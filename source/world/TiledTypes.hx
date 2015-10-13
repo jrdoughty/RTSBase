@@ -4,7 +4,7 @@ package world;
  * @author John Doughty
  */
 
-typedef TileSet {
+typedef TileSet = {
 	var firstgid:Int;
 	var image:String;
 	var imageheight:Int;
@@ -35,5 +35,4 @@ typedef TiledLevel = {
 	var tileheight:Int;
 	var tilesets:Array<TileSet>;
 	var tilewidth:Int;
-	var width:Int;
 }

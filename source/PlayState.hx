@@ -7,7 +7,9 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
 import world.Node;
+import world.SelfLoadingLevel;
 import world.TiledTypes;
+import openfl.Assets;
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -20,23 +22,23 @@ class PlayState extends FlxState
 	/**
 	 * Function that is called up when to state is created to set it up.
 	 */
-	var testLevel
-	 var testLevelData:Array<Int> = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-	 var width = 4;
-	 var nodes:Array<Node> = [];
+	private static var activeLevel:SelfLoadingLevel;
 	override public function create():Void
 	{
 		super.create();
-		
-		var i:Int = 0;
-		
-		for (i in 0...testLevelData.length)
-		{
-			nodes.push(new Node(i % width * 16, Math.floor(i / width) * 16));
-			add(nodes[i]);
-		}
+		add(getLevel());
 	}
 
+	public static function getLevel():SelfLoadingLevel
+	{
+		if (activeLevel == null)
+		{
+			activeLevel = new SelfLoadingLevel(Assets.getText("assets/data/testlvl.json"));
+		}
+		
+		return activeLevel;
+	}
+	
 	/**
 	 * Function that is called when this state is destroyed - you might want to
 	 * consider setting all objects this state uses to null to help garbage collection.
