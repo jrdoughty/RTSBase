@@ -13,10 +13,11 @@ class Node extends FlxSprite
 
 	private var occupants:Array<BaseActor> = [];
 	
-	public function new(frame, X:Float=0, Y:Float=0) 
+	public function new(asset:String, frame:Int, width:Int, height,X:Float=0, Y:Float=0) 
 	{
 		super(X, Y);
-		loadGraphic("assets/images/textures.png", false, 16, 16);
+		trace(asset);
+		loadGraphic(asset, false, width, height);
 		animation.add("main",[frame],0,false);
 		animation.add("clicked",[9],0,false);
 		animation.play("main");

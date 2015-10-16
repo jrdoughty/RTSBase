@@ -2,7 +2,6 @@ package world;
 
 import flixel.group.FlxGroup;
 import haxe.Json;
-import haxe.Resource;
 import world.TiledTypes.TiledLevel;
 import openfl.Assets;
 
@@ -19,12 +18,32 @@ class SelfLoadingLevel extends FlxGroup
 	public function new(json:String) 
 	{
 		super();
-		tiledLevel = Json.parse(json);
 		var i:Int = 0;
+		var tileSetId:Int = 0;
+		var j:Int = 0;
+		
+		var asset:String = "";
+		var frame:Int = 0;
+		var x:Int = 0;
+		var y:Int = 0;
+		
+		tiledLevel = Json.parse(json);
 		
 		for (i in 0...tiledLevel.layers[0].data.length)
 		{
-			nodes.push(new Node(tiledLevel.layers[0].data[i]-1,i % tiledLevel.width * 16, Math.floor(i / tiledLevel.width) * 16));
+			tileSetId = 0;
+			for (j in 0...(tiledLevel.tilesets.length-1))
+			{
+				if (tiledLevel.layers[0].data[i] > tiledLevel.tilesets[j + 1].firstgid)
+				{
+					tileSetId += 1;
+				}
+			}
+			asset = "assets/" + tiledLevel.tilesets[tileSetId].image.substring(3);
+			frame = tiledLevel.layers[0].data[i] - tiledLevel.tilesets[tileSetId].firstgid;
+			x = i % tiledLevel.width * tiledLevel.tilewidth;
+			y = Math.floor(i / tiledLevel.width) * tiledLevel.tileheight;
+			nodes.push(new Node(asset, frame,tiledLevel.tilewidth,tiledLevel.tileheight, x, y));
 			add(nodes[i]);
 		}
 	}
@@ -37,7 +56,6 @@ class SelfLoadingLevel extends FlxGroup
 			nodes[i].resetState();
 		}
 		selectedNode = node;
-		
 	}
 	
 }

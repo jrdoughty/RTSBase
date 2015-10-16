@@ -7,11 +7,11 @@ RTS Base is going to be a basic RTS system built in HaxeFlixel.
 *Must leverage tiled map editor
 
 #The dev goals are as follows:
-*Create Node system
+*Create Node system - Started
 *Use Click Activation to work with nodes
 *Create Actors to occupy nodes
 *Create Pathfinding for nodes
 *Create Movement system for Actors
-*Integrate tiled map editor
+*Integrate tiled map editor - Done for single layer
 *Create simple Health/Attack system
 *Create basic state machine

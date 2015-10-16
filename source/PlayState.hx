@@ -1,5 +1,6 @@
 package ;
 
+import actors.SwordSoldier;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -27,6 +28,8 @@ class PlayState extends FlxState
 	{
 		super.create();
 		add(getLevel());
+		add(new SwordSoldier(40,40));
+		
 	}
 
 	public static function getLevel():SelfLoadingLevel
