@@ -1,5 +1,6 @@
 package actors;
 import flixel.FlxG;
+import world.Node;
 
 /**
  * ...
@@ -8,46 +9,19 @@ import flixel.FlxG;
 class SwordSoldier extends BaseActor
 {
 
-	public function new(x:Int, y:Int) 
+	public function new(node:Node) 
 	{
-		super(x, y);
+		super(node);
 		loadGraphic("assets/images/soldiers.png", true, 8, 8);
 		animation.add("active", [0, 1], 5, true);
 	}
-	override public function update():Void 
-	{
-		super.update();
-		move();
-	}
 	
-	@:extern inline private function isMoveKeyDown():Bool
+	override public function move() 
 	{
-		return FlxG.keys.anyPressed(["LEFT", "A", "RIGHT", "D", "Up", "W", "Down", "S"]);
-	}
-	
-	public function move()
-	{
+		super.move();
+		
 		if (isMoveKeyDown())
 		{
-			if (FlxG.keys.anyPressed(["LEFT", "A"]))
-			{
-				x -= 1;
-				set_flipX(true);
-			}
-			else if (FlxG.keys.anyPressed(["RIGHT", "D"]))
-			{
-				x += 1;
-				set_flipX(false);
-			}
-
-			if (FlxG.keys.anyPressed(["Up", "W"]))
-			{
-				y -= 1;
-			}
-			else if (FlxG.keys.anyPressed(["Down", "S"]))
-			{
-				y += 1;
-			}
 			animation.play("active");
 		} 
 		else

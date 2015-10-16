@@ -13,7 +13,7 @@ import openfl.Assets;
 class SelfLoadingLevel extends FlxGroup
 {
 	private var tiledLevel:TiledLevel;
-	private var nodes:Array<Node> = [];
+	public var nodes:Array<Node> = [];
 	private var selectedNode:Node;
 	public function new(json:String) 
 	{
@@ -26,6 +26,7 @@ class SelfLoadingLevel extends FlxGroup
 		var frame:Int = 0;
 		var x:Int = 0;
 		var y:Int = 0;
+		var pass:Bool = false;
 		
 		tiledLevel = Json.parse(json);
 		
@@ -43,7 +44,8 @@ class SelfLoadingLevel extends FlxGroup
 			frame = tiledLevel.layers[0].data[i] - tiledLevel.tilesets[tileSetId].firstgid;
 			x = i % tiledLevel.width * tiledLevel.tilewidth;
 			y = Math.floor(i / tiledLevel.width) * tiledLevel.tileheight;
-			nodes.push(new Node(asset, frame,tiledLevel.tilewidth,tiledLevel.tileheight, x, y));
+			pass = tiledLevel.layers[1].data[i] == 0;
+			nodes.push(new Node(asset, frame,tiledLevel.tilewidth,tiledLevel.tileheight, x, y,pass));
 			add(nodes[i]);
 		}
 	}

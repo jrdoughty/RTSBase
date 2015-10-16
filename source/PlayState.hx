@@ -1,5 +1,6 @@
 package ;
 
+import actors.BaseActor;
 import actors.SwordSoldier;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -23,12 +24,15 @@ class PlayState extends FlxState
 	/**
 	 * Function that is called up when to state is created to set it up.
 	 */
-	private static var activeLevel:SelfLoadingLevel;
+	private static var activeLevel:SelfLoadingLevel = null;
+	
+	private static var selectedUnit:BaseActor = null;
+	
 	override public function create():Void
 	{
 		super.create();
 		add(getLevel());
-		add(new SwordSoldier(40,40));
+		add(new SwordSoldier(getLevel().nodes[0]));
 		
 	}
 
@@ -40,6 +44,28 @@ class PlayState extends FlxState
 		}
 		
 		return activeLevel;
+	}
+	
+	public static function selectUnit(baseA:BaseActor):Void
+	{
+		if(selectedUnit != null)
+		{
+			trace("it was null");
+			selectedUnit.resetSelect();
+		}
+		trace("running " + baseA);
+		selectedUnit = baseA;
+
+		if(selectedUnit != null)
+		{
+			trace("selecting");
+			selectedUnit.select();
+		}
+	}
+
+	public static function getSelectedUnit():BaseActor
+	{
+		return selectedUnit;
 	}
 	
 	/**

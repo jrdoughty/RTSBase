@@ -11,9 +11,10 @@ import flixel.plugin.MouseEventManager;
 class Node extends FlxSprite
 {
 
-	private var occupants:Array<BaseActor> = [];
+	private var occupant:BaseActor = null;
+	private var passable:Bool = true;
 	
-	public function new(asset:String, frame:Int, width:Int, height,X:Float=0, Y:Float=0) 
+	public function new(asset:String, frame:Int, width:Int, height, X:Float = 0, Y:Float = 0, pass:Bool = true ) 
 	{
 		super(X, Y);
 		trace(asset);
@@ -22,23 +23,35 @@ class Node extends FlxSprite
 		animation.add("clicked",[9],0,false);
 		animation.play("main");
 		
+		passable = pass;
+		
 		MouseEventManager.add(this, onClick, null, null, null);
 		
 	}
 	
 	public function isPassible():Bool
 	{
-		return (occupants.length == 0);
+		return (occupant != null);
 	}
 	
 	private function onClick(sprite:FlxSprite):Void
 	{
-		PlayState.getLevel().setSelectedNode(this);
-		animation.play("clicked");
+		trace(passable);
+		PlayState.selectUnit(occupant);
 	}
 	
 	public function resetState():Void
 	{
 		animation.play("main");
+	}
+	
+	public function setOccupant(o:BaseActor):Void
+	{
+		occupant = o;
+	}
+	
+	public function getOccupant():BaseActor
+	{
+		return occupant;
 	}
 }
