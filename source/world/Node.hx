@@ -13,6 +13,7 @@ class Node extends FlxSprite
 
 	private var occupant:BaseActor = null;
 	private var passable:Bool = true;
+	public var neightbors:Array<Node>;
 	
 	public function new(asset:String, frame:Int, width:Int, height, X:Float = 0, Y:Float = 0, pass:Bool = true ) 
 	{

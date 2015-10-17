@@ -19,16 +19,16 @@
     <class path="C:\HaxeToolkit\haxe\lib\openfl\3,3,8" />
     <class path="C:\HaxeToolkit\haxe\lib\lime\2,6,7" />
     <class path="source" />
-    <class path="export\flash\haxe" />
+    <class path="export\windows\neko\haxe" />
   </classpaths>
   <!-- Build options -->
   <build>
-    <option directives="flixel=3.3.11&#xA;openfl=3.3.8&#xA;lime=2.6.7&#xA;openfl-next&#xA;tools=2.6.7&#xA;FLX_NO_DEBUG&#xA;no-compilation&#xA;NAPE_RELEASE_BUILD&#xA;openfl-flash&#xA;FLX_RENDER_BLIT&#xA;web&#xA;display" />
+    <option directives="flixel=3.3.11&#xA;openfl=3.3.8&#xA;lime=2.6.7&#xA;openfl-next&#xA;tools=2.6.7&#xA;FLX_NO_DEBUG&#xA;no-compilation&#xA;NAPE_RELEASE_BUILD&#xA;native&#xA;lime-native&#xA;openfl-native&#xA;FLX_RENDER_TILE&#xA;windows&#xA;desktop&#xA;display" />
     <option flashStrict="False" />
     <option noInlineOnDebug="False" />
     <option mainClass="ApplicationMain" />
     <option enabledebug="False" />
-    <option additional="-swf-version 11.8" />
+    <option additional="--remap flash:openfl&#xA;#--macro keep(&quot;Main&quot;)" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>

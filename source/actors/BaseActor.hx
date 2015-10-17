@@ -12,11 +12,14 @@ class BaseActor extends FlxSprite
 {
 
 	var selected:Bool = false;
+	var iterator:Int = 0;
+	var currentNode:Node;
 	
 	public function new(node:Node) 
 	{
 		super(node.x, node.y);
 		node.setOccupant(this);
+		currentNode = node;
 		
 	}
 	
@@ -44,7 +47,8 @@ class BaseActor extends FlxSprite
 	
 	public function move()
 	{
-		if (isMoveKeyDown())
+		iterator += 1;
+		if (isMoveKeyDown() && iterator%60 == 0)
 		{
 			if (FlxG.keys.anyPressed(["LEFT", "A"]))
 			{
