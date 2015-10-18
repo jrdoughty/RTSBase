@@ -16,6 +16,7 @@ class AStar implements Path
 	private var levelWidth:Int = 0;
 	private var levelHeight:Int;
 	private var end:Node;
+	private var diagonal:Bool = false;
 	
 	public function new(start:Node, end:Node,nodes:Array<Node>,levelWidth:Int) 
 	{
@@ -108,17 +109,28 @@ class AStar implements Path
             for (j in 0...levelHeight) 
 			{
 				nodes[i + j * levelWidth].neighbors = [];
-                if (i - 1 >= 0 && j - 1 >= 0) 
+				if (diagonal)
 				{
-                    nodes[i + j * levelWidth].neighbors.push(nodes[i - 1 + (j - 1) * levelWidth]);
-                }
+					if (i - 1 >= 0 && j - 1 >= 0) 
+					{
+						nodes[i + j * levelWidth].neighbors.push(nodes[i - 1 + (j - 1) * levelWidth]);
+					}
+					if (i + 1 < levelWidth && j - 1 >= 0) 
+					{
+						nodes[i + j * levelWidth].neighbors.push(nodes[i + 1 + (j - 1) * levelWidth]);
+					}
+					if (i - 1 >= 0 && j + 1 < levelHeight) 
+					{
+						nodes[i + j * levelWidth].neighbors.push(nodes[i - 1 + (j + 1) * levelWidth]);
+					}
+					if (i + 1 < levelWidth && j + 1 < levelHeight) 
+					{
+						nodes[i + j * levelWidth].neighbors.push(nodes[i + 1 + (j + 1) * levelWidth]);
+					}
+				}
                 if (j - 1 >= 0) 
 				{
                     nodes[i + j * levelWidth].neighbors.push(nodes[i + (j - 1) * levelWidth]);
-                }
-                if (i + 1 < levelWidth && j - 1 >= 0) 
-				{
-                    nodes[i + j * levelWidth].neighbors.push(nodes[i + 1 + (j - 1) * levelWidth]);
                 }
                 if (i - 1 >= 0) 
 				{
@@ -128,17 +140,9 @@ class AStar implements Path
 				{
                     nodes[i + j * levelWidth].neighbors.push(nodes[i + 1 + j * levelWidth]);
                 }
-                if (i - 1 >= 0 && j + 1 < levelHeight) 
-				{
-                    nodes[i + j * levelWidth].neighbors.push(nodes[i - 1 + (j + 1) * levelWidth]);
-                }
                 if (j + 1 < levelHeight) 
 				{
                     nodes[i + j * levelWidth].neighbors.push(nodes[i + (j + 1) * levelWidth]);
-                }
-                if (i + 1 < levelWidth && j + 1 < levelHeight) 
-				{
-                    nodes[i + j * levelWidth].neighbors.push(nodes[i + 1 + (j + 1) * levelWidth]);
                 }
             }
         }
@@ -170,7 +174,7 @@ class AStar implements Path
         } 
 		else 
 		{
-            prospectiveG = parentNode.g + 250;//should be 14 but I'm sabotaging the heiristic for diagonals unless last resort
+            prospectiveG = parentNode.g + 14;//should be 14 but I'm sabotaging the heiristic for diagonals unless last resort
         }
         if (prospectiveG + childNode.heiristic < childNode.getFinal() || childNode.g == -1) 
 		{

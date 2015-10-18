@@ -13,14 +13,13 @@ class BaseActor extends FlxSprite
 
 	var selected:Bool = false;
 	var iterator:Int = 0;
-	var currentNode:Node;
+	public var currentNode:Node;
 	
 	public function new(node:Node) 
 	{
 		super(node.x, node.y);
 		node.setOccupant(this);
 		currentNode = node;
-		
 	}
 	
 	public function select():Void

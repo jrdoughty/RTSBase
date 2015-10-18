@@ -43,8 +43,10 @@ class Node extends FlxSprite
 	
 	private function onClick(sprite:FlxSprite):Void
 	{
-		trace(passable);
-		PlayState.selectUnit(occupant);
+		if (PlayState.getSelectedUnit != null && occupant == null)
+			PlayState.newPath(this);
+		else
+			PlayState.selectUnit(occupant);
 	}
 	
 	public function resetState():Void
