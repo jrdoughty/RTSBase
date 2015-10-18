@@ -8,6 +8,7 @@ import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
+import pathfinding.AStar;
 import world.Node;
 import world.SelfLoadingLevel;
 import world.TiledTypes;
@@ -33,7 +34,7 @@ class PlayState extends FlxState
 		super.create();
 		add(getLevel());
 		add(new SwordSoldier(getLevel().nodes[0]));
-		
+		new AStar(getLevel().nodes[0], getLevel().nodes[15], getLevel().nodes, getLevel().width);		
 	}
 
 	public static function getLevel():SelfLoadingLevel

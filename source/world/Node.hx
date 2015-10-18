@@ -11,14 +11,20 @@ import flixel.plugin.MouseEventManager;
 class Node extends FlxSprite
 {
 
+	public var neighbors:Array<Node>;
+	public var parentNode:Node;
 	private var occupant:BaseActor = null;
 	private var passable:Bool = true;
-	public var neightbors:Array<Node>;
+	public var g:Int = -1;
+	public var heiristic:Int = -1;
+	public var nodeX:Int;
+	public var nodeY:Int;
 	
-	public function new(asset:String, frame:Int, width:Int, height, X:Float = 0, Y:Float = 0, pass:Bool = true ) 
+	public function new(asset:String, frame:Int, width:Int, height, X:Int = 0, Y:Int = 0, pass:Bool = true ) 
 	{
-		super(X, Y);
-		trace(asset);
+		super(X * width, Y * height);
+		nodeX = X;
+		nodeY = Y;
 		loadGraphic(asset, false, width, height);
 		animation.add("main",[frame],0,false);
 		animation.add("clicked",[9],0,false);
@@ -32,7 +38,7 @@ class Node extends FlxSprite
 	
 	public function isPassible():Bool
 	{
-		return (occupant != null);
+		return (occupant == null && passable);
 	}
 	
 	private function onClick(sprite:FlxSprite):Void
@@ -54,5 +60,10 @@ class Node extends FlxSprite
 	public function getOccupant():BaseActor
 	{
 		return occupant;
+	}
+	
+	public function getFinal():Int
+	{
+		return heiristic + g;
 	}
 }

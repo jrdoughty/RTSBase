@@ -15,6 +15,10 @@ class SelfLoadingLevel extends FlxGroup
 	private var tiledLevel:TiledLevel;
 	public var nodes:Array<Node> = [];
 	private var selectedNode:Node;
+	
+	public var width:Int;
+	public var height:Int;
+	
 	public function new(json:String) 
 	{
 		super();
@@ -30,6 +34,9 @@ class SelfLoadingLevel extends FlxGroup
 		
 		tiledLevel = Json.parse(json);
 		
+		width = tiledLevel.width;
+		height = tiledLevel.height;
+		
 		for (i in 0...tiledLevel.layers[0].data.length)
 		{
 			tileSetId = 0;
@@ -42,8 +49,8 @@ class SelfLoadingLevel extends FlxGroup
 			}
 			asset = "assets/" + tiledLevel.tilesets[tileSetId].image.substring(3);
 			frame = tiledLevel.layers[0].data[i] - tiledLevel.tilesets[tileSetId].firstgid;
-			x = i % tiledLevel.width * tiledLevel.tilewidth;
-			y = Math.floor(i / tiledLevel.width) * tiledLevel.tileheight;
+			x = i % width;
+			y = Math.floor(i / width);
 			pass = tiledLevel.layers[1].data[i] == 0;
 			nodes.push(new Node(asset, frame,tiledLevel.tilewidth,tiledLevel.tileheight, x, y,pass));
 			add(nodes[i]);
