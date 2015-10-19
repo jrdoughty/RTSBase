@@ -33,12 +33,15 @@ class PlayState extends FlxState
 	{
 		super.create();
 		add(getLevel());
-		add(new SwordSoldier(getLevel().nodes[0]));		
+		add(new SwordSoldier(getLevel().nodes[0]));	
+		add(new SwordSoldier(getLevel().nodes[30]));		
 	}
+	
 	public static function newPath(node:Node)
 	{
 		new AStar(selectedUnit.currentNode, node, getLevel().nodes, getLevel().width);
 	}
+	
 	public static function getLevel():SelfLoadingLevel
 	{
 		if (activeLevel == null)

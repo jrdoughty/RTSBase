@@ -22,6 +22,7 @@
          "x":0,
          "y":0
         }],
+ "nextobjectid":1,
  "orientation":"orthogonal",
  "properties":
     {
@@ -36,12 +37,29 @@
          "imageheight":16,
          "imagewidth":40,
          "margin":0,
-         "name":"textures",
+         "name":"terrain",
          "properties":
             {
 
             },
          "spacing":0,
+         "tilecount":10,
+         "tileheight":8,
+         "tilewidth":8
+        }, 
+        {
+         "firstgid":11,
+         "image":"..\/images\/highlight.png",
+         "imageheight":16,
+         "imagewidth":32,
+         "margin":0,
+         "name":"highlight",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tilecount":8,
          "tileheight":8,
          "tilewidth":8
         }],

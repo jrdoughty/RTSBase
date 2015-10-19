@@ -30,6 +30,7 @@ class AStar implements Path
 		createNeighbors();
 		if (calculate())
 		{
+			cleanUp();
 			path.push(end);
 			createPath(end);
 		}
@@ -39,7 +40,19 @@ class AStar implements Path
 		}
 		trace(path.length);
 	}
-
+	
+	public function cleanUp()
+	{
+		var i:Int;
+		for (i in 0...nodes.length)
+		{
+			nodes[i].animation.play("main");
+			nodes[i].g = -1;
+			nodes[i].heiristic = -1;
+		}
+		closedList = [];
+		openList = [];
+	}
 	public function createPath(node:Node)
 	{
 		if (node.parentNode != null)

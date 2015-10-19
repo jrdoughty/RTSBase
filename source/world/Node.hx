@@ -32,13 +32,23 @@ class Node extends FlxSprite
 		
 		passable = pass;
 		
-		MouseEventManager.add(this, onClick, null, null, null);
+		MouseEventManager.add(this, onClick, null, onOver, onOut);
 		
 	}
 	
 	public function isPassible():Bool
 	{
 		return (occupant == null && passable);
+	}
+	
+	private function onOver(sprite:FlxSprite):Void
+	{
+		animation.play("clicked");
+	}
+	
+	private function onOut(sprite:FlxSprite):Void
+	{
+		resetState();
 	}
 	
 	private function onClick(sprite:FlxSprite):Void
