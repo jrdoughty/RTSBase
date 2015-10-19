@@ -43,7 +43,7 @@ class PlayState extends FlxState
 		var i:Int;
 		if (selectedUnit != null)
 		{
-			path = new AStar(selectedUnit.currentNode, node, getLevel().nodes, getLevel().width).getFullPath();
+			path = AStar.newPath(selectedUnit.currentNode, node, getLevel().nodes, getLevel().width);
 			
 			for (i in 0...path.length)
 			{

@@ -5,25 +5,26 @@ import world.Node;
  * ...
  * @author John Doughty
  */
-class AStar implements Path
+class AStar
 {
-	private var path:Array<Node> = [];
-	private var openList:Array<Node> = [];
-	private var closedList:Array<Node> = [];
-	private var nodes:Array<Node>;
-	private var pathHeiristic:Int;
-	private var costToMove:Int;
-	private var levelWidth:Int = 0;
-	private var levelHeight:Int;
-	private var end:Node;
-	private var diagonal:Bool = false;
+	private static var path:Array<Node> = [];
+	private static var openList:Array<Node> = [];
+	private static var closedList:Array<Node> = [];
+	private static var nodes:Array<Node>;
+	private static var pathHeiristic:Int;
+	private static var costToMove:Int;
+	private static var levelWidth:Int = 0;
+	private static var levelHeight:Int;
+	private static var end:Node;
+	private static var diagonal:Bool = false;
 	
-	public function new(start:Node, end:Node,nodes:Array<Node>,levelWidth:Int) 
+	public static function newPath(start:Node, endNode:Node,nodeList:Array<Node>,levelW:Int):Array<Node>
 	{
-		this.nodes = nodes;
-		this.levelWidth = levelWidth;
-		this.levelHeight = Math.floor(nodes.length / levelWidth);
-		this.end = end;
+		path = [];
+		nodes = nodeList;
+		levelWidth = levelW;
+		levelHeight = Math.floor(nodes.length / levelW);
+		end = endNode;
 		start.heiristic = calculateHeiristic(start.nodeX, start.nodeY, end.nodeX, end.nodeY);
 		start.g = 0;
 		openList.push(start);
@@ -38,17 +39,13 @@ class AStar implements Path
 		{
 			path = [];
 		}
-		trace(path.length);
-	}
-	
-	public function getFullPath():Array<Node>
-	{
 		return path;
 	}
 	
-	public function cleanUp()
+	private static function cleanUp()
 	{
 		var i:Int;
+		trace("test");
 		for (i in 0...nodes.length)
 		{
 			nodes[i].animation.play("main");
@@ -58,7 +55,7 @@ class AStar implements Path
 		closedList = [];
 		openList = [];
 	}
-	public function createPath(node:Node)
+	private static function createPath(node:Node)
 	{
 		if (node.parentNode != null)
 		{
@@ -67,17 +64,20 @@ class AStar implements Path
 		}
 	}
 	
-	public function getNext():Node
+	public static function getNext():Node
 	{
-		return path[1];
+		if(path.length > 1)
+			return path[path.length - 2];
+		else
+			return path[0];
 	}
 
-	public function getHeiristic():Int
+	public static function getHeiristic():Int
 	{
 		return pathHeiristic;
 	}
 	
-	public function calculate()
+	private static function calculate()
 	{
 		var i:Int = 0;
         var closestIndex:Int = -1;
@@ -98,7 +98,7 @@ class AStar implements Path
 		{
             if (openList[closestIndex].neighbors[i].isPassible()) 
 			{
-                if (this.SetupChildNode(openList[closestIndex].neighbors[i], openList[closestIndex]))
+                if (SetupChildNode(openList[closestIndex].neighbors[i], openList[closestIndex]))
 				{
                     return true;
                 }
@@ -117,7 +117,7 @@ class AStar implements Path
 		}
 	}
 	
-	public function createNeighbors()
+	private static function createNeighbors()
 	{
 		var i:Int;
 		var j:Int;
@@ -164,7 +164,7 @@ class AStar implements Path
             }
         }
 	}
-	@:extern private inline function calculateHeiristic (startX:Int, startY:Int, endX:Int, endY:Int) 
+	@:extern private static inline function calculateHeiristic (startX:Int, startY:Int, endX:Int, endY:Int) 
 	{
         var h = Std.int(10 * Math.abs(startX - endX) + 10 * Math.abs(startY - endY));
         return h;
@@ -172,7 +172,7 @@ class AStar implements Path
 	
 	
 
-    private function SetupChildNode(childNode:Node, parentNode:Node):Bool 
+    private static function SetupChildNode(childNode:Node, parentNode:Node):Bool 
 	{
         var prospectiveG:Int;
         var i:Int;
