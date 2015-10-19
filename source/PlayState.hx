@@ -39,7 +39,18 @@ class PlayState extends FlxState
 	
 	public static function newPath(node:Node)
 	{
-		new AStar(selectedUnit.currentNode, node, getLevel().nodes, getLevel().width);
+		var path:Array<Node>;
+		var i:Int;
+		if (selectedUnit != null)
+		{
+			path = new AStar(selectedUnit.currentNode, node, getLevel().nodes, getLevel().width).getFullPath();
+			
+			for (i in 0...path.length)
+			{
+				path[i].animation.play("clicked");
+			}
+			
+		}
 	}
 	
 	public static function getLevel():SelfLoadingLevel
@@ -69,6 +80,9 @@ class PlayState extends FlxState
 		}
 	}
 
+	
+
+	
 	public static function getSelectedUnit():BaseActor
 	{
 		return selectedUnit;

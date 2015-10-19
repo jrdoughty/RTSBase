@@ -19,6 +19,7 @@ class Node extends FlxSprite
 	public var heiristic:Int = -1;
 	public var nodeX:Int;
 	public var nodeY:Int;
+	private var highlight:FlxSprite;
 	
 	public function new(asset:String, frame:Int, width:Int, height, X:Int = 0, Y:Int = 0, pass:Bool = true ) 
 	{
@@ -34,6 +35,9 @@ class Node extends FlxSprite
 		
 		MouseEventManager.add(this, onClick, null, onOver, onOut);
 		
+		highlight = new FlxSprite(x, y).loadGraphic("assets/images/highlight.png", true, 8, 8);
+		highlight.animation.add("main", [0, 1, 2, 3, 4, 5, 6], 10);
+		highlight.animation.play("main");
 	}
 	
 	public function isPassible():Bool
@@ -43,20 +47,24 @@ class Node extends FlxSprite
 	
 	private function onOver(sprite:FlxSprite):Void
 	{
-		animation.play("clicked");
+		PlayState.getLevel().add(highlight);
 	}
 	
 	private function onOut(sprite:FlxSprite):Void
 	{
-		resetState();
+		PlayState.getLevel().remove(highlight);
 	}
 	
 	private function onClick(sprite:FlxSprite):Void
 	{
-		if (PlayState.getSelectedUnit != null && occupant == null)
+		if (PlayState.getSelectedUnit != null && isPassible())
+		{
 			PlayState.newPath(this);
-		else
+		}
+		else if (occupant != null)
+		{
 			PlayState.selectUnit(occupant);
+		}
 	}
 	
 	public function resetState():Void

@@ -41,6 +41,11 @@ class AStar implements Path
 		trace(path.length);
 	}
 	
+	public function getFullPath():Array<Node>
+	{
+		return path;
+	}
+	
 	public function cleanUp()
 	{
 		var i:Int;
@@ -57,7 +62,6 @@ class AStar implements Path
 	{
 		if (node.parentNode != null)
 		{
-			node.animation.play("clicked");
 			path.push(node.parentNode);
 			createPath(node.parentNode);
 		}
