@@ -16,18 +16,18 @@ class SwordSoldier extends BaseActor
 		animation.add("active", [0, 1], 5, true);
 	}
 	
-	override public function move() 
+	override private function takeAction()
 	{
-		super.move();
-		
-		if (isMoveKeyDown())
+		super.takeAction();
+		if (moving)
 		{
 			animation.play("active");
-		} 
+		}
 		else
 		{
 			animation.frameIndex = 0;
 			animation.pause();
 		}
 	}
+	
 }

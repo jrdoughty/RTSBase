@@ -2,7 +2,10 @@ package actors;
 
 import flixel.FlxSprite;
 import flixel.FlxG;
+import haxe.Timer;
+import pathfinding.AStar;
 import world.Node;
+import flixel.tweens.FlxTween;
 
 /**
  * ...
@@ -11,20 +14,61 @@ import world.Node;
 class BaseActor extends FlxSprite
 {
 
-	var selected:Bool = false;
-	var iterator:Int = 0;
+	private var selected:Bool = false;
+	private var iterator:Int = 0;
+	private var actionTimer:Timer;
+	private var delayTimer:Timer;
+	public var targetNode:Node;
 	public var currentNode:Node;
+	private var speed:Int = 250;
+	private var moving:Bool = false;
 	
 	public function new(node:Node) 
 	{
 		super(node.x, node.y);
-		node.setOccupant(this);
+		node.occupant = this;
 		currentNode = node;
+		
+		delayTimer = new Timer(Math.floor(1000*Math.random()));//Keeps mass created units from updating at the exact same time. Idea from: http://answers.unity3d.com/questions/419786/a-pathfinding-multiple-enemies-moving-target-effic.html
+		delayTimer.run = delayedStart;
+	}
+	
+	private function delayedStart()
+	{
+		delayTimer.stop();
+		actionTimer = new Timer(speed);
+		actionTimer.run = takeAction;
+	}
+	
+	private function takeAction()
+	{
+		var path:Array<Node> = [];
+		if (targetNode != null && targetNode.isPassible())
+		{
+			path = AStar.newPath(currentNode, targetNode);
+		}
+		if (path.length > 1 && path[path.length - 2].occupant == null)
+		{
+			currentNode.occupant = null;
+			currentNode = path[path.length - 2];
+			currentNode.occupant = this;
+			FlxTween.tween(this, { x:currentNode.x, y:currentNode.y }, speed / 1000);
+			moving = true;
+		}
+		else if (path.length > 1 && path[path.length - 2].occupant != null)
+		{
+			moving = false;
+		}
+		else
+		{
+			targetNode = null;
+			moving = false;
+		}
 	}
 	
 	public function select():Void
 	{
-		color = 0xdddddd;
+		color = 0x99ff66;
 		selected = true;
 	}
 	
@@ -33,41 +77,5 @@ class BaseActor extends FlxSprite
 		selected = false;
 		color = 0xffffff;
 	}
-	override public function update():Void 
-	{
-		super.update();
-		move();
-	}
 	
-	@:extern inline private function isMoveKeyDown():Bool
-	{
-		return FlxG.keys.anyPressed(["LEFT", "A", "RIGHT", "D", "Up", "W", "Down", "S"]);
-	}
-	
-	public function move()
-	{
-		iterator += 1;
-		if (isMoveKeyDown() && iterator%60 == 0)
-		{
-			if (FlxG.keys.anyPressed(["LEFT", "A"]))
-			{
-				x -= 8;
-				set_flipX(true);
-			}
-			else if (FlxG.keys.anyPressed(["RIGHT", "D"]))
-			{
-				x += 8;
-				set_flipX(false);
-			}
-
-			if (FlxG.keys.anyPressed(["Up", "W"]))
-			{
-				y -= 8;
-			}
-			else if (FlxG.keys.anyPressed(["Down", "S"]))
-			{
-				y += 8;
-			}
-		}
-	}
 }

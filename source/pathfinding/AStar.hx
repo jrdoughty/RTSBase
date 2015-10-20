@@ -13,23 +13,27 @@ class AStar
 	private static var nodes:Array<Node>;
 	private static var pathHeiristic:Int;
 	private static var costToMove:Int;
-	private static var levelWidth:Int = 0;
+	private static var levelWidth:Int;
 	private static var levelHeight:Int;
 	private static var end:Node;
 	private static var diagonal:Bool = false;
 	
-	public static function newPath(start:Node, endNode:Node,nodeList:Array<Node>,levelW:Int):Array<Node>
+	public static function newPath(start:Node, endNode:Node):Array<Node>
 	{
+		nodes = PlayState.getLevel().nodes;
+		levelWidth = PlayState.getLevel().width;
+		
+		cleanParentNodes();//ensure everying this ready
+		cleanUp();
+		
 		path = [];
-		nodes = nodeList;
-		levelWidth = levelW;
-		levelHeight = Math.floor(nodes.length / levelW);
+		levelHeight = Math.floor(nodes.length / levelWidth);
 		end = endNode;
 		start.heiristic = calculateHeiristic(start.nodeX, start.nodeY, end.nodeX, end.nodeY);
 		start.g = 0;
 		openList.push(start);
 		createNeighbors();
-		if (calculate())
+		if (calculate() && start != endNode)
 		{
 			cleanUp();
 			path.push(end);
@@ -39,13 +43,22 @@ class AStar
 		{
 			path = [];
 		}
+		cleanParentNodes();
 		return path;
+	}
+	
+	private static function cleanParentNodes()
+	{
+		var i:Int;
+		for (i in 0...nodes.length)
+		{
+			nodes[i].parentNode = null;
+		}
 	}
 	
 	private static function cleanUp()
 	{
 		var i:Int;
-		trace("test");
 		for (i in 0...nodes.length)
 		{
 			nodes[i].animation.play("main");

@@ -13,12 +13,12 @@ class Node extends FlxSprite
 
 	public var neighbors:Array<Node>;
 	public var parentNode:Node;
-	private var occupant:BaseActor = null;
-	private var passable:Bool = true;
+	public var occupant:BaseActor = null;
 	public var g:Int = -1;
 	public var heiristic:Int = -1;
 	public var nodeX:Int;
 	public var nodeY:Int;
+	private var passable:Bool = true;
 	private var highlight:FlxSprite;
 	
 	public function new(asset:String, frame:Int, width:Int, height, X:Int = 0, Y:Int = 0, pass:Bool = true ) 
@@ -42,7 +42,7 @@ class Node extends FlxSprite
 	
 	public function isPassible():Bool
 	{
-		return (occupant == null && passable);
+		return (passable);
 	}
 	
 	private function onOver(sprite:FlxSprite):Void
@@ -57,7 +57,7 @@ class Node extends FlxSprite
 	
 	private function onClick(sprite:FlxSprite):Void
 	{
-		if (PlayState.getSelectedUnit != null && isPassible())
+		if (PlayState.getSelectedUnit != null && isPassible() && occupant == null)
 		{
 			PlayState.newPath(this);
 		}
@@ -70,16 +70,6 @@ class Node extends FlxSprite
 	public function resetState():Void
 	{
 		animation.play("main");
-	}
-	
-	public function setOccupant(o:BaseActor):Void
-	{
-		occupant = o;
-	}
-	
-	public function getOccupant():BaseActor
-	{
-		return occupant;
 	}
 	
 	public function getFinal():Int

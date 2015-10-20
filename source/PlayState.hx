@@ -43,13 +43,7 @@ class PlayState extends FlxState
 		var i:Int;
 		if (selectedUnit != null)
 		{
-			path = AStar.newPath(selectedUnit.currentNode, node, getLevel().nodes, getLevel().width);
-			
-			for (i in 0...path.length)
-			{
-				path[i].animation.play("clicked");
-			}
-			
+			selectedUnit.targetNode = node;
 		}
 	}
 	
@@ -57,7 +51,7 @@ class PlayState extends FlxState
 	{
 		if (activeLevel == null)
 		{
-			activeLevel = new SelfLoadingLevel(Assets.getText("assets/data/testlvl.json"));
+			activeLevel = new SelfLoadingLevel(Assets.getText("assets/data/moreopen.json"));
 		}
 		
 		return activeLevel;
