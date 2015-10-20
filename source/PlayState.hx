@@ -1,6 +1,7 @@
 package ;
 
 import actors.BaseActor;
+import actors.SpearSoldier;
 import actors.SwordSoldier;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -34,7 +35,9 @@ class PlayState extends FlxState
 		super.create();
 		add(getLevel());
 		add(new SwordSoldier(getLevel().nodes[0]));	
-		add(new SwordSoldier(getLevel().nodes[30]));		
+		add(new SwordSoldier(getLevel().nodes[30]));
+		add(new SpearSoldier(getLevel().nodes[380]));
+		add(new SpearSoldier(getLevel().nodes[399]));		
 	}
 	
 	public static function newPath(node:Node)
@@ -61,15 +64,12 @@ class PlayState extends FlxState
 	{
 		if(selectedUnit != null)
 		{
-			trace("it was null");
 			selectedUnit.resetSelect();
 		}
-		trace("running " + baseA);
 		selectedUnit = baseA;
 
 		if(selectedUnit != null)
 		{
-			trace("selecting");
 			selectedUnit.select();
 		}
 	}
