@@ -6,22 +6,39 @@ import haxe.Timer;
 import pathfinding.AStar;
 import world.Node;
 import flixel.tweens.FlxTween;
+import flixel.util.FlxColor;
 
 /**
  * ...
  * @author John Doughty
  */
+
+enum State {
+	MOVING;
+	ATTACKING;
+	IDLE;
+	BUSY;
+}
+ 
+ 
 class BaseActor extends FlxSprite
 {
 
+	public var currentNode:Node;
+	public var targetNode:Node;
+	public var targetEnemy:BaseActor;
+	public var team:Int = 0;
+	public var damage:Int = 1;
 	private var selected:Bool = false;
 	private var iterator:Int = 0;
 	private var actionTimer:Timer;
 	private var delayTimer:Timer;
-	public var targetNode:Node;
-	public var currentNode:Node;
 	private var speed:Int = 250;
-	private var moving:Bool = false;
+	private var state:State = IDLE;
+	private var healthMax:Int = 8;
+	private var healthBar:FlxSprite;
+	private var healthBarFill:FlxSprite;
+	
 	
 	public function new(node:Node) 
 	{
@@ -29,8 +46,15 @@ class BaseActor extends FlxSprite
 		node.occupant = this;
 		currentNode = node;
 		
-		delayTimer = new Timer(Math.floor(1000*Math.random()));//Keeps mass created units from updating at the exact same time. Idea from: http://answers.unity3d.com/questions/419786/a-pathfinding-multiple-enemies-moving-target-effic.html
+		delayTimer = new Timer(Math.floor(1000*Math.random()));//Keeps mass created units from updating at the exact same time. Idea from: http://answers.unity3d.com/questions/419786/a-pathfinding-multiple-enemies-MOVING-target-effic.html
 		delayTimer.run = delayedStart;
+		health = 1;
+		healthBar = new FlxSprite(x, y - 1);
+		healthBar.makeGraphic(8, 1, FlxColor.BLACK);
+		PlayState.getLevel().add(healthBar);
+		healthBarFill = new FlxSprite(x, y - 1);
+		healthBarFill.makeGraphic(8, 1, FlxColor.RED);
+		PlayState.getLevel().add(healthBarFill);
 	}
 	
 	private function delayedStart()
@@ -40,7 +64,69 @@ class BaseActor extends FlxSprite
 		actionTimer.run = takeAction;
 	}
 	
+	override public function update()
+	{
+		super.update();
+		healthBarFill.scale.set(health, 1);
+		healthBarFill.updateHitbox();
+	}
+	
 	private function takeAction()
+	{
+		if (state == IDLE)
+		{
+			idle();
+		}
+		else if (state == MOVING)
+		{
+			move();
+		}
+		else if (state == ATTACKING)
+		{
+			attack();
+		}
+	}
+	
+	private function attack()
+	{
+		if (targetEnemy != null && targetEnemy.alive)
+		{
+			targetEnemy.hurt(damage / targetEnemy.healthMax);
+		}
+		else if (targetNode != null)
+		{
+			state = MOVING;
+		}
+		else
+		{
+			state = IDLE;
+		}
+	}
+	
+	private function idle()
+	{
+		var i:Int;
+
+		
+		if (targetNode != null)
+		{
+			state = MOVING;
+		}
+		else
+		{
+			for (i in 0...currentNode.neighbors.length)
+			{
+				if (currentNode.neighbors[i].occupant != null && currentNode.neighbors[i].occupant.team != team)
+				{
+					targetEnemy = currentNode.neighbors[i].occupant;
+					state = ATTACKING;
+					break;
+				}
+			}
+		}
+	}
+	
+	private function move():Void
 	{
 		var path:Array<Node> = [];
 		if (targetNode != null && targetNode.isPassible())
@@ -53,16 +139,29 @@ class BaseActor extends FlxSprite
 			currentNode = path[path.length - 2];
 			currentNode.occupant = this;
 			FlxTween.tween(this, { x:currentNode.x, y:currentNode.y }, speed / 1000);
-			moving = true;
+			FlxTween.tween(healthBar, { x:currentNode.x, y:currentNode.y - 1}, speed / 1000);
+			FlxTween.tween(healthBarFill, { x:currentNode.x, y:currentNode.y - 1 }, speed / 1000);
+			if (currentNode == targetNode)
+			{
+				state = IDLE;
+			}
 		}
 		else if (path.length > 1 && path[path.length - 2].occupant != null)
 		{
-			moving = false;
+			if (path[path.length - 2].occupant.team != team)
+			{
+				targetEnemy = path[path.length - 2].occupant;
+				state = ATTACKING;
+			}
+			else
+			{
+				state = IDLE;
+			}
 		}
 		else
 		{
 			targetNode = null;
-			moving = false;
+			state = IDLE;
 		}
 	}
 	
@@ -78,4 +177,14 @@ class BaseActor extends FlxSprite
 		color = 0xffffff;
 	}
 	
+	override public function kill()
+	{
+		super.kill();
+		currentNode.occupant = null;
+		actionTimer.stop();
+		PlayState.getLevel().remove(healthBar);
+		PlayState.getLevel().remove(healthBarFill);
+		PlayState.getLevel().remove(this);
+		destroy();
+	}
 }

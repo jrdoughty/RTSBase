@@ -109,13 +109,10 @@ class AStar
 
 		for (i in 0...openList[closestIndex].neighbors.length) 
 		{
-            if (openList[closestIndex].neighbors[i].isPassible()) 
+			if (SetupChildNode(openList[closestIndex].neighbors[i], openList[closestIndex]))
 			{
-                if (SetupChildNode(openList[closestIndex].neighbors[i], openList[closestIndex]))
-				{
-                    return true;
-                }
-            }
+				return true;
+			}
         }
         closedList.push(openList[closestIndex]);
         openList.splice(closestIndex, 1);
@@ -197,10 +194,18 @@ class AStar
             childNode.parentNode = parentNode;
             return true;// done if its the end
         }
-
+		else if (childNode.isPassible() == false)
+		{
+			return false;
+		}
+		
         if (parentNode.nodeX == childNode.nodeX || parentNode.nodeY == childNode.nodeY) 
 		{
             prospectiveG = parentNode.g + 10;
+			if (childNode.occupant != null)
+			{
+				prospectiveG += 100;
+			}
         } 
 		else 
 		{

@@ -1,6 +1,7 @@
 package actors;
 import flixel.FlxG;
 import world.Node;
+import actors.BaseActor.State;
 
 /**
  * ...
@@ -14,20 +15,27 @@ class SwordSoldier extends BaseActor
 		super(node);
 		loadGraphic("assets/images/soldiers.png", true, 8, 8);
 		animation.add("active", [0, 1], 5, true);
+		animation.add("attack", [0, 4], 5, true);
+		team = 1;
 	}
+
 	
-	override private function takeAction()
+	override private function move() 
 	{
-		super.takeAction();
-		if (moving)
-		{
+			super.move();
 			animation.play("active");
-		}
-		else
-		{
-			animation.frameIndex = 0;
-			animation.pause();
-		}
 	}
 	
+	override private function idle()
+	{
+		super.idle();
+		animation.frameIndex = 0;
+		animation.pause();
+	}
+	
+	override private function attack()
+	{
+		super.attack();
+		animation.play("attack");
+	}
 }

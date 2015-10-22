@@ -11,7 +11,7 @@ import flixel.plugin.MouseEventManager;
 class Node extends FlxSprite
 {
 
-	public var neighbors:Array<Node>;
+	public var neighbors:Array<Node> = [];
 	public var parentNode:Node;
 	public var occupant:BaseActor = null;
 	public var g:Int = -1;
@@ -57,6 +57,7 @@ class Node extends FlxSprite
 	
 	private function onClick(sprite:FlxSprite):Void
 	{
+		trace(occupant);
 		if (PlayState.getSelectedUnit != null && isPassible() && occupant == null)
 		{
 			PlayState.newPath(this);
