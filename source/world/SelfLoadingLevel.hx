@@ -76,17 +76,5 @@ class SelfLoadingLevel extends FlxGroup
 		}
 		
 		
-	}
-	
-	public function setSelectedNode(node:Node):Void
-	{
-		var i:Int = 0;
-		for (i in 0...nodes.length)
-		{
-			nodes[i].resetState();
-		}
-		selectedNode = node;
-		trace(selectedNode.occupant);
-	}
-	
+	}	
 }

@@ -89,28 +89,31 @@ class BaseActor extends FlxSprite
 	
 	private function attack()
 	{
+		state = ATTACKING;
 		if (targetEnemy != null && targetEnemy.alive)
 		{
 			targetEnemy.hurt(damage / targetEnemy.healthMax);
 		}
 		else if (targetNode != null)
 		{
-			state = MOVING;
+			
+			move();
 		}
 		else
 		{
-			state = IDLE;
+			idle();
 		}
 	}
 	
 	private function idle()
 	{
+		state = IDLE;
 		var i:Int;
-
+		
 		
 		if (targetNode != null)
 		{
-			state = MOVING;
+			move();
 		}
 		else
 		{
@@ -119,7 +122,7 @@ class BaseActor extends FlxSprite
 				if (currentNode.neighbors[i].occupant != null && currentNode.neighbors[i].occupant.team != team)
 				{
 					targetEnemy = currentNode.neighbors[i].occupant;
-					state = ATTACKING;
+					attack();
 					break;
 				}
 			}
@@ -128,6 +131,8 @@ class BaseActor extends FlxSprite
 	
 	private function move():Void
 	{
+		state = MOVING;
+		trace("what");
 		var path:Array<Node> = [];
 		if (targetNode != null && targetNode.isPassible())
 		{
@@ -143,7 +148,7 @@ class BaseActor extends FlxSprite
 			FlxTween.tween(healthBarFill, { x:currentNode.x, y:currentNode.y - 1 }, speed / 1000);
 			if (currentNode == targetNode)
 			{
-				state = IDLE;
+				state = IDLE;//Unlike other cases, this is after the action has been carried out.
 			}
 		}
 		else if (path.length > 1 && path[path.length - 2].occupant != null)
@@ -151,17 +156,17 @@ class BaseActor extends FlxSprite
 			if (path[path.length - 2].occupant.team != team)
 			{
 				targetEnemy = path[path.length - 2].occupant;
-				state = ATTACKING;
+				attack();
 			}
 			else
 			{
-				state = IDLE;
+				idle();
 			}
 		}
 		else
 		{
 			targetNode = null;
-			state = IDLE;
+			idle();
 		}
 	}
 	
