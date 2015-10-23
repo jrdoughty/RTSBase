@@ -2,6 +2,7 @@ package world;
 
 import flixel.group.FlxGroup;
 import haxe.Json;
+import world.TiledTypes.Layer;
 import world.TiledTypes.TiledLevel;
 import openfl.Assets;
 
@@ -12,12 +13,12 @@ import openfl.Assets;
  */
 class SelfLoadingLevel extends FlxGroup
 {
-	private var tiledLevel:TiledLevel;
 	public var nodes:Array<Node> = [];
-	private var selectedNode:Node;
-	
 	public var width:Int;
 	public var height:Int;
+	
+	private var selectedNode:Node;
+	private var tiledLevel:TiledLevel;
 	
 	public function new(json:String) 
 	{
@@ -32,29 +33,49 @@ class SelfLoadingLevel extends FlxGroup
 		var y:Int = 0;
 		var pass:Bool = false;
 		
+		var graphicLayer:Layer = null;
+		var collisionLayer:Layer = null;
+		
 		tiledLevel = Json.parse(json);
 		
 		width = tiledLevel.width;
 		height = tiledLevel.height;
 		
-		for (i in 0...tiledLevel.layers[0].data.length)
+		for (i in 0...tiledLevel.layers.length)
 		{
-			tileSetId = 0;
-			for (j in 0...(tiledLevel.tilesets.length-1))
+			if (tiledLevel.layers[i].name == "graphic")
 			{
-				if (tiledLevel.layers[0].data[i] > tiledLevel.tilesets[j + 1].firstgid)
-				{
-					tileSetId += 1;
-				}
+				graphicLayer = tiledLevel.layers[i];
 			}
-			asset = "assets/" + tiledLevel.tilesets[tileSetId].image.substring(3);
-			frame = tiledLevel.layers[0].data[i] - tiledLevel.tilesets[tileSetId].firstgid;
-			x = i % width;
-			y = Math.floor(i / width);
-			pass = tiledLevel.layers[1].data[i] == 0;
-			nodes.push(new Node(asset, frame,tiledLevel.tilewidth,tiledLevel.tileheight, x, y,pass));
-			add(nodes[i]);
+			else if (tiledLevel.layers[i].name == "collision")
+			{
+				collisionLayer = tiledLevel.layers[i];
+			}
+			if (graphicLayer != null && collisionLayer != null)
+			{
+				for (i in 0...graphicLayer.data.length)
+				{
+					tileSetId = 0;
+					for (j in 0...(tiledLevel.tilesets.length-1))
+					{
+						if (graphicLayer.data[i] > tiledLevel.tilesets[j + 1].firstgid)
+						{
+							tileSetId += 1;
+						}
+					}
+					asset = "assets/" + tiledLevel.tilesets[tileSetId].image.substring(3);
+					frame = graphicLayer.data[i] - tiledLevel.tilesets[tileSetId].firstgid;
+					x = i % width;
+					y = Math.floor(i / width);
+					pass = collisionLayer.data[i] == 0;
+					nodes.push(new Node(asset, frame,tiledLevel.tilewidth,tiledLevel.tileheight, x, y, pass));
+					add(nodes[i]);
+				}
+				break;
+			}
 		}
+		
+		
 	}
 	
 	public function setSelectedNode(node:Node):Void
