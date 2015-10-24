@@ -29,6 +29,7 @@ class BaseActor extends FlxSprite
 	public var targetEnemy:BaseActor;
 	public var team:Int = 0;
 	public var damage:Int = 1;
+	
 	private var selected:Bool = false;
 	private var iterator:Int = 0;
 	private var actionTimer:Timer;
@@ -38,7 +39,7 @@ class BaseActor extends FlxSprite
 	private var healthMax:Int = 8;
 	private var healthBar:FlxSprite;
 	private var healthBarFill:FlxSprite;
-	
+	private	var path:Array<Node> = [];
 	
 	public function new(node:Node) 
 	{
@@ -133,21 +134,21 @@ class BaseActor extends FlxSprite
 	{
 		state = MOVING;
 		trace("what");
-		var path:Array<Node> = [];
-		if (targetNode != null && targetNode.isPassible())
+		if (targetNode != null && targetNode.isPassible() && path.length == 0)
 		{
 			path = AStar.newPath(currentNode, targetNode);
 		}
 		if (path.length > 1 && path[path.length - 2].occupant == null)
 		{
-			currentNode.occupant = null;
-			currentNode = path[path.length - 2];
+			path.splice(path.length - 1,1)[0].occupant = null;
+			currentNode = path[path.length - 1];
 			currentNode.occupant = this;
 			FlxTween.tween(this, { x:currentNode.x, y:currentNode.y }, speed / 1000);
 			FlxTween.tween(healthBar, { x:currentNode.x, y:currentNode.y - 1}, speed / 1000);
 			FlxTween.tween(healthBarFill, { x:currentNode.x, y:currentNode.y - 1 }, speed / 1000);
 			if (currentNode == targetNode)
 			{
+				path = [];
 				state = IDLE;//Unlike other cases, this is after the action has been carried out.
 			}
 		}
@@ -160,7 +161,17 @@ class BaseActor extends FlxSprite
 			}
 			else
 			{
-				idle();
+				var nextMove = path[path.length - 2];
+				path = AStar.newPath(currentNode, targetNode);
+				if (path.length > 1 && nextMove != path[path.length -2] )
+				{
+					move();//try new path					
+				}
+				else
+				{
+					path = [];
+					targetNode = null;
+				}
 			}
 		}
 		else
