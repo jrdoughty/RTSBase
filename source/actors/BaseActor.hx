@@ -132,8 +132,10 @@ class BaseActor extends FlxSprite
 	
 	private function move():Void
 	{
+		var nextMove:Node;
+		
 		state = MOVING;
-		trace("what");
+		
 		if (targetNode != null && targetNode.isPassible() && path.length == 0)
 		{
 			path = AStar.newPath(currentNode, targetNode);
@@ -161,7 +163,7 @@ class BaseActor extends FlxSprite
 			}
 			else
 			{
-				var nextMove = path[path.length - 2];
+				nextMove = path[path.length - 2];
 				path = AStar.newPath(currentNode, targetNode);
 				if (path.length > 1 && nextMove != path[path.length -2] )
 				{

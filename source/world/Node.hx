@@ -12,6 +12,7 @@ class Node extends FlxSprite
 {
 
 	public var neighbors:Array<Node> = [];
+	public static var activeNodes = [];
 	public var parentNode:Node;
 	public var occupant:BaseActor = null;
 	public var g:Int = -1;

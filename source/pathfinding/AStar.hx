@@ -20,14 +20,14 @@ class AStar
 	
 	public static function newPath(start:Node, endNode:Node):Array<Node>
 	{
-		nodes = PlayState.getLevel().nodes;
+		nodes = Node.activeNodes;
 		levelWidth = PlayState.getLevel().width;
 		
 		cleanParentNodes();//ensure everying this ready
 		cleanUp();
 		
 		path = [];
-		levelHeight = Math.floor(nodes.length / levelWidth);
+		levelHeight = Math.floor(Node.activeNodes.length / levelWidth);
 		end = endNode;
 		start.heiristic = calculateHeiristic(start.nodeX, start.nodeY, end.nodeX, end.nodeY);
 		start.g = 0;

@@ -34,10 +34,10 @@ class PlayState extends FlxState
 	{
 		super.create();
 		add(getLevel());
-		add(new SwordSoldier(getLevel().nodes[0]));	
-		add(new SwordSoldier(getLevel().nodes[30]));
-		add(new SpearSoldier(getLevel().nodes[380]));
-		add(new SpearSoldier(getLevel().nodes[399]));		
+		add(new SwordSoldier(Node.activeNodes[0]));	
+		add(new SwordSoldier(Node.activeNodes[30]));
+		add(new SpearSoldier(Node.activeNodes[380]));
+		add(new SpearSoldier(Node.activeNodes[399]));		
 	}
 	
 	public static function newPath(node:Node)

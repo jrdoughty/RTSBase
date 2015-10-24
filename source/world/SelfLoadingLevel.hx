@@ -13,7 +13,7 @@ import openfl.Assets;
  */
 class SelfLoadingLevel extends FlxGroup
 {
-	public var nodes:Array<Node> = [];
+	//public var nodes:Array<Node> = [];
 	public var width:Int;
 	public var height:Int;
 	
@@ -68,8 +68,8 @@ class SelfLoadingLevel extends FlxGroup
 					x = i % width;
 					y = Math.floor(i / width);
 					pass = collisionLayer.data[i] == 0;
-					nodes.push(new Node(asset, frame,tiledLevel.tilewidth,tiledLevel.tileheight, x, y, pass));
-					add(nodes[i]);
+					Node.activeNodes.push(new Node(asset, frame,tiledLevel.tilewidth,tiledLevel.tileheight, x, y, pass));
+					add(Node.activeNodes[i]);
 				}
 				break;
 			}
