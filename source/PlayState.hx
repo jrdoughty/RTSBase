@@ -4,6 +4,7 @@ import actors.BaseActor;
 import actors.SpearSoldier;
 import actors.SwordSoldier;
 import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.text.FlxText;
@@ -14,6 +15,7 @@ import world.Node;
 import world.SelfLoadingLevel;
 import world.TiledTypes;
 import openfl.Assets;
+import flixel.plugin.MouseEventManager;
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -30,20 +32,27 @@ class PlayState extends FlxState
 	
 	private static var selectedUnit:BaseActor = null;
 	
+	
+	
 	override public function create():Void
 	{
+		var i:Int;
+		
 		super.create();
 		add(getLevel());
+		add(activeLevel.highlight);
+		for (i in 0...Node.activeNodes.length)
+		{
+			MouseEventManager.add(Node.activeNodes[i], onClick, null, onOver, null);
+		}
 		add(new SwordSoldier(Node.activeNodes[0]));	
 		add(new SwordSoldier(Node.activeNodes[30]));
 		add(new SpearSoldier(Node.activeNodes[380]));
 		add(new SpearSoldier(Node.activeNodes[399]));		
 	}
 	
-	public static function newPath(node:Node)
+	public static function setOnPath(node:Node)
 	{
-		var path:Array<Node>;
-		var i:Int;
 		if (selectedUnit != null)
 		{
 			selectedUnit.targetNode = node;
@@ -74,12 +83,29 @@ class PlayState extends FlxState
 		}
 	}
 
-	
-
-	
 	public static function getSelectedUnit():BaseActor
 	{
 		return selectedUnit;
+	}
+	
+	
+	private function onOver(sprite:Node):Void
+	{
+		getLevel().highlight.x = sprite.x;
+		getLevel().highlight.y = sprite.y;
+	}
+	
+	private function onClick(sprite:Node):Void
+	{
+		
+		if (selectedUnit != null && sprite.isPassible() && sprite.occupant == null)
+		{
+			setOnPath(sprite);
+		}
+		else if (sprite.occupant != null)
+		{
+			selectUnit(sprite.occupant);
+		}
 	}
 	
 	/**

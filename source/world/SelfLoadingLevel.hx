@@ -1,5 +1,6 @@
 package world;
 
+import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import haxe.Json;
 import world.TiledTypes.Layer;
@@ -16,6 +17,7 @@ class SelfLoadingLevel extends FlxGroup
 	//public var nodes:Array<Node> = [];
 	public var width:Int;
 	public var height:Int;
+	public var highlight:FlxSprite;
 	
 	private var selectedNode:Node;
 	private var tiledLevel:TiledLevel;
@@ -70,8 +72,18 @@ class SelfLoadingLevel extends FlxGroup
 					pass = collisionLayer.data[i] == 0;
 					Node.activeNodes.push(new Node(asset, frame,tiledLevel.tilewidth,tiledLevel.tileheight, x, y, pass));
 					add(Node.activeNodes[i]);
+					trace(i);
 				}
 				break;
+			}
+			for (i in 0...tiledLevel.tilesets.length)
+			{
+				if (tiledLevel.tilesets[i].name == "highlight")
+				{
+					highlight = new FlxSprite(0, 0).loadGraphic("assets/"+tiledLevel.tilesets[i].image.substring(3), true, tiledLevel.tilewidth, tiledLevel.tileheight);
+					highlight.animation.add("main", [0, 1, 2, 3, 4, 5, 6], 10);//has to be better way
+					highlight.animation.play("main");
+				}
 			}
 		}
 		
