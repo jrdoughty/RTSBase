@@ -4,6 +4,7 @@ import actors.BaseActor;
 import actors.SpearSoldier;
 import actors.SwordSoldier;
 import flixel.FlxG;
+import flixel.util.FlxColor;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -31,7 +32,7 @@ class PlayState extends FlxState
 	private static var activeLevel:SelfLoadingLevel = null;
 	
 	private static var selectedUnit:BaseActor = null;
-	
+	private static var highlight:FlxSprite;
 	
 	
 	override public function create():Void
@@ -41,9 +42,11 @@ class PlayState extends FlxState
 		super.create();
 		add(getLevel());
 		add(activeLevel.highlight);
+		highlight = new FlxSprite(-1,-1);
+		highlight.makeGraphic(1, 1, FlxColor.WHITE);
 		for (i in 0...Node.activeNodes.length)
 		{
-			MouseEventManager.add(Node.activeNodes[i], onClick, null, onOver, null);
+			MouseEventManager.add(Node.activeNodes[i], onClick, select, onOver);
 		}
 		add(new SwordSoldier(Node.activeNodes[0]));	
 		add(new SwordSoldier(Node.activeNodes[30]));
@@ -97,7 +100,12 @@ class PlayState extends FlxState
 	
 	private function onClick(sprite:Node):Void
 	{
-		
+		add(highlight);
+		highlight.alpha = .5;
+		highlight.x = FlxG.mouse.x;
+		highlight.y = FlxG.mouse.y;
+		highlight.setGraphicSize(1, 1);
+		highlight.updateHitbox();
 		if (selectedUnit != null && sprite.isPassible() && sprite.occupant == null)
 		{
 			setOnPath(sprite);
@@ -106,6 +114,11 @@ class PlayState extends FlxState
 		{
 			selectUnit(sprite.occupant);
 		}
+	}
+	
+	private function select(sprite:Node):Void
+	{
+		remove(highlight);
 	}
 	
 	/**
@@ -122,6 +135,11 @@ class PlayState extends FlxState
 	 */
 	override public function update():Void
 	{
+		if (FlxG.mouse.pressed)
+		{
+			highlight.setGraphicSize(Math.floor(FlxG.mouse.x - highlight.x), Math.floor(FlxG.mouse.y - highlight.y));
+			highlight.updateHitbox();
+		}
 		super.update();
 	}
 }
