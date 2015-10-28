@@ -13,6 +13,7 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
 import systems.AStar;
+import systems.InputHandler;
 import systems.Team;
 import world.Node;
 import world.SelfLoadingLevel;
@@ -32,16 +33,12 @@ class PlayState extends FlxState
 	 * Function that is called up when to state is created to set it up.
 	 */
 	private static var activeLevel:SelfLoadingLevel = null;
-	private static var selectedUnit:BaseActor = null;
-	private static var selectedUnits:Array<BaseActor> = [];
 	
-	private var selector:FlxSprite;
-	private var Teams:Array<Team> = [];
-	private var activeTeam:Team;
-	private var wasLeftMouseDown:Bool = false;
-	private var flxTeamUnits:FlxGroup = new FlxGroup();
-	private var flxNodes:FlxGroup = new FlxGroup();
+	public static var selector(default,null):FlxSprite;
+	public static var Teams(default,null):Array<Team> = [];
+	public static var activeTeam(default,null):Team;
 	
+	private var inputHandler:InputHandler;
 	
 	override public function create():Void
 	{
@@ -52,11 +49,6 @@ class PlayState extends FlxState
 		add(activeLevel.highlight);
 		selector = new FlxSprite(-1,-1);
 		selector.makeGraphic(1, 1, FlxColor.WHITE);
-		for (i in 0...Node.activeNodes.length)
-		{
-			flxNodes.add(Node.activeNodes[i]);
-			MouseEventManager.add(Node.activeNodes[i], onClick, removeSelector, onOver);
-		}
 		activeTeam = new Team();
 		Teams.push(activeTeam);
 		Teams.push(new Team());
@@ -70,18 +62,11 @@ class PlayState extends FlxState
 			add(unitsInPlay[i]);
 		}
 		trace(unitsInPlay.length);
-		for (i in 0...Teams.length)
+		/*for (i in 0...Teams.length)
 		{
 			flxTeamUnits.add(Teams[i].flxUnits);
-		}
-	}
-	
-	public static function setOnPath(node:Node)
-	{
-		if (selectedUnit != null)
-		{
-			selectedUnit.targetNode = node;
-		}
+		}*/
+		inputHandler = new InputHandler();
 	}
 	
 	public static function getLevel():SelfLoadingLevel
@@ -94,49 +79,6 @@ class PlayState extends FlxState
 		return activeLevel;
 	}
 	
-	public static function selectUnit(baseA:BaseActor):Void
-	{
-		if(selectedUnit != null)
-		{
-			selectedUnit.resetSelect();
-		}
-		selectedUnit = baseA;
-
-		if(selectedUnit != null)
-		{
-			selectedUnit.select();
-		}
-	}
-
-	public static function getSelectedUnit():BaseActor
-	{
-		return selectedUnit;
-	}
-	
-	
-	private function onOver(sprite:Node):Void
-	{
-		getLevel().highlight.x = sprite.x;
-		getLevel().highlight.y = sprite.y;
-	}
-	
-	private function onClick(sprite:Node):Void
-	{
-		add(selector);
-		selector.alpha = .5;
-		selector.x = FlxG.mouse.x;
-		selector.y = FlxG.mouse.y;
-		selector.setGraphicSize(1, 1);
-		selector.updateHitbox();
-		if (selectedUnit != null && sprite.isPassible() && sprite.occupant == null)
-		{
-			setOnPath(sprite);
-		}
-		else if (sprite.occupant != null)
-		{
-			selectUnit(sprite.occupant);
-		}
-	}
 	
 	private function getUnitsInPlay():Array<BaseActor>
 	{
@@ -151,29 +93,6 @@ class PlayState extends FlxState
 		return result;
 	}
 	
-	private function removeSelector(sprite:FlxSprite)
-	{
-		remove(selector);
-	}
-	
-	private function selectOverlap(selector:FlxObject, unit:BaseActor):Void
-	{
-		if (unit.team == activeTeam.id)
-		{
-			selectedUnits.push(unit);
-			unit.select();
-
-		}
-	}
-	
-	private function deselectUnits():Void
-	{
-		var i:Int;
-		for (i in 0...selectedUnits.length)
-		{
-			selectedUnits[i].resetSelect();
-		}
-	}
 	
 	/**
 	 * Function that is called when this state is destroyed - you might want to
@@ -189,26 +108,6 @@ class PlayState extends FlxState
 	 */
 	override public function update():Void
 	{
-		var i:Int;
-		if (FlxG.mouse.pressed)
-		{
-			if (wasLeftMouseDown)
-			{
-				selector.setGraphicSize(Math.floor(FlxG.mouse.x - selector.x), Math.floor(FlxG.mouse.y - selector.y));
-				selector.updateHitbox();
-			}
-			wasLeftMouseDown = true;
-		}
-		else
-		{
-			if (wasLeftMouseDown)
-			{
-				deselectUnits();
-				selectedUnits = [];
-				FlxG.overlap(selector, flxTeamUnits, selectOverlap);
-			}
-			wasLeftMouseDown = false;
-		}
 		super.update();
 	}
 }
