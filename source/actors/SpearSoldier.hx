@@ -1,7 +1,7 @@
 package actors;
 import flixel.FlxG;
 import world.Node;
-import actors.BaseActor.State;
+import actors.BaseActor.ActorState;
 
 /**
  * ...
@@ -17,9 +17,15 @@ class SpearSoldier extends BaseActor
 		animation.add("active", [2, 3], 5, true);
 		animation.add("attack", [2, 6], 5, true);
 		animation.frameIndex = 2;
-		team = 2;
 	}
 	
+	
+	override private function move() 
+	{
+			super.move();
+			animation.play("active");
+	
+	}
 	
 	override private function idle()
 	{

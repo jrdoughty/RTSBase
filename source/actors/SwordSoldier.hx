@@ -1,7 +1,7 @@
 package actors;
 import flixel.FlxG;
 import world.Node;
-import actors.BaseActor.State;
+import actors.BaseActor.ActorState;
 
 /**
  * ...

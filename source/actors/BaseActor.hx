@@ -3,7 +3,7 @@ package actors;
 import flixel.FlxSprite;
 import flixel.FlxG;
 import haxe.Timer;
-import pathfinding.AStar;
+import systems.AStar;
 import world.Node;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
@@ -13,7 +13,7 @@ import flixel.util.FlxColor;
  * @author John Doughty
  */
 
-enum State {
+enum ActorState {
 	MOVING;
 	ATTACKING;
 	IDLE;
@@ -35,7 +35,7 @@ class BaseActor extends FlxSprite
 	private var actionTimer:Timer;
 	private var delayTimer:Timer;
 	private var speed:Int = 250;
-	private var state:State = IDLE;
+	private var state:ActorState = IDLE;
 	private var healthMax:Int = 8;
 	private var healthBar:FlxSprite;
 	private var healthBarFill:FlxSprite;
