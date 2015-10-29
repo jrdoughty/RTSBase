@@ -62,11 +62,7 @@ class PlayState extends FlxState
 			add(unitsInPlay[i]);
 		}
 		trace(unitsInPlay.length);
-		/*for (i in 0...Teams.length)
-		{
-			flxTeamUnits.add(Teams[i].flxUnits);
-		}*/
-		inputHandler = new InputHandler();
+		inputHandler = new InputHandler(this);
 	}
 	
 	public static function getLevel():SelfLoadingLevel
@@ -109,5 +105,7 @@ class PlayState extends FlxState
 	override public function update():Void
 	{
 		super.update();
+	
+		inputHandler.update();
 	}
 }

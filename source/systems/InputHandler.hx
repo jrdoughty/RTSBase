@@ -1,6 +1,7 @@
 package systems;
 import actors.BaseActor;
 import flixel.FlxG;
+import flixel.FlxState;
 import flixel.group.FlxGroup;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -30,13 +31,19 @@ class InputHandler
 	private var flxTeamUnits:FlxGroup = new FlxGroup();
 	private var flxNodes:FlxGroup = new FlxGroup();
 	private var nodes:Array<Node>;
+	private var playstate:PlayState;
 	
-	public function new() 
+	public function new(state:PlayState) 
 	{
+		playstate = state;
 		for (i in 0...Node.activeNodes.length)
 		{
 			flxNodes.add(Node.activeNodes[i]);
 			MouseEventManager.add(Node.activeNodes[i], onClick, removeSelector, onOver);
+		}
+		for (i in 0...PlayState.Teams.length)
+		{
+			flxTeamUnits.add(PlayState.Teams[i].flxUnits);
 		}
 	}
 	
@@ -69,7 +76,7 @@ class InputHandler
 	
 	private function onClick(sprite:Node):Void
 	{
-		//add(selector);
+		playstate.add(PlayState.selector);
 		PlayState.selector.alpha = .5;
 		PlayState.selector.x = FlxG.mouse.x;
 		PlayState.selector.y = FlxG.mouse.y;
@@ -96,7 +103,7 @@ class InputHandler
 	
 	private function removeSelector(sprite:FlxSprite)
 	{
-		//remove(selector);
+		playstate.remove(PlayState.selector);
 	}
 	
 	private function deselectUnits():Void
@@ -110,8 +117,11 @@ class InputHandler
 	
 	private function onOver(sprite:Node):Void
 	{
-		PlayState.getLevel().highlight.x = sprite.x;
-		PlayState.getLevel().highlight.y = sprite.y;
+		if (PlayState.getLevel().highlight != null)
+		{
+			PlayState.getLevel().highlight.x = sprite.x;
+			PlayState.getLevel().highlight.y = sprite.y;
+		}
 	}
 	public function update()
 	{
