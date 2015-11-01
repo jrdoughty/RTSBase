@@ -67,6 +67,7 @@ class PlayState extends FlxState implements RTSGameState
 		if (activeLevel == null)
 		{
 			activeLevel = new SelfLoadingLevel(Assets.getText("assets/data/moreopen.json"));
+			AStar.setActiveLevel(activeLevel);
 		}
 		
 		return activeLevel;
