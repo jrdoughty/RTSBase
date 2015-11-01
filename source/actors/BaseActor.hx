@@ -19,6 +19,7 @@ enum ActorState {
 	ATTACKING;
 	IDLE;
 	BUSY;
+	CHASING;
 }
  
  
@@ -89,14 +90,95 @@ class BaseActor extends FlxSprite
 		{
 			attack();
 		}
+		else if (state == CHASING)
+		{
+			chase();
+		}
+	}
+	
+	private function chase()
+	{
+		var nextMove:Node;
+		var inRange:Bool = false;
+		var i:Int;
+		
+		state = CHASING;
+				
+		state = ATTACKING;
+		if (targetEnemy != null && targetEnemy.alive)
+		{
+			for (i in 0...currentNode.neighbors.length)
+			{
+				if (currentNode.neighbors[i].occupant == targetEnemy)
+				{
+					inRange = true;
+					break;
+				}
+			}
+			if (inRange)
+			{
+				attack();
+			}
+			else
+			{
+				if (targetEnemy.currentNode.isPassible())
+				{
+					path = AStar.newPath(currentNode, targetEnemy.currentNode);
+				}
+				
+				if (path.length > 1 && path[path.length - 2].occupant == null)
+				{
+					path.splice(path.length - 1,1)[0].occupant = null;
+					currentNode = path[path.length - 1];
+					currentNode.occupant = this;
+					FlxTween.tween(this, { x:currentNode.x, y:currentNode.y }, speed / 1000);
+					FlxTween.tween(healthBar, { x:currentNode.x, y:currentNode.y - 1}, speed / 1000);
+					FlxTween.tween(healthBarFill, { x:currentNode.x, y:currentNode.y - 1 }, speed / 1000);
+					for (i in 0...currentNode.neighbors.length)
+					{
+						if (currentNode.neighbors[i].occupant == targetEnemy)
+						{
+							inRange = true;
+							break;
+						}
+					}
+					if (inRange)
+					{
+						path = [];
+						state = ATTACKING;
+					}
+				}
+			}
+		}
+		else
+		{
+			idle();
+		}
 	}
 	
 	private function attack()
 	{
+		var i:Int;
+		var inRange:Bool = false;
 		state = ATTACKING;
 		if (targetEnemy != null && targetEnemy.alive)
 		{
-			targetEnemy.hurt(damage / targetEnemy.healthMax);
+			for (i in 0...currentNode.neighbors.length)
+			{
+				if (currentNode.neighbors[i].occupant == targetEnemy)
+				{
+					inRange = true;
+					break;
+				}
+			}
+			if (inRange)
+			{
+				targetEnemy.hurt(damage / targetEnemy.healthMax);
+			}
+			else
+			{
+				chase();
+			}
 		}
 		else if (targetNode != null)
 		{
@@ -196,6 +278,13 @@ class BaseActor extends FlxSprite
 	{
 		selected = false;
 		color = 0xffffff;
+	}
+	
+	public function resetStates():Void
+	{
+		state = IDLE;
+		targetEnemy = null;
+		targetNode = null;
 	}
 	
 	override public function kill()

@@ -63,6 +63,7 @@ class InputHandler
 		{
 			for (i in 0...selectedUnits.length)
 			{
+				selectedUnits[i].resetStates();
 				selectedUnits[i].targetNode = node;
 			}
 		}
