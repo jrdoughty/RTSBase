@@ -3,6 +3,7 @@ package world;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import haxe.Json;
+import systems.AStar;
 import world.TiledTypes.Layer;
 import world.TiledTypes.TiledLevel;
 import openfl.Assets;
@@ -19,8 +20,9 @@ class SelfLoadingLevel extends FlxGroup
 	public var height:Int;
 	public var highlight:FlxSprite;
 	
+	public var tiledLevel(default,null):TiledLevel;
+	
 	private var selectedNode:Node;
-	private var tiledLevel:TiledLevel;
 	
 	public function new(json:String) 
 	{
@@ -86,6 +88,7 @@ class SelfLoadingLevel extends FlxGroup
 			}
 		}
 		
+		AStar.setActiveLevel(this);
 		
 	}	
 }

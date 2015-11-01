@@ -3,6 +3,7 @@ package actors;
 import flixel.FlxSprite;
 import flixel.FlxG;
 import haxe.Timer;
+import interfaces.RTSGameState;
 import systems.AStar;
 import world.Node;
 import flixel.tweens.FlxTween;
@@ -40,9 +41,11 @@ class BaseActor extends FlxSprite
 	private var healthBar:FlxSprite;
 	private var healthBarFill:FlxSprite;
 	private	var path:Array<Node> = [];
+	private var activeState:RTSGameState;
 	
-	public function new(node:Node) 
+	public function new(node:Node, state:RTSGameState) 
 	{
+		activeState = state;
 		super(node.x, node.y);
 		node.occupant = this;
 		currentNode = node;
@@ -52,10 +55,10 @@ class BaseActor extends FlxSprite
 		health = 1;
 		healthBar = new FlxSprite(x, y - 1);
 		healthBar.makeGraphic(8, 1, FlxColor.BLACK);
-		PlayState.getLevel().add(healthBar);
+		activeState.add(healthBar);
 		healthBarFill = new FlxSprite(x, y - 1);
 		healthBarFill.makeGraphic(8, 1, FlxColor.RED);
-		PlayState.getLevel().add(healthBarFill);
+		activeState.add(healthBarFill);
 	}
 	
 	private function delayedStart()
@@ -200,9 +203,9 @@ class BaseActor extends FlxSprite
 		super.kill();
 		currentNode.occupant = null;
 		actionTimer.stop();
-		PlayState.getLevel().remove(healthBar);
-		PlayState.getLevel().remove(healthBarFill);
-		PlayState.getLevel().remove(this);
+		activeState.remove(healthBar);
+		activeState.remove(healthBarFill);
+		activeState.remove(this);
 		destroy();
 	}
 }

@@ -2,6 +2,7 @@ package actors;
 import flixel.FlxG;
 import world.Node;
 import actors.BaseActor.ActorState;
+import interfaces.RTSGameState;
 
 /**
  * ...
@@ -10,9 +11,9 @@ import actors.BaseActor.ActorState;
 class SwordSoldier extends BaseActor
 {
 
-	public function new(node:Node) 
+	public function new(node:Node, state:RTSGameState) 
 	{
-		super(node);
+		super(node, state);
 		loadGraphic("assets/images/soldiers.png", true, 8, 8);
 		animation.add("active", [0, 1], 5, true);
 		animation.add("attack", [0, 4], 5, true);

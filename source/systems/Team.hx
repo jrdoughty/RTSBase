@@ -22,7 +22,6 @@ class Team
 	
 	public function addUnit(actor:BaseActor):Void
 	{
-		trace("added");
 		units.push(actor);
 		flxUnits.add(actor);
 		actor.team = id;

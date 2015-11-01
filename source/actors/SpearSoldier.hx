@@ -1,5 +1,6 @@
 package actors;
 import flixel.FlxG;
+import interfaces.RTSGameState;
 import world.Node;
 import actors.BaseActor.ActorState;
 
@@ -10,9 +11,9 @@ import actors.BaseActor.ActorState;
 class SpearSoldier extends BaseActor
 {
 
-	public function new(node:Node) 
+	public function new(node:Node, state:RTSGameState) 
 	{
-		super(node);
+		super(node, state);
 		loadGraphic("assets/images/soldiers.png", true, 8, 8);
 		animation.add("active", [2, 3], 5, true);
 		animation.add("attack", [2, 6], 5, true);

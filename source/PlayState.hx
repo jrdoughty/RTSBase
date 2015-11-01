@@ -12,6 +12,7 @@ import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
+import interfaces.RTSGameState;
 import systems.AStar;
 import systems.InputHandler;
 import systems.Team;
@@ -27,14 +28,13 @@ import flixel.plugin.MouseEventManager;
 
 
  
-class PlayState extends FlxState
+class PlayState extends FlxState implements RTSGameState
 {
 	/**
 	 * Function that is called up when to state is created to set it up.
 	 */
-	private static var activeLevel:SelfLoadingLevel = null;
+	private var activeLevel:SelfLoadingLevel = null;
 	
-	public static var selector(default,null):FlxSprite;
 	public static var Teams(default,null):Array<Team> = [];
 	public static var activeTeam(default,null):Team;
 	
@@ -47,25 +47,22 @@ class PlayState extends FlxState
 		super.create();
 		add(getLevel());
 		add(activeLevel.highlight);
-		selector = new FlxSprite(-1,-1);
-		selector.makeGraphic(1, 1, FlxColor.WHITE);
 		activeTeam = new Team();
 		Teams.push(activeTeam);
 		Teams.push(new Team());
-		Teams[0].addUnit(new SwordSoldier(Node.activeNodes[0]));
-		Teams[0].addUnit(new SwordSoldier(Node.activeNodes[30]));
-		Teams[1].addUnit(new SpearSoldier(Node.activeNodes[380]));
-		Teams[1].addUnit(new SpearSoldier(Node.activeNodes[399]));	
+		Teams[0].addUnit(new SwordSoldier(Node.activeNodes[0],this));
+		Teams[0].addUnit(new SwordSoldier(Node.activeNodes[50],this));
+		Teams[1].addUnit(new SpearSoldier(Node.activeNodes[616],this));
+		Teams[1].addUnit(new SpearSoldier(Node.activeNodes[499],this));	
 		unitsInPlay = getUnitsInPlay();
 		for (i in 0...unitsInPlay.length)
 		{
 			add(unitsInPlay[i]);
 		}
-		trace(unitsInPlay.length);
 		inputHandler = new InputHandler(this);
 	}
 	
-	public static function getLevel():SelfLoadingLevel
+	public function getLevel():SelfLoadingLevel
 	{
 		if (activeLevel == null)
 		{

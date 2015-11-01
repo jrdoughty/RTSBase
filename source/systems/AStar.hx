@@ -1,5 +1,6 @@
 package systems ;
 import world.Node;
+import world.SelfLoadingLevel;
 
 /**
  * ...
@@ -10,19 +11,22 @@ class AStar
 	private static var path:Array<Node> = [];
 	private static var openList:Array<Node> = [];
 	private static var closedList:Array<Node> = [];
-	private static var nodes:Array<Node>;
 	private static var pathHeiristic:Int;
 	private static var costToMove:Int;
 	private static var levelWidth:Int;
 	private static var levelHeight:Int;
 	private static var end:Node;
 	private static var diagonal:Bool = false;
+	private static var activeLevel:SelfLoadingLevel;
+	
+	public static function setActiveLevel(level:SelfLoadingLevel)
+	{
+		activeLevel = level;
+		levelWidth = activeLevel.width;
+	}
 	
 	public static function newPath(start:Node, endNode:Node):Array<Node>
 	{
-		nodes = Node.activeNodes;
-		levelWidth = PlayState.getLevel().width;
-		
 		cleanParentNodes();//ensure everying this ready
 		cleanUp();
 		
@@ -50,20 +54,20 @@ class AStar
 	private static function cleanParentNodes()
 	{
 		var i:Int;
-		for (i in 0...nodes.length)
+		for (i in 0...Node.activeNodes.length)
 		{
-			nodes[i].parentNode = null;
+			Node.activeNodes[i].parentNode = null;
 		}
 	}
 	
 	private static function cleanUp()
 	{
 		var i:Int;
-		for (i in 0...nodes.length)
+		for (i in 0...Node.activeNodes.length)
 		{
-			nodes[i].animation.play("main");
-			nodes[i].g = -1;
-			nodes[i].heiristic = -1;
+			Node.activeNodes[i].animation.play("main");
+			Node.activeNodes[i].g = -1;
+			Node.activeNodes[i].heiristic = -1;
 		}
 		closedList = [];
 		openList = [];
@@ -135,41 +139,41 @@ class AStar
 		{
             for (j in 0...levelHeight) 
 			{
-				nodes[i + j * levelWidth].neighbors = [];
+				Node.activeNodes[i + j * levelWidth].neighbors = [];
 				if (diagonal)
 				{
 					if (i - 1 >= 0 && j - 1 >= 0) 
 					{
-						nodes[i + j * levelWidth].neighbors.push(nodes[i - 1 + (j - 1) * levelWidth]);
+						Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i - 1 + (j - 1) * levelWidth]);
 					}
 					if (i + 1 < levelWidth && j - 1 >= 0) 
 					{
-						nodes[i + j * levelWidth].neighbors.push(nodes[i + 1 + (j - 1) * levelWidth]);
+						Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i + 1 + (j - 1) * levelWidth]);
 					}
 					if (i - 1 >= 0 && j + 1 < levelHeight) 
 					{
-						nodes[i + j * levelWidth].neighbors.push(nodes[i - 1 + (j + 1) * levelWidth]);
+						Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i - 1 + (j + 1) * levelWidth]);
 					}
 					if (i + 1 < levelWidth && j + 1 < levelHeight) 
 					{
-						nodes[i + j * levelWidth].neighbors.push(nodes[i + 1 + (j + 1) * levelWidth]);
+						Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i + 1 + (j + 1) * levelWidth]);
 					}
 				}
                 if (j - 1 >= 0) 
 				{
-                    nodes[i + j * levelWidth].neighbors.push(nodes[i + (j - 1) * levelWidth]);
+                    Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i + (j - 1) * levelWidth]);
                 }
                 if (i - 1 >= 0) 
 				{
-                    nodes[i + j * levelWidth].neighbors.push(nodes[i - 1 + j * levelWidth]);
+                    Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i - 1 + j * levelWidth]);
                 }
                 if (i + 1 < levelWidth) 
 				{
-                    nodes[i + j * levelWidth].neighbors.push(nodes[i + 1 + j * levelWidth]);
+                    Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i + 1 + j * levelWidth]);
                 }
                 if (j + 1 < levelHeight) 
 				{
-                    nodes[i + j * levelWidth].neighbors.push(nodes[i + (j + 1) * levelWidth]);
+                    Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i + (j + 1) * levelWidth]);
                 }
             }
         }
