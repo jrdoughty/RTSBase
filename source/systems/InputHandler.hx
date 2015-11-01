@@ -31,15 +31,16 @@ class InputHandler
 	private var flxTeamUnits:FlxGroup = new FlxGroup();
 	private var flxNodes:FlxGroup = new FlxGroup();
 	private var nodes:Array<Node>;
-	private var playstate:PlayState;
+	private var activeState:FlxState;
+	private var newClick:Bool = true;
 	
-	public function new(state:PlayState) 
+	public function new(state:FlxState) 
 	{
-		playstate = state;
+		activeState = state;
 		for (i in 0...Node.activeNodes.length)
 		{
 			flxNodes.add(Node.activeNodes[i]);
-			MouseEventManager.add(Node.activeNodes[i], onClick, removeSelector, onOver);
+			MouseEventManager.add(Node.activeNodes[i], null, null, onOver);
 		}
 		for (i in 0...PlayState.Teams.length)
 		{
@@ -47,63 +48,43 @@ class InputHandler
 		}
 	}
 	
-	public static function setOnPath(node:Node)
+	
+	private function nodeClick(selector:FlxObject,node:Node):Void
 	{
-		if (selectedUnit != null)
+		var i:Int;
+		if (selectedUnits.length > 0 && node.isPassible() && node.occupant == null)
 		{
-			selectedUnit.targetNode = node;
+			for (i in 0...selectedUnits.length)
+			{
+				selectedUnits[i].targetNode = node;
+			}
 		}
 	}
 	
-	public static function selectUnit(baseA:BaseActor):Void
+	private function click():Void
 	{
-		if(selectedUnit != null)
+		newClick = true;
+		if (FlxG.overlap(PlayState.selector, flxTeamUnits, selectOverlap) == false)
 		{
-			selectedUnit.resetSelect();
+			FlxG.overlap(PlayState.selector, flxNodes, nodeClick);
 		}
-		selectedUnit = baseA;
-
-		if(selectedUnit != null)
-		{
-			selectedUnit.select();
-		}
-	}
-
-	public static function getSelectedUnit():BaseActor
-	{
-		return selectedUnit;
-	}
-	
-	private function onClick(sprite:Node):Void
-	{
-		playstate.add(PlayState.selector);
-		PlayState.selector.alpha = .5;
-		PlayState.selector.x = FlxG.mouse.x;
-		PlayState.selector.y = FlxG.mouse.y;
-		PlayState.selector.setGraphicSize(1, 1);
-		PlayState.selector.updateHitbox();
-		if (selectedUnit != null && sprite.isPassible() && sprite.occupant == null)
-		{
-			setOnPath(sprite);
-		}
-		else if (sprite.occupant != null)
-		{
-			selectUnit(sprite.occupant);
-		}
+		
+		activeState.remove(PlayState.selector);
 	}
 	
 	private function selectOverlap(selector:FlxObject, unit:BaseActor):Void
 	{
+		if (newClick)
+		{
+			deselectUnits();
+			selectedUnits = [];
+			newClick = false;
+		}
 		if (unit.team == PlayState.activeTeam.id)
 		{
 			selectedUnits.push(unit);
 			unit.select();
 		}
-	}
-	
-	private function removeSelector(sprite:FlxSprite)
-	{
-		playstate.remove(PlayState.selector);
 	}
 	
 	private function deselectUnits():Void
@@ -123,14 +104,23 @@ class InputHandler
 			PlayState.getLevel().highlight.y = sprite.y;
 		}
 	}
+	
 	public function update()
 	{
-		
 		if (FlxG.mouse.pressed)
 		{
 			if (wasLeftMouseDown)
 			{
 				PlayState.selector.setGraphicSize(Math.floor(FlxG.mouse.x - PlayState.selector.x), Math.floor(FlxG.mouse.y - PlayState.selector.y));
+				PlayState.selector.updateHitbox();
+			}
+			else
+			{
+				activeState.add(PlayState.selector);
+				PlayState.selector.alpha = .5;
+				PlayState.selector.x = FlxG.mouse.x;
+				PlayState.selector.y = FlxG.mouse.y;
+				PlayState.selector.setGraphicSize(1, 1);
 				PlayState.selector.updateHitbox();
 			}
 			wasLeftMouseDown = true;
@@ -139,9 +129,7 @@ class InputHandler
 		{
 			if (wasLeftMouseDown)
 			{
-				deselectUnits();
-				selectedUnits = [];
-				FlxG.overlap(PlayState.selector, flxTeamUnits, selectOverlap);
+				click();
 			}
 			wasLeftMouseDown = false;
 		}
