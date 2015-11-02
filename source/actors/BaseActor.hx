@@ -32,6 +32,7 @@ class BaseActor extends FlxSprite
 	public var team:Int = 0;
 	public var damage:Int = 1;
 	
+	private var lastTargetNode:Node;
 	private var selected:Bool = false;
 	private var iterator:Int = 0;
 	private var actionTimer:Timer;
@@ -152,7 +153,7 @@ class BaseActor extends FlxSprite
 		}
 		else
 		{
-			idle();
+			state = IDLE;
 		}
 	}
 	
@@ -174,6 +175,10 @@ class BaseActor extends FlxSprite
 			if (inRange)
 			{
 				targetEnemy.hurt(damage / targetEnemy.healthMax);
+				if (targetEnemy.alive == false)
+				{
+					targetEnemy = null;
+				}
 			}
 			else
 			{
@@ -187,7 +192,7 @@ class BaseActor extends FlxSprite
 		}
 		else
 		{
-			idle();
+			state = IDLE;
 		}
 	}
 	
@@ -200,6 +205,10 @@ class BaseActor extends FlxSprite
 		if (targetNode != null)
 		{
 			move();
+		}
+		else if (targetEnemy != null)
+		{
+			attack();
 		}
 		else
 		{
@@ -221,7 +230,7 @@ class BaseActor extends FlxSprite
 		
 		state = MOVING;
 		
-		if (targetNode != null && targetNode.isPassible() && path.length == 0)
+		if ((targetNode != null && path.length == 0|| targetNode != lastTargetNode) && targetNode.isPassible())
 		{
 			path = AStar.newPath(currentNode, targetNode);
 		}
@@ -264,8 +273,9 @@ class BaseActor extends FlxSprite
 		else
 		{
 			targetNode = null;
-			idle();
+			state = IDLE;
 		}
+		lastTargetNode = targetNode;
 	}
 	
 	public function select():Void
@@ -290,6 +300,7 @@ class BaseActor extends FlxSprite
 	override public function kill()
 	{
 		super.kill();
+		resetStates();
 		currentNode.occupant = null;
 		actionTimer.stop();
 		activeState.remove(healthBar);

@@ -31,6 +31,7 @@ class InputHandler
 	
 	private var wasLeftMouseDown:Bool = false;
 	private var flxTeamUnits:FlxGroup = new FlxGroup();
+	private var flxActiveTeamUnits:FlxGroup = new FlxGroup();
 	private var flxNodes:FlxGroup = new FlxGroup();
 	private var nodes:Array<Node>;
 	private var activeState:RTSGameState;
@@ -53,6 +54,7 @@ class InputHandler
 		{
 			flxTeamUnits.add(PlayState.Teams[i].flxUnits);
 		}
+		flxActiveTeamUnits.add(PlayState.activeTeam.flxUnits);
 	}
 	
 	
@@ -67,17 +69,38 @@ class InputHandler
 				selectedUnits[i].targetNode = node;
 			}
 		}
+		else if (node.occupant != null && node.occupant.team != PlayState.activeTeam.id)
+		{
+			for (i in 0...selectedUnits.length)
+			{
+				selectedUnits[i].resetStates();
+				selectedUnits[i].targetEnemy = node.occupant;
+			}
+		}
 	}
 	
 	private function click():Void
 	{
 		newClick = true;
-		if (FlxG.overlap(selector, flxTeamUnits, selectOverlap) == false && selector.width < activeState.getLevel().tiledLevel.tilewidth && selector.height < activeState.getLevel().tiledLevel.tileheight)
+		if (FlxG.overlap(selector, flxActiveTeamUnits, selectOverlap) == false)
 		{
-			FlxG.overlap(selector, flxNodes, nodeClick);
+			if (selector.width < activeState.getLevel().tiledLevel.tilewidth && selector.height < activeState.getLevel().tiledLevel.tileheight)
+			{
+				FlxG.overlap(selector, flxNodes, nodeClick);
+			}
 		}
 		
 		activeState.remove(selector);
+	}
+	
+	private function attackOverlap(selector:FlxObject, unit:BaseActor):Void
+	{
+		trace("attack");
+		var i:Int;
+		for (i in 0...selectedUnits.length)
+		{
+			selectedUnits[i].targetEnemy = unit;
+		}
 	}
 	
 	private function selectOverlap(selector:FlxObject, unit:BaseActor):Void
