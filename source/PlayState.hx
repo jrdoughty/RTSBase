@@ -12,7 +12,7 @@ import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
-import interfaces.RTSGameState;
+import interfaces.GameState;
 import systems.AStar;
 import systems.InputHandler;
 import systems.Team;
@@ -28,15 +28,15 @@ import flixel.plugin.MouseEventManager;
 
 
  
-class PlayState extends FlxState implements RTSGameState
+class PlayState extends FlxState implements GameState
 {
 	/**
 	 * Function that is called up when to state is created to set it up.
 	 */
 	private var activeLevel:SelfLoadingLevel = null;
 	
-	public static var Teams(default,null):Array<Team> = [];
-	public static var activeTeam(default,null):Team;
+	public var Teams(default,null):Array<Team> = [];
+	public var activeTeam(default,null):Team;
 	
 	private var inputHandler:InputHandler;
 	

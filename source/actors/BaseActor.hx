@@ -3,7 +3,7 @@ package actors;
 import flixel.FlxSprite;
 import flixel.FlxG;
 import haxe.Timer;
-import interfaces.RTSGameState;
+import interfaces.GameState;
 import systems.AStar;
 import world.Node;
 import flixel.tweens.FlxTween;
@@ -43,9 +43,9 @@ class BaseActor extends FlxSprite
 	private var healthBar:FlxSprite;
 	private var healthBarFill:FlxSprite;
 	private	var path:Array<Node> = [];
-	private var activeState:RTSGameState;
+	private var activeState:GameState;
 	
-	public function new(node:Node, state:RTSGameState) 
+	public function new(node:Node, state:GameState) 
 	{
 		activeState = state;
 		super(node.x, node.y);
@@ -104,8 +104,7 @@ class BaseActor extends FlxSprite
 		var i:Int;
 		
 		state = CHASING;
-				
-		state = ATTACKING;
+		
 		if (targetEnemy != null && targetEnemy.alive)
 		{
 			for (i in 0...currentNode.neighbors.length)

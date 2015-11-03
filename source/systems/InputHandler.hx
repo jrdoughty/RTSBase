@@ -7,7 +7,7 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.plugin.MouseEventManager;
 import flixel.util.FlxColor;
-import interfaces.RTSGameState;
+import interfaces.GameState;
 import world.Node;
 
 /**
@@ -26,21 +26,20 @@ class InputHandler
 {
 	public var state:InputState = SELECTING;
 	
-	private static var selectedUnit:BaseActor = null;
-	private static var selectedUnits:Array<BaseActor> = [];
-	
+	private var selectedUnit:BaseActor = null;
+	private var selectedUnits:Array<BaseActor> = [];
 	private var wasLeftMouseDown:Bool = false;
 	private var flxTeamUnits:FlxGroup = new FlxGroup();
 	private var flxActiveTeamUnits:FlxGroup = new FlxGroup();
 	private var flxNodes:FlxGroup = new FlxGroup();
 	private var nodes:Array<Node>;
-	private var activeState:RTSGameState;
+	private var activeState:GameState;
 	private var newClick:Bool = true;
 	private var selectorStartX:Float;
 	private var selectorStartY:Float;
 	private var selector(default,null):FlxSprite;
 	
-	public function new(state:RTSGameState) 
+	public function new(state:GameState) 
 	{
 		activeState = state;
 		selector = new FlxSprite(-1,-1);
@@ -50,11 +49,11 @@ class InputHandler
 			flxNodes.add(Node.activeNodes[i]);
 			MouseEventManager.add(Node.activeNodes[i], null, null, onOver);
 		}
-		for (i in 0...PlayState.Teams.length)
+		for (i in 0...activeState.Teams.length)
 		{
-			flxTeamUnits.add(PlayState.Teams[i].flxUnits);
+			flxTeamUnits.add(activeState.Teams[i].flxUnits);
 		}
-		flxActiveTeamUnits.add(PlayState.activeTeam.flxUnits);
+		flxActiveTeamUnits.add(activeState.activeTeam.flxUnits);
 	}
 	
 	
@@ -69,7 +68,7 @@ class InputHandler
 				selectedUnits[i].targetNode = node;
 			}
 		}
-		else if (node.occupant != null && node.occupant.team != PlayState.activeTeam.id)
+		else if (node.occupant != null && node.occupant.team != activeState.activeTeam.id)
 		{
 			for (i in 0...selectedUnits.length)
 			{
@@ -111,7 +110,7 @@ class InputHandler
 			selectedUnits = [];
 			newClick = false;
 		}
-		if (unit.team == PlayState.activeTeam.id)
+		if (unit.team == activeState.activeTeam.id)
 		{
 			selectedUnits.push(unit);
 			unit.select();
