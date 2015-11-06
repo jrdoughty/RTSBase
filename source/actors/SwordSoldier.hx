@@ -8,7 +8,7 @@ import interfaces.GameState;
  * ...
  * @author John Doughty
  */
-class SwordSoldier extends BaseActor
+class SwordSoldier extends Unit
 {
 
 	public function new(node:Node, state:GameState) 
@@ -18,6 +18,7 @@ class SwordSoldier extends BaseActor
 		animation.add("active", [0, 1], 5, true);
 		animation.add("attack", [0, 4], 5, true);
 		team = 1;
+		speed = 200;
 	}
 
 	

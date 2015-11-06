@@ -21,6 +21,7 @@ import world.SelfLoadingLevel;
 import world.TiledTypes;
 import openfl.Assets;
 import flixel.plugin.MouseEventManager;
+import actors.Unit;
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -28,12 +29,13 @@ import flixel.plugin.MouseEventManager;
 
 
  
-class PlayState extends FlxState implements GameState
+class BaseState extends FlxState implements GameState
 {
 	/**
 	 * Function that is called up when to state is created to set it up.
 	 */
 	private var activeLevel:SelfLoadingLevel = null;
+	private var levelAssetPath:String = "";
 	
 	public var Teams(default,null):Array<Team> = [];
 	public var activeTeam(default,null):Team;
@@ -42,31 +44,36 @@ class PlayState extends FlxState implements GameState
 	
 	override public function create():Void
 	{
-		var i:Int;
-		var unitsInPlay:Array<BaseActor>;
 		super.create();
 		add(getLevel());
 		add(activeLevel.highlight);
+		createTeams();
+		setupUnitsInPlay();
+		inputHandler = new InputHandler(this);
+	}
+	
+	private function createTeams():Void
+	{
 		activeTeam = new Team();
 		Teams.push(activeTeam);
-		Teams.push(new Team());
-		Teams[0].addUnit(new SwordSoldier(Node.activeNodes[0],this));
-		Teams[0].addUnit(new SwordSoldier(Node.activeNodes[50],this));
-		Teams[1].addUnit(new SpearSoldier(Node.activeNodes[616],this));
-		Teams[1].addUnit(new SpearSoldier(Node.activeNodes[499],this));	
+	}
+	
+	private function setupUnitsInPlay():Void
+	{
+		var i:Int;
+		var unitsInPlay:Array<Unit>;
 		unitsInPlay = getUnitsInPlay();
 		for (i in 0...unitsInPlay.length)
 		{
 			add(unitsInPlay[i]);
 		}
-		inputHandler = new InputHandler(this);
 	}
 	
 	public function getLevel():SelfLoadingLevel
 	{
 		if (activeLevel == null)
 		{
-			activeLevel = new SelfLoadingLevel(Assets.getText("assets/data/moreopen.json"));
+			activeLevel = new SelfLoadingLevel(Assets.getText(levelAssetPath));
 			AStar.setActiveLevel(activeLevel);
 		}
 		
@@ -74,10 +81,10 @@ class PlayState extends FlxState implements GameState
 	}
 	
 	
-	private function getUnitsInPlay():Array<BaseActor>
+	private function getUnitsInPlay():Array<Unit>
 	{
 		var i:Int;
-		var result:Array<BaseActor> = [];
+		var result:Array<Unit> = [];
 		
 		for (i in 0...Teams.length)
 		{

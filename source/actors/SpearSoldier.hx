@@ -8,7 +8,7 @@ import actors.BaseActor.ActorState;
  * ...
  * @author John Doughty
  */
-class SpearSoldier extends BaseActor
+class SpearSoldier extends Unit
 {
 
 	public function new(node:Node, state:GameState) 

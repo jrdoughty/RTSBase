@@ -1,5 +1,6 @@
 package systems;
 import actors.BaseActor;
+import actors.Unit;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
@@ -27,7 +28,7 @@ class InputHandler
 	public var state:InputState = SELECTING;
 	
 	private var selectedUnit:BaseActor = null;
-	private var selectedUnits:Array<BaseActor> = [];
+	private var selectedUnits:Array<Unit> = [];
 	private var wasLeftMouseDown:Bool = false;
 	private var flxTeamUnits:FlxGroup = new FlxGroup();
 	private var flxActiveTeamUnits:FlxGroup = new FlxGroup();
@@ -81,7 +82,7 @@ class InputHandler
 	private function click():Void
 	{
 		newClick = true;
-		if (FlxG.overlap(selector, flxActiveTeamUnits, selectOverlap) == false)
+		if (FlxG.overlap(selector, flxActiveTeamUnits, selectOverlapUnits) == false)
 		{
 			if (selector.width < activeState.getLevel().tiledLevel.tilewidth && selector.height < activeState.getLevel().tiledLevel.tileheight)
 			{
@@ -102,7 +103,7 @@ class InputHandler
 		}
 	}
 	
-	private function selectOverlap(selector:FlxObject, unit:BaseActor):Void
+	private function selectOverlapUnits(selector:FlxObject, unit:Unit):Void
 	{
 		if (newClick)
 		{
