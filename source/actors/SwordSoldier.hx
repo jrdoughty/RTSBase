@@ -2,7 +2,7 @@ package actors;
 import flixel.FlxG;
 import world.Node;
 import actors.BaseActor.ActorState;
-import interfaces.GameState;
+import interfaces.IGameState;
 
 /**
  * ...
@@ -11,7 +11,7 @@ import interfaces.GameState;
 class SwordSoldier extends Unit
 {
 
-	public function new(node:Node, state:GameState) 
+	public function new(node:Node, state:IGameState) 
 	{
 		super(node, state);
 		loadGraphic("assets/images/soldiers.png", true, 8, 8);

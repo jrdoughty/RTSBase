@@ -6,7 +6,7 @@ import flixel.FlxSprite;
  * ...
  * @author ...
  */
-class Control extends FlxSprite
+class UnitControl extends FlxSprite
 {
 
 	public static inline var ATTACK:Int = 0;//Corresponds to frames

@@ -1,6 +1,6 @@
 package actors;
 import flixel.FlxG;
-import interfaces.GameState;
+import interfaces.IGameState;
 import world.Node;
 import actors.BaseActor.ActorState;
 
@@ -11,7 +11,7 @@ import actors.BaseActor.ActorState;
 class SpearSoldier extends Unit
 {
 
-	public function new(node:Node, state:GameState) 
+	public function new(node:Node, state:IGameState) 
 	{
 		super(node, state);
 		loadGraphic("assets/images/soldiers.png", true, 8, 8);

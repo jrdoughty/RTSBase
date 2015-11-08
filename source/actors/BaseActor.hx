@@ -3,7 +3,7 @@ package actors;
 import flixel.FlxSprite;
 import flixel.FlxG;
 import haxe.Timer;
-import interfaces.GameState;
+import interfaces.IGameState;
 import systems.AStar;
 import world.Node;
 import flixel.tweens.FlxTween;
@@ -41,9 +41,9 @@ class BaseActor extends FlxSprite
 	private var healthMax:Int = 8;
 	private var healthBar:FlxSprite;
 	private var healthBarFill:FlxSprite;
-	private var activeState:GameState;
+	private var activeState:IGameState;
 	
-	public function new(node:Node, state:GameState) 
+	public function new(node:Node, state:IGameState) 
 	{
 		activeState = state;
 		super(node.x, node.y);

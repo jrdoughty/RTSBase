@@ -1,6 +1,6 @@
 package actors;
 import world.Node;
-import interfaces.GameState;
+import interfaces.IGameState;
 import systems.AStar;
 import flixel.tweens.FlxTween;
 
@@ -13,7 +13,7 @@ class Unit extends BaseActor
 	private	var path:Array<Node> = [];
 	public var targetNode:Node;
 
-	public function new(node:Node, state:GameState) 
+	public function new(node:Node, state:IGameState) 
 	{
 		super(node, state);
 		

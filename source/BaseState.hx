@@ -13,7 +13,7 @@ import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
-import interfaces.GameState;
+import interfaces.IGameState;
 import systems.AStar;
 import systems.InputHandler;
 import systems.Team;
@@ -30,19 +30,18 @@ import actors.Unit;
 
 
  
-class BaseState extends FlxState implements GameState
+class BaseState extends FlxState implements IGameState
 {
 	/**
 	 * Function that is called up when to state is created to set it up.
 	 */
-	private var activeLevel:SelfLoadingLevel = null;
-	private var levelAssetPath:String = "";
-	private var dashboard:Dashboard;
-	
+	public var dashboard(default,null):Dashboard;
 	public var Teams(default,null):Array<Team> = [];
 	public var activeTeam(default,null):Team;
 	
 	private var inputHandler:InputHandler;
+	private var activeLevel:SelfLoadingLevel = null;
+	private var levelAssetPath:String = "";
 	
 	override public function create():Void
 	{

@@ -8,7 +8,8 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.plugin.MouseEventManager;
 import flixel.util.FlxColor;
-import interfaces.GameState;
+import interfaces.IGameState;
+import dashboard.UnitControl;
 import world.Node;
 
 /**
@@ -34,13 +35,14 @@ class InputHandler
 	private var flxActiveTeamUnits:FlxGroup = new FlxGroup();
 	private var flxNodes:FlxGroup = new FlxGroup();
 	private var nodes:Array<Node>;
-	private var activeState:GameState;
+	private var activeState:IGameState;
 	private var newClick:Bool = true;
 	private var selectorStartX:Float;
 	private var selectorStartY:Float;
-	private var selector(default,null):FlxSprite;
+	private var selector(default, null):FlxSprite;
+	private var activeControls:Array<Contro
 	
-	public function new(state:GameState) 
+	public function new(state:IGameState) 
 	{
 		activeState = state;
 		selector = new FlxSprite(-1,-1);
