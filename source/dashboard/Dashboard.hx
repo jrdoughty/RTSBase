@@ -24,9 +24,7 @@ class Dashboard extends FlxGroup
 		controls = new ControlsContainer(y);
 		
 		selected = new FlxSprite();
-		selected.scale.set(4, 4);
-		selected.updateHitbox();
-		selected.x = 58;
+		selected.x = controls.background.width;
 		selected.y = y;
 		
 		add(background);
@@ -37,6 +35,8 @@ class Dashboard extends FlxGroup
 	public function setSelected(sprite:FlxSprite)
 	{
 		selected.loadGraphicFromSprite(sprite);
+		selected.setGraphicSize(56, 56);
+		selected.updateHitbox();
 		selected.animation.frameIndex = sprite.animation.frameIndex;
 	}
 }

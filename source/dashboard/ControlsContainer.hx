@@ -9,7 +9,7 @@ import flixel.group.FlxGroup;
  */
 class ControlsContainer extends FlxGroup
 {
-	private var background:FlxSprite;
+	public var background(default,null):FlxSprite;
 	private var controls:Array<UnitControl> = [];
 	
 	public function new(y:Int) 
