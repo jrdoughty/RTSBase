@@ -17,30 +17,20 @@ import world.Node;
  * @author ...
  */
 
-enum InputState {
-	SELECTING;
-	ATTACKING;
-	PATROL;
-	BUILD;
-}
-
 class InputHandler
 {
-	public var state:InputState = SELECTING;
-	
-	private var selectedUnit:BaseActor = null;
 	private var selectedUnits:Array<Unit> = [];
 	private var wasLeftMouseDown:Bool = false;
+	private var wasRightMouseDown:Bool = false;
 	private var flxTeamUnits:FlxGroup = new FlxGroup();
 	private var flxActiveTeamUnits:FlxGroup = new FlxGroup();
 	private var flxNodes:FlxGroup = new FlxGroup();
 	private var nodes:Array<Node>;
 	private var activeState:IGameState;
-	private var newClick:Bool = true;
+	private var newLeftClick:Bool = true;
 	private var selectorStartX:Float;
 	private var selectorStartY:Float;
 	private var selector(default, null):FlxSprite;
-	private var activeControls:Array<Contro
 	
 	public function new(state:IGameState) 
 	{
@@ -83,7 +73,7 @@ class InputHandler
 	
 	private function click():Void
 	{
-		newClick = true;
+		newLeftClick = true;
 		if (FlxG.overlap(selector, flxActiveTeamUnits, selectOverlapUnits) == false)
 		{
 			if (selector.width < activeState.getLevel().tiledLevel.tilewidth && selector.height < activeState.getLevel().tiledLevel.tileheight)
@@ -107,14 +97,16 @@ class InputHandler
 	
 	private function selectOverlapUnits(selector:FlxObject, unit:Unit):Void
 	{
-		if (newClick)
+		if (newLeftClick)
 		{
 			deselectUnits();
 			selectedUnits = [];
-			newClick = false;
+			newLeftClick = false;
 		}
 		if (unit.team == activeState.activeTeam.id)
 		{
+			activeState.dashboard;
+			activeState.dashboard.setSelected(unit);
 			selectedUnits.push(unit);
 			unit.select();
 		}
@@ -137,45 +129,51 @@ class InputHandler
 			activeState.getLevel().highlight.y = sprite.y;
 		}
 	}
-	public function update()
+	
+	@:extern inline private function setupSelectorSize()
 	{
 		var width:Int;
 		var height:Int;
+		if (FlxG.mouse.x < selectorStartX)
+		{
+			selector.x = FlxG.mouse.x;
+			width = Math.round(selectorStartX - FlxG.mouse.x);
+		}
+		else
+		{
+			selector.x = selectorStartX;
+			width = Math.round(FlxG.mouse.x - selector.x);
+		}
+		
+		if (FlxG.mouse.y < selectorStartY)
+		{
+			selector.y = FlxG.mouse.y;
+			height = Math.round(selectorStartY - FlxG.mouse.y);
+		}
+		else
+		{
+			selector.y = selectorStartY;
+			height = Math.round(FlxG.mouse.y - selector.y);
+		}
+		if (width == 0)
+		{
+			width = 1;//setGraphics makes squares with a 0 height or width
+		}
+		if (height == 0)
+		{
+			height = 1;//setGraphics makes squares with a 0 height or width
+		}
+		selector.setGraphicSize(width, height);
+		selector.updateHitbox();
+	}
+	
+	public function update()
+	{
 		if (FlxG.mouse.pressed)
 		{
 			if (wasLeftMouseDown)
 			{
-				if (FlxG.mouse.x < selectorStartX)
-				{
-					selector.x = FlxG.mouse.x;
-					width = Math.round(selectorStartX - FlxG.mouse.x);
-				}
-				else
-				{
-					selector.x = selectorStartX;
-					width = Math.round(FlxG.mouse.x - selector.x);
-				}
-				
-				if (FlxG.mouse.y < selectorStartY)
-				{
-					selector.y = FlxG.mouse.y;
-					height = Math.round(selectorStartY - FlxG.mouse.y);
-				}
-				else
-				{
-					selector.y = selectorStartY;
-					height = Math.round(FlxG.mouse.y - selector.y);
-				}
-				if (width == 0)
-				{
-					width = 1;//setGraphics makes squares with a 0 height or width
-				}
-				if (height == 0)
-				{
-					height = 1;//setGraphics makes squares with a 0 height or width
-				}
-				selector.setGraphicSize(width, height);
-				selector.updateHitbox();
+				setupSelectorSize();
 			}
 			else
 			{
@@ -197,6 +195,17 @@ class InputHandler
 				click();
 			}
 			wasLeftMouseDown = false;
+		}
+		
+		if (FlxG.mouse.pressedRight)
+		{
+			
+			
+			wasRightMouseDown = true;
+		}
+		else
+		{
+			wasRightMouseDown = false;
 		}
 	}
 }

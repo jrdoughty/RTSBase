@@ -35,7 +35,7 @@ class BaseState extends FlxState implements IGameState
 	/**
 	 * Function that is called up when to state is created to set it up.
 	 */
-	public var dashboard(default,null):Dashboard;
+	public var dashboard:Dashboard;
 	public var Teams(default,null):Array<Team> = [];
 	public var activeTeam(default,null):Team;
 	
@@ -51,7 +51,8 @@ class BaseState extends FlxState implements IGameState
 		createTeams();
 		setupUnitsInPlay();
 		inputHandler = new InputHandler(this);
-		add(new Dashboard(0,184,inputHandler));
+		dashboard = new Dashboard(0, 184, inputHandler);
+		add(dashboard);
 	}
 	
 	private function createTeams():Void
