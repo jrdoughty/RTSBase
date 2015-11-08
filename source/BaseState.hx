@@ -3,6 +3,7 @@ package ;
 import actors.BaseActor;
 import actors.SpearSoldier;
 import actors.SwordSoldier;
+import dashboard.Dashboard;
 import flixel.FlxG;
 import flixel.group.FlxGroup;
 import flixel.util.FlxColor;
@@ -36,6 +37,7 @@ class BaseState extends FlxState implements GameState
 	 */
 	private var activeLevel:SelfLoadingLevel = null;
 	private var levelAssetPath:String = "";
+	private var dashboard:Dashboard;
 	
 	public var Teams(default,null):Array<Team> = [];
 	public var activeTeam(default,null):Team;
@@ -50,6 +52,7 @@ class BaseState extends FlxState implements GameState
 		createTeams();
 		setupUnitsInPlay();
 		inputHandler = new InputHandler(this);
+		add(new Dashboard(0,184,inputHandler));
 	}
 	
 	private function createTeams():Void
