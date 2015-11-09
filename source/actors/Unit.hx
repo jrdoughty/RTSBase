@@ -1,21 +1,30 @@
 package actors;
+import haxe.Constraints.Function;
 import world.Node;
 import interfaces.IGameState;
 import systems.AStar;
 import flixel.tweens.FlxTween;
-
+import dashboard.Control;
 /**
  * ...
  * @author ...
  */
+
+ 
 class Unit extends BaseActor
 {
+		
 	private	var path:Array<Node> = [];
 	public var targetNode:Node;
-
+	
 	public function new(node:Node, state:IGameState) 
 	{
+		var i:Int;
 		super(node, state);
+		for (i in 0...8)
+		{
+			controls.push(new Control(0, 0, i));
+		}
 		
 	}
 	

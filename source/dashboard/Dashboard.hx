@@ -1,5 +1,6 @@
 package dashboard;
 
+import actors.BaseActor;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import systems.InputHandler;
@@ -32,11 +33,20 @@ class Dashboard extends FlxGroup
 		add(selected);
 	}
 	
-	public function setSelected(sprite:FlxSprite)
+	public function setSelected(sprite:BaseActor)
 	{
+		var i:Int;
+		
 		selected.loadGraphicFromSprite(sprite);
 		selected.setGraphicSize(56, 56);
 		selected.updateHitbox();
 		selected.animation.frameIndex = sprite.animation.frameIndex;
+		
+		for (i in 0...sprite.controls.length)
+		{
+			controls.add(sprite.controls[i]);
+			sprite.controls[i].x = 2 + (i % 3) * 18;
+			sprite.controls[i].y = 184 + Math.floor(i / 3) * 18 + 2;
+		}
 	}
 }

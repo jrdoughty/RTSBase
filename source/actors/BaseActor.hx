@@ -8,6 +8,7 @@ import systems.AStar;
 import world.Node;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
+import dashboard.Control;
 
 /**
  * ...
@@ -31,6 +32,7 @@ class BaseActor extends FlxSprite
 	public var targetEnemy:BaseActor;
 	public var team:Int = 0;
 	public var damage:Int = 1;
+	public var controls:Array<Control> = [];
 	
 	private var lastTargetNode:Node;
 	private var selected:Bool = false;

@@ -10,7 +10,7 @@ import flixel.group.FlxGroup;
 class ControlsContainer extends FlxGroup
 {
 	public var background(default,null):FlxSprite;
-	private var controls:Array<UnitControl> = [];
+	private var controls:Array<Control> = [];
 	
 	public function new(y:Int) 
 	{
@@ -19,12 +19,6 @@ class ControlsContainer extends FlxGroup
 		background = new FlxSprite(0, y);
 		background.loadGraphic("assets/images/controlsBG.png");
 		add(background);
-		for (i in 0...7)
-		{
-			controls.push(new UnitControl(2+(i%3)*18, y + Math.floor(i/3)*18 + 2));
-			add(controls[i]);
-			controls[i].setFrameIndex(i);
-		}
 	}
 	
 }

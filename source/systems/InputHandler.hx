@@ -9,7 +9,7 @@ import flixel.FlxSprite;
 import flixel.plugin.MouseEventManager;
 import flixel.util.FlxColor;
 import interfaces.IGameState;
-import dashboard.UnitControl;
+import dashboard.Control;
 import world.Node;
 
 /**
