@@ -17,6 +17,7 @@ class Dashboard extends FlxGroup
 	private var inputHandler:InputHandler;
 	private var selected:FlxSprite;
 	private var activeControls:Array<Control> = [];
+	private var activeUnits:Array<FlxSprite> = [];
 	
 	public function new(x:Int, y:Int, inputH:InputHandler) 
 	{
@@ -44,11 +45,6 @@ class Dashboard extends FlxGroup
 		selected.updateHitbox();
 		selected.animation.frameIndex = baseA.animation.frameIndex;
 		
-		for (i in 0...activeControls.length)
-		{
-			controls.remove(activeControls[i]);			
-		}
-		
 		activeControls = baseA.controls;
 		
 		for (i in 0...baseA.controls.length)
@@ -57,5 +53,25 @@ class Dashboard extends FlxGroup
 			baseA.controls[i].x = 2 + (i % 3) * 18;
 			baseA.controls[i].y = 184 + Math.floor(i / 3) * 18 + 2;
 		}
+	}
+	
+	public function clearDashBoard()
+	{
+		var i:Int;
+		
+		for (i in 0...activeControls.length)
+		{
+			controls.remove(activeControls[i]);			
+		}
+		
+	}
+	
+	public function addSelectedUnit(baseA:BaseActor)
+	{
+		var sprite:FlxSprite = new FlxSprite().loadGraphicFromSprite(baseA);
+		sprite.x = 184;
+		sprite.y = 184;
+		activeUnits.push(sprite);
+		add(sprite);
 	}
 }
