@@ -101,15 +101,11 @@ class InputHandler
 		{
 			deselectUnits();
 			selectedUnits = [];
-			newLeftClick = false;
-		}
-		if (unit.team == activeState.activeTeam.id)
-		{
-			activeState.dashboard;
 			activeState.dashboard.setSelected(unit);
-			selectedUnits.push(unit);
-			unit.select();
 		}
+		selectedUnits.push(unit);
+		unit.select();
+		newLeftClick = false;
 	}
 	
 	private function deselectUnits():Void
