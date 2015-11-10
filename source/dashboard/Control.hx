@@ -8,9 +8,9 @@ import flixel.FlxSprite;
  */
 class Control extends FlxSprite
 {	
-	public function new(X:Float=0, Y:Float=0, frame:Int=7, ?spriteString:String) 
+	public function new(frame:Int=7, ?spriteString:String) 
 	{
-		super(X, Y);
+		super(0, 0);
 		if (spriteString == null)
 		{
 			loadGraphic("assets/images/controls.png", false, 8, 8);

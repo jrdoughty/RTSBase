@@ -4,6 +4,7 @@ import actors.BaseActor;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import systems.InputHandler;
+import dashboard.Control;
 
 /**
  * ...
@@ -15,6 +16,7 @@ class Dashboard extends FlxGroup
 	private var controls:ControlsContainer;
 	private var inputHandler:InputHandler;
 	private var selected:FlxSprite;
+	private var activeControls:Array<Control> = [];
 	
 	public function new(x:Int, y:Int, inputH:InputHandler) 
 	{
@@ -25,28 +27,35 @@ class Dashboard extends FlxGroup
 		controls = new ControlsContainer(y);
 		
 		selected = new FlxSprite();
-		selected.x = controls.background.width;
-		selected.y = y;
+		selected.x = controls.background.width + 4;
+		selected.y = y+4;
 		
 		add(background);
 		add(controls);
 		add(selected);
 	}
 	
-	public function setSelected(sprite:BaseActor)
+	public function setSelected(baseA:BaseActor)
 	{
 		var i:Int;
 		
-		selected.loadGraphicFromSprite(sprite);
-		selected.setGraphicSize(56, 56);
+		selected.loadGraphicFromSprite(baseA);
+		selected.setGraphicSize(48, 48);
 		selected.updateHitbox();
-		selected.animation.frameIndex = sprite.animation.frameIndex;
+		selected.animation.frameIndex = baseA.animation.frameIndex;
 		
-		for (i in 0...sprite.controls.length)
+		for (i in 0...activeControls.length)
 		{
-			controls.add(sprite.controls[i]);
-			sprite.controls[i].x = 2 + (i % 3) * 18;
-			sprite.controls[i].y = 184 + Math.floor(i / 3) * 18 + 2;
+			controls.remove(activeControls[i]);			
+		}
+		
+		activeControls = baseA.controls;
+		
+		for (i in 0...baseA.controls.length)
+		{
+			controls.add(baseA.controls[i]);
+			baseA.controls[i].x = 2 + (i % 3) * 18;
+			baseA.controls[i].y = 184 + Math.floor(i / 3) * 18 + 2;
 		}
 	}
 }

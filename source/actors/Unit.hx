@@ -23,7 +23,7 @@ class Unit extends BaseActor
 		super(node, state);
 		for (i in 0...8)
 		{
-			controls.push(new Control(0, 0, i));
+			controls.push(new Control(i));
 		}
 		
 	}
