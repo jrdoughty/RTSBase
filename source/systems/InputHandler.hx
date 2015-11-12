@@ -101,8 +101,10 @@ class InputHandler
 		{
 			deselectUnits();
 			selectedUnits = [];
+			activeState.dashboard.clearDashBoard();
 			activeState.dashboard.setSelected(unit);
 		}
+		activeState.dashboard.addSelectedUnit(unit);
 		selectedUnits.push(unit);
 		unit.select();
 		newLeftClick = false;

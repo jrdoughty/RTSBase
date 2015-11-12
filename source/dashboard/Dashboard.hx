@@ -63,14 +63,17 @@ class Dashboard extends FlxGroup
 		{
 			controls.remove(activeControls[i]);			
 		}
+		for (i in 0...activeUnits.length)
+		{
+			remove(activeUnits[i]);
+		}
+		activeUnits = [];
 		
 	}
 	
 	public function addSelectedUnit(baseA:BaseActor)
 	{
-		var sprite:FlxSprite = new FlxSprite().loadGraphicFromSprite(baseA);
-		sprite.x = 184;
-		sprite.y = 184;
+		var sprite:FlxSprite = new FlxSprite(112+activeUnits.length * 16,184).loadGraphicFromSprite(baseA);
 		activeUnits.push(sprite);
 		add(sprite);
 	}
