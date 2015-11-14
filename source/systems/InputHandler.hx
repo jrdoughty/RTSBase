@@ -9,6 +9,7 @@ import flixel.FlxSprite;
 import flixel.plugin.MouseEventManager;
 import flixel.util.FlxColor;
 import interfaces.IGameState;
+import flixel.FlxCamera;
 import dashboard.Control;
 import world.Node;
 
@@ -217,5 +218,12 @@ class InputHandler
 		{
 			wasRightMouseDown = false;
 		}
+		/*
+		if (FlxG.mouse.y > 236 && FlxG.camera.y > -activeState.dashboard.background.height)
+		{
+			//activeState.dashboard.background.y -= 1;
+			FlxG.camera.y -= 1;
+		}*/
 	}
+	
 }

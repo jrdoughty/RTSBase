@@ -5,6 +5,7 @@ import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import systems.InputHandler;
 import dashboard.Control;
+import flixel.FlxG;
 
 /**
  * ...
@@ -13,23 +14,29 @@ import dashboard.Control;
 class Dashboard extends FlxGroup
 {
 	public var background:FlxSprite;
-	private var controls:ControlsContainer;
+	private var controls:FlxSprite;
 	private var inputHandler:InputHandler;
 	private var selected:FlxSprite;
 	private var activeControls:Array<Control> = [];
 	private var activeUnits:Array<ActorRepresentative> = [];
+	private var baseY:Int = 0;
+	private var baseX:Int = 0;
 	
 	public function new(x:Int, y:Int, inputH:InputHandler):Void
 	{
 		super();
+		
+		baseX = x;
+		baseY = y;
+		
 		inputHandler = inputH;
-		background = new FlxSprite(x, y);
+		background = new FlxSprite(baseX, baseY);
 		background.loadGraphic("assets/images/dashBG.png");
-		controls = new ControlsContainer(y);
+		controls = new FlxSprite(baseX,baseY).loadGraphic("assets/images/controlsBG.png");
 		
 		selected = new FlxSprite();
-		selected.x = controls.background.width + 4;
-		selected.y = y + 4;
+		selected.x = controls.width + 4;
+		selected.y = baseY + 4;
 		
 		add(background);
 		add(controls);
@@ -50,7 +57,7 @@ class Dashboard extends FlxGroup
 		
 		for (i in 0...baseA.controls.length)
 		{
-			controls.add(baseA.controls[i]);
+			add(baseA.controls[i]);
 			baseA.controls[i].x = 2 + (i % 3) * 18;
 			baseA.controls[i].y = 184 + Math.floor(i / 3) * 18 + 2;
 		}
@@ -62,7 +69,7 @@ class Dashboard extends FlxGroup
 		
 		for (i in 0...activeControls.length)
 		{
-			controls.remove(activeControls[i]);			
+			remove(activeControls[i]);			
 		}
 		for (i in 0...activeUnits.length)
 		{
@@ -88,6 +95,8 @@ class Dashboard extends FlxGroup
 		var i:Int;
 				
 		super.update();
+		
+		background.y = baseY - FlxG.camera.y;
 		
 		for (i in 0...activeUnits.length)
 		{
