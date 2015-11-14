@@ -16,14 +16,14 @@
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
     <class path="C:\HaxeToolkit\haxe\lib\flixel\3,3,11" />
-    <class path="C:\HaxeToolkit\haxe\lib\openfl\3,3,8" />
-    <class path="C:\HaxeToolkit\haxe\lib\lime\2,6,8" />
+    <class path="C:\HaxeToolkit\haxe\lib\openfl\3,3,9" />
+    <class path="C:\HaxeToolkit\haxe\lib\lime\2,6,9" />
     <class path="source" />
-    <class path="export\windows\neko\haxe" />
+    <class path="export\android\haxe" />
   </classpaths>
   <!-- Build options -->
   <build>
-    <option directives="flixel=3.3.11&#xA;openfl=3.3.8&#xA;lime=2.6.8&#xA;openfl-next&#xA;tools=2.6.8&#xA;FLX_NO_DEBUG&#xA;no-compilation&#xA;NAPE_RELEASE_BUILD&#xA;native&#xA;lime-native&#xA;openfl-native&#xA;FLX_RENDER_TILE&#xA;windows&#xA;desktop&#xA;display" />
+    <option directives="flixel=3.3.11&#xA;openfl=3.3.9&#xA;lime=2.6.9&#xA;openfl-next&#xA;tools=2.6.9&#xA;FLX_NO_DEBUG&#xA;no-compilation&#xA;NAPE_RELEASE_BUILD&#xA;native&#xA;lime-native&#xA;openfl-native&#xA;FLX_RENDER_TILE&#xA;android&#xA;mobile&#xA;android&#xA;android-9&#xA;display" />
     <option flashStrict="False" />
     <option noInlineOnDebug="False" />
     <option mainClass="ApplicationMain" />

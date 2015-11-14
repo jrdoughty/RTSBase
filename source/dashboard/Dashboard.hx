@@ -17,9 +17,9 @@ class Dashboard extends FlxGroup
 	private var inputHandler:InputHandler;
 	private var selected:FlxSprite;
 	private var activeControls:Array<Control> = [];
-	private var activeUnits:Array<FlxSprite> = [];
+	private var activeUnits:Array<ActorRepresentative> = [];
 	
-	public function new(x:Int, y:Int, inputH:InputHandler) 
+	public function new(x:Int, y:Int, inputH:InputHandler):Void
 	{
 		super();
 		inputHandler = inputH;
@@ -29,14 +29,14 @@ class Dashboard extends FlxGroup
 		
 		selected = new FlxSprite();
 		selected.x = controls.background.width + 4;
-		selected.y = y+4;
+		selected.y = y + 4;
 		
 		add(background);
 		add(controls);
 		add(selected);
 	}
 	
-	public function setSelected(baseA:BaseActor)
+	public function setSelected(baseA:BaseActor):Void
 	{
 		var i:Int;
 		
@@ -44,6 +44,7 @@ class Dashboard extends FlxGroup
 		selected.setGraphicSize(48, 48);
 		selected.updateHitbox();
 		selected.animation.frameIndex = baseA.animation.frameIndex;
+		selected.animation.pause();
 		
 		activeControls = baseA.controls;
 		
@@ -55,7 +56,7 @@ class Dashboard extends FlxGroup
 		}
 	}
 	
-	public function clearDashBoard()
+	public function clearDashBoard():Void
 	{
 		var i:Int;
 		
@@ -66,15 +67,41 @@ class Dashboard extends FlxGroup
 		for (i in 0...activeUnits.length)
 		{
 			remove(activeUnits[i]);
+			remove(activeUnits[i].healthBarFill);
+			remove(activeUnits[i].healthBar);
 		}
 		activeUnits = [];
 		
 	}
 	
-	public function addSelectedUnit(baseA:BaseActor)
+	public function addSelectedUnit(baseA:BaseActor):Void
 	{
-		var sprite:FlxSprite = new FlxSprite(112+activeUnits.length * 16,184).loadGraphicFromSprite(baseA);
+		var sprite:ActorRepresentative = new ActorRepresentative(baseA,112 + activeUnits.length * 16, 184);
 		activeUnits.push(sprite);
 		add(sprite);
+		add(sprite.healthBar);
+		add(sprite.healthBarFill);
+	}
+	
+	override public function update():Void
+	{
+		var i:Int;
+				
+		super.update();
+		
+		for (i in 0...activeUnits.length)
+		{
+			if (activeUnits[i].alive)
+			{
+				activeUnits[i].update();
+			}
+			else
+			{
+				remove(activeUnits[i]);
+				remove(activeUnits[i].healthBarFill);
+				remove(activeUnits[i].healthBar);
+				activeUnits.splice(i, 1);
+			}
+		}
 	}
 }

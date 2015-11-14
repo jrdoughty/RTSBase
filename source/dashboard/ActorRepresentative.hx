@@ -1,0 +1,40 @@
+package dashboard;
+
+import actors.BaseActor;
+import flixel.FlxSprite;
+import flixel.util.FlxColor;
+/**
+ * ...
+ * @author ...
+ */
+class ActorRepresentative extends FlxSprite
+{
+	public var healthBar:FlxSprite;
+	public var healthBarFill:FlxSprite;
+	
+	private var baseActor:BaseActor;
+	
+	public function new(base:BaseActor, X:Float=0, Y:Float=0, width:Int = 16, height:Int = 16) 
+	{
+		super(0, 0);
+		baseActor = base;
+		loadGraphicFromSprite(base);
+		setGraphicSize(width, height);
+		updateHitbox();
+		x = X;
+		y = Y;
+		healthBar = new FlxSprite(x, y);
+		healthBar.makeGraphic(width, 1, FlxColor.BLACK);
+		healthBarFill = new FlxSprite(x, y);
+		healthBarFill.makeGraphic(width, 1, FlxColor.RED);
+		animation.pause();
+	}
+	
+	override public function update():Void
+	{
+		super.update();
+		alive = baseActor.alive;
+		healthBarFill.scale.set(baseActor.health, 1);
+		healthBarFill.updateHitbox();
+	}
+}

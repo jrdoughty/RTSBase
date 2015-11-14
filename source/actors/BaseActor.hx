@@ -33,6 +33,7 @@ class BaseActor extends FlxSprite
 	public var team:Int = 0;
 	public var damage:Int = 1;
 	public var controls:Array<Control> = [];
+	public var idleFrame:Int = 0;
 	
 	private var lastTargetNode:Node;
 	private var selected:Bool = false;

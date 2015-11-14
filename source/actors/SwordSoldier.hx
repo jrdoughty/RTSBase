@@ -19,6 +19,7 @@ class SwordSoldier extends Unit
 		animation.add("attack", [0, 4], 5, true);
 		team = 1;
 		speed = 200;
+		idleFrame = 0;
 	}
 
 	

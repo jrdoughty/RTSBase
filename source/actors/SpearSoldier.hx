@@ -18,6 +18,7 @@ class SpearSoldier extends Unit
 		animation.add("active", [2, 3], 5, true);
 		animation.add("attack", [2, 6], 5, true);
 		animation.frameIndex = 2;
+		idleFrame = 2;
 	}
 	
 	
