@@ -81,7 +81,7 @@ class SelfLoadingLevel extends FlxGroup
 				if (tiledLevel.tilesets[i].name == "highlight")
 				{
 					highlight = new FlxSprite(0, 0).loadGraphic("assets/"+tiledLevel.tilesets[i].image.substring(3), true, tiledLevel.tilewidth, tiledLevel.tileheight);
-					highlight.animation.add("main", [0, 1, 2, 3, 4, 5, 6], 10);//has to be better way
+					highlight.animation.add("main", [0, 1, 2, 3, 4, 5, 6], 24);//has to be better way
 					highlight.animation.play("main");
 				}
 			}

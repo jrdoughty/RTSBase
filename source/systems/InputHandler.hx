@@ -121,10 +121,15 @@ class InputHandler
 	
 	private function onOver(sprite:Node):Void
 	{
-		if (activeState.getLevel().highlight != null)
+		if (activeState.getLevel().highlight != null && sprite.occupant != null)
 		{
+			activeState.getLevel().highlight.visible = true;
 			activeState.getLevel().highlight.x = sprite.x;
 			activeState.getLevel().highlight.y = sprite.y;
+		}
+		else
+		{
+			activeState.getLevel().highlight.visible = false;
 		}
 	}
 	
@@ -151,7 +156,14 @@ class InputHandler
 		else
 		{
 			selector.y = selectorStartY;
-			height = Math.round(FlxG.mouse.y - selector.y);
+			if (FlxG.mouse.y > activeState.dashboard.background.y)
+			{
+				height = Math.round(activeState.dashboard.background.y - selector.y);
+			}
+			else
+			{
+				height = Math.round(FlxG.mouse.y - selector.y);
+			}
 		}
 		if (width == 0)
 		{
