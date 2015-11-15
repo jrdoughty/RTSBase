@@ -78,7 +78,6 @@ class Dashboard extends FlxGroup
 			remove(activeUnits[i].healthBar);
 		}
 		activeUnits = [];
-		
 	}
 	
 	public function addSelectedUnit(baseA:BaseActor):Void
@@ -88,6 +87,15 @@ class Dashboard extends FlxGroup
 		add(sprite);
 		add(sprite.healthBar);
 		add(sprite.healthBarFill);
+	}
+	
+	private function redoDashboard():Void
+	{
+		var i:Int;
+		for (i in 0...activeUnits.length)
+		{
+			activeUnits[i].setDashPos(112 + i * 16, 184);
+		}
 	}
 	
 	override public function update():Void
@@ -111,6 +119,7 @@ class Dashboard extends FlxGroup
 				remove(activeUnits[i].healthBarFill);
 				remove(activeUnits[i].healthBar);
 				activeUnits.splice(i, 1);
+				redoDashboard();
 			}
 			i++;
 		}

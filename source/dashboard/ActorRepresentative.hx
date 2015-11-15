@@ -30,6 +30,13 @@ class ActorRepresentative extends FlxSprite
 		animation.pause();
 	}
 	
+	public function setDashPos(x:Int, y:Int):Void
+	{
+		this.x = x;
+		healthBar.x = x;
+		healthBarFill.x = x;
+	}
+	
 	override public function update():Void
 	{
 		super.update();
