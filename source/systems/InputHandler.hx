@@ -18,20 +18,32 @@ import world.Node;
  * @author ...
  */
 
+enum InputState {
+	SELECTING;
+	ATTACKING;
+	MOVING;
+	CASTING;
+}
+ 
 class InputHandler
 {
 	private var selectedUnits:Array<Unit> = [];
-	private var wasLeftMouseDown:Bool = false;
-	private var wasRightMouseDown:Bool = false;
+	private var inputState:InputState = InputState.SELECTING;
+	private var activeState:IGameState;
+	
 	private var flxTeamUnits:FlxGroup = new FlxGroup();
 	private var flxActiveTeamUnits:FlxGroup = new FlxGroup();
 	private var flxNodes:FlxGroup = new FlxGroup();
 	private var nodes:Array<Node>;
-	private var activeState:IGameState;
-	private var newLeftClick:Bool = true;
+	private var selector:FlxSprite;
+	
 	private var selectorStartX:Float;
 	private var selectorStartY:Float;
-	private var selector(default, null):FlxSprite;
+	
+	private var newLeftClick:Bool = true;
+	private var wasRightMouseDown:Bool = false;
+	private var wasLeftMouseDown:Bool = false;
+	
 	
 	public function new(state:IGameState) 
 	{
@@ -218,12 +230,6 @@ class InputHandler
 		{
 			wasRightMouseDown = false;
 		}
-		/*
-		if (FlxG.mouse.y > 236 && FlxG.camera.y > -activeState.dashboard.background.height)
-		{
-			//activeState.dashboard.background.y -= 1;
-			FlxG.camera.y -= 1;
-		}*/
 	}
 	
 }
