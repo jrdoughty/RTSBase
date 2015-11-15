@@ -69,8 +69,10 @@ class Unit extends BaseActor
 				}
 				else
 				{
+					/*we wait for now
 					path = [];
 					targetNode = null;
+					*/
 				}
 			}
 		}
@@ -172,7 +174,6 @@ class Unit extends BaseActor
 		}
 		else if (targetNode != null)
 		{
-			
 			move();
 		}
 		else

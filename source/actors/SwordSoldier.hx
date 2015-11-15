@@ -18,7 +18,7 @@ class SwordSoldier extends Unit
 		animation.add("active", [0, 1], 5, true);
 		animation.add("attack", [0, 4], 5, true);
 		team = 1;
-		speed = 200;
+		//speed = 200;
 		idleFrame = 0;
 	}
 
@@ -39,14 +39,12 @@ class SwordSoldier extends Unit
 	override private function attack()
 	{
 		super.attack();
-		trace("attack");
 		animation.play("attack");
 	}
 	
 	override private function chase()
 	{
 		super.chase();
-		trace("active");
 		animation.play("active");
 	}
 }

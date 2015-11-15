@@ -92,13 +92,13 @@ class Dashboard extends FlxGroup
 	
 	override public function update():Void
 	{
-		var i:Int;
+		var i:Int = 0;
 				
 		super.update();
 		
 		background.y = baseY - FlxG.camera.y;
 		
-		for (i in 0...activeUnits.length)
+		while(i < activeUnits.length)
 		{
 			if (activeUnits[i].alive)
 			{
@@ -106,11 +106,13 @@ class Dashboard extends FlxGroup
 			}
 			else
 			{
+				trace("REMOVE");
 				remove(activeUnits[i]);
 				remove(activeUnits[i].healthBarFill);
 				remove(activeUnits[i].healthBar);
 				activeUnits.splice(i, 1);
 			}
+			i++;
 		}
 	}
 }
