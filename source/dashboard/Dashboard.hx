@@ -14,10 +14,11 @@ import flixel.FlxG;
 class Dashboard extends FlxGroup
 {
 	public var background:FlxSprite;
+	public var activeControls:Array<Control> = [];
+	
 	private var controls:FlxSprite;
 	private var inputHandler:InputHandler;
 	private var selected:FlxSprite;
-	private var activeControls:Array<Control> = [];
 	private var activeUnits:Array<ActorRepresentative> = [];
 	private var baseY:Int = 0;
 	private var baseX:Int = 0;

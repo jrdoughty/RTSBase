@@ -18,7 +18,8 @@ import world.Node;
  * @author ...
  */
 
-enum InputState {
+enum InputState 
+{
 	SELECTING;
 	ATTACKING;
 	MOVING;
@@ -27,12 +28,12 @@ enum InputState {
  
 class InputHandler
 {
-	private var selectedUnits:Array<Unit> = [];
 	private var inputState:InputState = InputState.SELECTING;
 	private var activeState:IGameState;
 	
 	private var flxTeamUnits:FlxGroup = new FlxGroup();
 	private var flxActiveTeamUnits:FlxGroup = new FlxGroup();
+	private var selectedUnits:Array<Unit> = [];
 	private var flxNodes:FlxGroup = new FlxGroup();
 	private var nodes:Array<Node>;
 	private var selector:FlxSprite;
@@ -62,6 +63,15 @@ class InputHandler
 		flxActiveTeamUnits.add(activeState.activeTeam.flxUnits);
 	}
 	
+	public function setupClickControls(controls:Array<Control>)
+	{
+		var i:Int;
+		for (i in 0...controls.length)
+		{
+			if(controls[i].
+			MouseEventManager.add(Node.activeNodes[i], null, null, onOver);
+		}
+	}
 	
 	private function nodeClick(selector:FlxObject,node:Node):Void
 	{
@@ -87,14 +97,22 @@ class InputHandler
 	private function click():Void
 	{
 		newLeftClick = true;
-		if (FlxG.overlap(selector, flxActiveTeamUnits, selectOverlapUnits) == false)
+		if (inputState == SELECTING)
 		{
+			if (FlxG.overlap(selector, flxActiveTeamUnits, selectOverlapUnits) == false)
+			{
+				activeState.dashboard.clearDashBoard();//Select Enemies later
+			}
+		}
+		else if (inputState == MOVING)
+		{			
 			if (selector.width < activeState.getLevel().tiledLevel.tilewidth && selector.height < activeState.getLevel().tiledLevel.tileheight)
 			{
 				FlxG.overlap(selector, flxNodes, nodeClick);
 			}
 		}
 		
+		inputState = SELECTING;
 		activeState.remove(selector);
 	}
 	
@@ -134,15 +152,24 @@ class InputHandler
 	
 	private function onOver(sprite:Node):Void
 	{
-		if (activeState.getLevel().highlight != null && sprite.occupant != null)
+		if (inputState == SELECTING)
+		{
+			if (activeState.getLevel().highlight != null && sprite.occupant != null)
+			{
+				activeState.getLevel().highlight.visible = true;
+				activeState.getLevel().highlight.x = sprite.x;
+				activeState.getLevel().highlight.y = sprite.y;
+			}
+			else
+			{
+				activeState.getLevel().highlight.visible = false;
+			}
+		}
+		else if (inputState == MOVING)
 		{
 			activeState.getLevel().highlight.visible = true;
 			activeState.getLevel().highlight.x = sprite.x;
 			activeState.getLevel().highlight.y = sprite.y;
-		}
-		else
-		{
-			activeState.getLevel().highlight.visible = false;
 		}
 	}
 	
@@ -150,41 +177,53 @@ class InputHandler
 	{
 		var width:Int;
 		var height:Int;
-		if (FlxG.mouse.x < selectorStartX)
-		{
-			selector.x = FlxG.mouse.x;
-			width = Math.round(selectorStartX - FlxG.mouse.x);
-		}
-		else
-		{
-			selector.x = selectorStartX;
-			width = Math.round(FlxG.mouse.x - selector.x);
-		}
 		
-		if (FlxG.mouse.y < selectorStartY)
+		if (inputState == SELECTING)
 		{
-			selector.y = FlxG.mouse.y;
-			height = Math.round(selectorStartY - FlxG.mouse.y);
-		}
-		else
-		{
-			selector.y = selectorStartY;
-			if (FlxG.mouse.y > activeState.dashboard.background.y)
+			if (FlxG.mouse.x < selectorStartX)
 			{
-				height = Math.round(activeState.dashboard.background.y - selector.y);
+				selector.x = FlxG.mouse.x;
+				width = Math.round(selectorStartX - FlxG.mouse.x);
 			}
 			else
 			{
-				height = Math.round(FlxG.mouse.y - selector.y);
+				selector.x = selectorStartX;
+				width = Math.round(FlxG.mouse.x - selector.x);
+			}
+			
+			if (FlxG.mouse.y < selectorStartY)
+			{
+				selector.y = FlxG.mouse.y;
+				height = Math.round(selectorStartY - FlxG.mouse.y);
+			}
+			else
+			{
+				selector.y = selectorStartY;
+				if (FlxG.mouse.y > activeState.dashboard.background.y)
+				{
+					height = Math.round(activeState.dashboard.background.y - selector.y);
+				}
+				else
+				{
+					height = Math.round(FlxG.mouse.y - selector.y);
+				}
+			}
+			if (width == 0)
+			{
+				width = 1;//setGraphics makes squares with a 0 height or width
+			}
+			if (height == 0)
+			{
+				height = 1;//setGraphics makes squares with a 0 height or width
 			}
 		}
-		if (width == 0)
+		else 
 		{
-			width = 1;//setGraphics makes squares with a 0 height or width
-		}
-		if (height == 0)
-		{
-			height = 1;//setGraphics makes squares with a 0 height or width
+			selector.alpha = 0;
+			width = 1;
+			height = 1;
+			selector.x = FlxG.mouse.x;
+			selector.y = FlxG.mouse.y;
 		}
 		selector.setGraphicSize(width, height);
 		selector.updateHitbox();
@@ -192,6 +231,16 @@ class InputHandler
 	
 	public function update()
 	{
+		
+		if (FlxG.keys.pressed.M)
+		{
+			inputState = MOVING;
+		}
+		else if (FlxG.keys.pressed.S)
+		{
+			inputState = SELECTING;
+		}
+		
 		if (FlxG.mouse.pressed)
 		{
 			if (wasLeftMouseDown)
@@ -201,7 +250,14 @@ class InputHandler
 			else
 			{
 				activeState.add(selector);
-				selector.alpha = .5;
+				if (inputState == SELECTING)
+				{
+					selector.alpha = .5;
+				}
+				else
+				{
+					selector.alpha = 0;
+				}
 				selectorStartX = FlxG.mouse.x;
 				selectorStartY = FlxG.mouse.y;
 				selector.x = selectorStartX;
