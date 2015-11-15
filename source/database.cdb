@@ -1,0 +1,60 @@
+{
+	"sheets": [
+		{
+			"name": "Actors",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id"
+				},
+				{
+					"typeStr": "1",
+					"name": "name",
+					"display": null
+				},
+				{
+					"typeStr": "3",
+					"name": "health",
+					"opt": true
+				},
+				{
+					"typeStr": "7",
+					"name": "Sprite",
+					"display": null
+				},
+				{
+					"typeStr": "3",
+					"name": "speed",
+					"display": null
+				},
+				{
+					"typeStr": "3",
+					"name": "damage",
+					"opt": true
+				}
+			],
+			"lines": [
+				{
+					"name": "Sword Solder",
+					"Sprite": "7b3ce3f681669a8cad4d85432cd2a6bb",
+					"speed": 200,
+					"id": "SwordSoldier",
+					"health": 8,
+					"damage": 1
+				},
+				{
+					"id": "SpearSoldier",
+					"name": "Spear Soldier",
+					"Sprite": "5d295e81da6d101b4d4612cf2f622b3a",
+					"speed": 250,
+					"health": 9,
+					"damage": 1
+				}
+			],
+			"separators": [],
+			"props": {}
+		}
+	],
+	"customTypes": [],
+	"compress": false
+}
