@@ -72,10 +72,15 @@ class InputHandler
 			{
 				MouseEventManager.add(controls[i], null, Move, null);
 			}
-			if (controls[i].type == ActorControlTypes.ATTACK)
+			else if (controls[i].type == ActorControlTypes.ATTACK)
 			{
 				MouseEventManager.add(controls[i], null, Attack, null);
 			}
+			else if (controls[i].type == ActorControlTypes.STOP)
+			{
+				MouseEventManager.add(controls[i], null, Stop, null);
+			}
+			
 		}
 	}
 	
@@ -266,14 +271,14 @@ class InputHandler
 		}
 		else if (FlxG.keys.pressed.S)
 		{
-			inputState = SELECTING;
+			Stop();
 		}
 		else if (FlxG.keys.pressed.A)
 		{
 			Attack();
 		}
 		
-		if (FlxG.mouse.pressed)
+		if (FlxG.mouse.pressed && FlxG.mouse.pressedRight == false)
 		{
 			if (wasLeftMouseDown)
 			{
@@ -301,7 +306,7 @@ class InputHandler
 		}
 		else
 		{
-			if (wasLeftMouseDown)
+			if (wasLeftMouseDown && FlxG.mouse.pressedRight == false)
 			{
 				click();
 			}
@@ -328,6 +333,16 @@ class InputHandler
 	private function Attack(sprite:FlxSprite = null)
 	{
 		inputState = ATTACKING;
+	}
+	
+	private function Stop(sprite:FlxSprite = null)
+	{
+		var i:Int;
+		for (i in 0...selectedUnits.length)
+		{
+			selectedUnits[i].resetStates();
+		}
+		inputState = SELECTING;
 	}
 	
 }

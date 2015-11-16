@@ -30,7 +30,7 @@ class Unit extends BaseActor
 	{
 		var i:Int;
 		super(node, state);
-		for (i in 0...7)
+		for (i in 0...3)
 		{
 			controls.push(new Control(i, unitControlTypes[i]));
 		}
