@@ -56,12 +56,13 @@ class Dashboard extends FlxGroup
 		
 		activeControls = baseA.controls;
 		
-		for (i in 0...baseA.controls.length)
+		for (i in 0...activeControls.length)
 		{
-			add(baseA.controls[i]);
-			baseA.controls[i].x = 2 + (i % 3) * 18;
-			baseA.controls[i].y = 184 + Math.floor(i / 3) * 18 + 2;
+			add(activeControls[i]);
+			activeControls[i].x = 2 + (i % 3) * 18;
+			activeControls[i].y = 184 + Math.floor(i / 3) * 18 + 2;
 		}
+		inputHandler.setupClickControls(activeControls);
 	}
 	
 	public function clearDashBoard():Void

@@ -5,6 +5,7 @@ import interfaces.IGameState;
 import systems.AStar;
 import flixel.tweens.FlxTween;
 import dashboard.Control;
+import actors.BaseActor.ActorControlTypes;
 /**
  * ...
  * @author ...
@@ -16,14 +17,22 @@ class Unit extends BaseActor
 		
 	private	var path:Array<Node> = [];
 	public var targetNode:Node;
+	private var unitControlTypes: Array<ActorControlTypes> = [ActorControlTypes.ATTACK,
+		ActorControlTypes.STOP,
+		ActorControlTypes.MOVE, 
+		ActorControlTypes.PATROL, 
+		ActorControlTypes.CAST, 
+		ActorControlTypes.BUILD, 
+		ActorControlTypes.HOLD];
+	
 	
 	public function new(node:Node, state:IGameState) 
 	{
 		var i:Int;
 		super(node, state);
-		for (i in 0...8)
+		for (i in 0...7)
 		{
-			controls.push(new Control(i));
+			controls.push(new Control(i, unitControlTypes[i]));
 		}
 		
 	}

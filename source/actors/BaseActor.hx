@@ -23,6 +23,17 @@ enum ActorState
 	BUSY;
 	CHASING;
 }
+
+enum ActorControlTypes 
+{
+	ATTACK;
+	STOP;
+	MOVE;
+	PATROL;
+	CAST;
+	BUILD;
+	HOLD;
+}
  
  
 class BaseActor extends FlxSprite
