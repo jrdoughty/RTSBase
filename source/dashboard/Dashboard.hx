@@ -41,7 +41,7 @@ class Dashboard extends FlxGroup
 		
 		add(background);
 		add(controls);
-		add(selected);
+		//add(selected);
 	}
 	
 	public function setSelected(baseA:BaseActor):Void
@@ -53,7 +53,7 @@ class Dashboard extends FlxGroup
 		selected.updateHitbox();
 		selected.animation.frameIndex = baseA.animation.frameIndex;
 		selected.animation.pause();
-		
+		add(selected);
 		activeControls = baseA.controls;
 		
 		for (i in 0...activeControls.length)
@@ -69,10 +69,13 @@ class Dashboard extends FlxGroup
 	{
 		var i:Int;
 		
+		remove(selected);
+		
 		for (i in 0...activeControls.length)
 		{
 			remove(activeControls[i]);			
 		}
+		
 		for (i in 0...activeUnits.length)
 		{
 			remove(activeUnits[i]);
