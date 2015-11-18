@@ -2,6 +2,7 @@ package dashboard;
 
 import actors.BaseActor.ActorControlTypes;
 import flixel.FlxSprite;
+import openfl.display.Sprite;
 
 /**
  * ...
@@ -26,6 +27,16 @@ class Control extends FlxSprite
 		animation.frameIndex = frame;
 		scale.set(2, 2);
 		updateHitbox();
+	}
+	
+	public function hover(sprite:Control)
+	{
+		color = 0xBBBBBB;
+	}
+	
+	public function out(sprite:Control)
+	{
+		color = 0xFFFFFF;
 	}
 	
 }

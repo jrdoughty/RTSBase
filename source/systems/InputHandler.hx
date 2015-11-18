@@ -70,15 +70,15 @@ class InputHandler
 		{
 			if (controls[i].type == ActorControlTypes.MOVE)
 			{
-				MouseEventManager.add(controls[i], null, Move, null);
+				MouseEventManager.add(controls[i], null, Move, controls[i].hover, controls[i].out, false, true, false);
 			}
 			else if (controls[i].type == ActorControlTypes.ATTACK)
 			{
-				MouseEventManager.add(controls[i], null, Attack, null);
+				MouseEventManager.add(controls[i], null, Attack, controls[i].hover, controls[i].out, false, true, false);
 			}
 			else if (controls[i].type == ActorControlTypes.STOP)
 			{
-				MouseEventManager.add(controls[i], null, Stop, null);
+				MouseEventManager.add(controls[i], null, Stop, controls[i].hover, controls[i].out, false, true, false);
 			}
 			
 		}
