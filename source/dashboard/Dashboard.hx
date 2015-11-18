@@ -111,7 +111,7 @@ class Dashboard extends FlxGroup
 		
 		background.y = baseY - FlxG.camera.y;
 		
-		while(i < activeUnits.length)
+		while(i < activeUnits.length)//because the length gets stored ahead in haxe for loops, the changing length breaks this loop
 		{
 			if (activeUnits[i].alive)
 			{
@@ -119,12 +119,19 @@ class Dashboard extends FlxGroup
 			}
 			else
 			{
-				trace("REMOVE");
 				remove(activeUnits[i]);
 				remove(activeUnits[i].healthBarFill);
 				remove(activeUnits[i].healthBar);
 				activeUnits.splice(i, 1);
-				redoDashboard();
+				if (activeUnits.length == 0)
+				{
+					clearDashBoard();
+					inputHandler.resetInputState();
+				}
+				else
+				{
+					redoDashboard();
+				}
 			}
 			i++;
 		}

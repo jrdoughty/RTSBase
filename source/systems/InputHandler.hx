@@ -144,7 +144,7 @@ class InputHandler
 					FlxG.overlap(selector, flxNodes, AttackClick);
 				}
 			}
-			inputState = SELECTING;
+			resetInputState();
 			
 		}
 		activeState.remove(selector);
@@ -342,7 +342,10 @@ class InputHandler
 		{
 			selectedUnits[i].resetStates();
 		}
+		resetInputState();
+	}
+	public function resetInputState()
+	{
 		inputState = SELECTING;
 	}
-	
 }
