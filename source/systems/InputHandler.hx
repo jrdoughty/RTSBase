@@ -49,8 +49,6 @@ class InputHandler
 	public function new(state:IGameState) 
 	{
 		activeState = state;
-		selector = new FlxSprite(-1,-1);
-		selector.makeGraphic(1, 1, FlxColor.WHITE);
 		for (i in 0...Node.activeNodes.length)
 		{
 			flxNodes.add(Node.activeNodes[i]);
@@ -124,49 +122,39 @@ class InputHandler
 			Attack();
 		}
 		
-		if (FlxG.mouse.pressed)
+		if (FlxG.mouse.pressed && FlxG.mouse.justPressed == false)
 		{
-			if (wasLeftMouseDown)
+			setupSelectorSize();
+			wasLeftMouseDown = true;
+		}
+		else if (FlxG.mouse.justPressed)
+		{
+			selector = new FlxSprite(-1,-1);
+			selector.makeGraphic(1, 1, FlxColor.WHITE);
+			activeState.add(selector);
+			if (inputState == SELECTING)
 			{
-				setupSelectorSize();
+				selector.alpha = .5;
 			}
 			else
 			{
-				activeState.add(selector);
-				if (inputState == SELECTING)
-				{
-					selector.alpha = .5;
-				}
-				else
-				{
-					selector.alpha = 0;
-				}
-				selectorStartX = FlxG.mouse.x;
-				selectorStartY = FlxG.mouse.y;
-				selector.x = selectorStartX;
-				selector.y = selectorStartY;
-				selector.setGraphicSize(1, 1);
-				selector.updateHitbox();
+				selector.alpha = 0;
 			}
-			wasLeftMouseDown = true;
-		}
-		else
+			selectorStartX = FlxG.mouse.x;
+			selectorStartY = FlxG.mouse.y;
+			selector.x = selectorStartX;
+			selector.y = selectorStartY;
+			selector.setGraphicSize(1, 1);
+			selector.updateHitbox();
+		} else if (wasLeftMouseDown && FlxG.mouse.pressed == false)
 		{
+			click();
 			wasLeftMouseDown = false;
 		}
 		
-		if (FlxG.mouse.pressedRight)
+		if (FlxG.mouse.justPressedRight)
 		{
-			if (wasRightMouseDown == false)
-			{
-				
-			}
-			
-			wasRightMouseDown = true;
-		}
-		else
-		{
-			wasRightMouseDown = false;
+			rightClick();
 		}
 	}
 	
@@ -256,6 +244,27 @@ class InputHandler
 			
 		}
 		activeState.remove(selector);
+		selector = null;
+	}
+	
+	private function rightClick()
+	{
+		if (selector == null)
+		{
+			selector = new FlxSprite(FlxG.mouse.x, FlxG.mouse.y);
+			selector.makeGraphic(1, 1, FlxColor.WHITE);
+			activeState.add(selector);
+		}
+		selector.alpha = 0;
+		if (FlxG.overlap(selector, activeState.dashboard) == false)
+		{
+			if (selector.width < activeState.getLevel().tiledLevel.tilewidth && selector.height < activeState.getLevel().tiledLevel.tileheight)
+			{
+				FlxG.overlap(selector, flxNodes, AttackClick);
+			}
+		}
+		activeState.remove(selector);
+		selector = null;
 	}
 	
 	private function Move(sprite:FlxSprite = null)
