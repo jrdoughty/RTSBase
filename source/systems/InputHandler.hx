@@ -63,6 +63,30 @@ class InputHandler
 		flxActiveTeamUnits.add(activeState.activeTeam.flxUnits);
 	}
 	
+	private function onOver(sprite:Node):Void
+	{
+		if (inputState == SELECTING)
+		{
+			if (activeState.getLevel().highlight != null && sprite.occupant != null)
+			{
+				activeState.getLevel().highlight.visible = true;
+				activeState.getLevel().highlight.x = sprite.x;
+				activeState.getLevel().highlight.y = sprite.y;
+			}
+			else
+			{
+				activeState.getLevel().highlight.visible = false;
+			}
+		}
+		else if (inputState == MOVING || inputState == ATTACKING)
+		{
+			activeState.getLevel().highlight.visible = true;
+			activeState.getLevel().highlight.x = sprite.x;
+			activeState.getLevel().highlight.y = sprite.y;
+		}
+	}
+	
+	
 	public function setupClickControls(controls:Array<Control>)
 	{
 		var i:Int;
@@ -84,125 +108,65 @@ class InputHandler
 		}
 	}
 	
-	private function moveToNode(selector:FlxObject,node:Node):Void
+	public function update()
 	{
-		var i:Int;
-		if (selectedUnits.length > 0 && node.isPassible() && (node.occupant == null || node.occupant.team != activeState.activeTeam.id))
+		
+		if (FlxG.keys.pressed.M)
 		{
-			for (i in 0...selectedUnits.length)
+			Move();
+		}
+		else if (FlxG.keys.pressed.S)
+		{
+			Stop();
+		}
+		else if (FlxG.keys.pressed.A)
+		{
+			Attack();
+		}
+		
+		if (FlxG.mouse.pressed)
+		{
+			if (wasLeftMouseDown)
 			{
-				selectedUnits[i].resetStates();
-				selectedUnits[i].targetNode = node;
-			}
-		}
-	}
-	
-	private function AttackClick(selector:FlxObject,node:Node):Void
-	{
-		var i:Int;
-		if (selectedUnits.length > 0 && node.isPassible() && node.occupant == null)
-		{
-			for (i in 0...selectedUnits.length)
-			{
-				selectedUnits[i].resetStates();
-				selectedUnits[i].targetNode = node;
-			}
-		}
-		else if (node.occupant != null && node.occupant.team != activeState.activeTeam.id)
-		{
-			for (i in 0...selectedUnits.length)
-			{
-				selectedUnits[i].resetStates();
-				selectedUnits[i].targetEnemy = node.occupant;
-			}
-		}
-	}
-	
-	private function click():Void
-	{
-		newLeftClick = true;
-		if (FlxG.overlap(selector, activeState.dashboard) == false)
-		{
-			if (inputState == SELECTING)
-			{
-					if (FlxG.overlap(selector, flxActiveTeamUnits, selectOverlapUnits) == false)
-					{
-						activeState.dashboard.clearDashBoard();//Select Enemies later
-					}
-			}
-			else if (inputState == MOVING)
-			{			
-				if (selector.width < activeState.getLevel().tiledLevel.tilewidth && selector.height < activeState.getLevel().tiledLevel.tileheight)
-				{
-					FlxG.overlap(selector, flxNodes, moveToNode);
-				}
-			}
-			else if (inputState == ATTACKING)
-			{			
-				if (selector.width < activeState.getLevel().tiledLevel.tilewidth && selector.height < activeState.getLevel().tiledLevel.tileheight)
-				{
-					FlxG.overlap(selector, flxNodes, AttackClick);
-				}
-			}
-			resetInputState();
-			
-		}
-		activeState.remove(selector);
-	}
-	
-	private function attackOverlap(selector:FlxObject, unit:BaseActor):Void
-	{
-		var i:Int;
-		for (i in 0...selectedUnits.length)
-		{
-			selectedUnits[i].targetEnemy = unit;
-		}
-	}
-	
-	private function selectOverlapUnits(selector:FlxObject, unit:Unit):Void
-	{
-		if (newLeftClick)
-		{
-			deselectUnits();
-			selectedUnits = [];
-			activeState.dashboard.clearDashBoard();
-			activeState.dashboard.setSelected(unit);
-		}
-		activeState.dashboard.addSelectedUnit(unit);
-		selectedUnits.push(unit);
-		unit.select();
-		newLeftClick = false;
-	}
-	
-	private function deselectUnits():Void
-	{
-		var i:Int;
-		for (i in 0...selectedUnits.length)
-		{
-			selectedUnits[i].resetSelect();
-		}
-	}
-	
-	private function onOver(sprite:Node):Void
-	{
-		if (inputState == SELECTING)
-		{
-			if (activeState.getLevel().highlight != null && sprite.occupant != null)
-			{
-				activeState.getLevel().highlight.visible = true;
-				activeState.getLevel().highlight.x = sprite.x;
-				activeState.getLevel().highlight.y = sprite.y;
+				setupSelectorSize();
 			}
 			else
 			{
-				activeState.getLevel().highlight.visible = false;
+				activeState.add(selector);
+				if (inputState == SELECTING)
+				{
+					selector.alpha = .5;
+				}
+				else
+				{
+					selector.alpha = 0;
+				}
+				selectorStartX = FlxG.mouse.x;
+				selectorStartY = FlxG.mouse.y;
+				selector.x = selectorStartX;
+				selector.y = selectorStartY;
+				selector.setGraphicSize(1, 1);
+				selector.updateHitbox();
 			}
+			wasLeftMouseDown = true;
 		}
-		else if (inputState == MOVING || inputState == ATTACKING)
+		else
 		{
-			activeState.getLevel().highlight.visible = true;
-			activeState.getLevel().highlight.x = sprite.x;
-			activeState.getLevel().highlight.y = sprite.y;
+			wasLeftMouseDown = false;
+		}
+		
+		if (FlxG.mouse.pressedRight)
+		{
+			if (wasRightMouseDown == false)
+			{
+				
+			}
+			
+			wasRightMouseDown = true;
+		}
+		else
+		{
+			wasRightMouseDown = false;
 		}
 	}
 	
@@ -262,67 +226,36 @@ class InputHandler
 		selector.updateHitbox();
 	}
 	
-	public function update()
+	private function click():Void
 	{
-		
-		if (FlxG.keys.pressed.M)
+		newLeftClick = true;
+		if (FlxG.overlap(selector, activeState.dashboard) == false)
 		{
-			Move();
-		}
-		else if (FlxG.keys.pressed.S)
-		{
-			Stop();
-		}
-		else if (FlxG.keys.pressed.A)
-		{
-			Attack();
-		}
-		
-		if (FlxG.mouse.pressed && FlxG.mouse.pressedRight == false)
-		{
-			if (wasLeftMouseDown)
+			if (inputState == SELECTING)
 			{
-				setupSelectorSize();
+					if (FlxG.overlap(selector, flxActiveTeamUnits, selectOverlapUnits) == false)
+					{
+						activeState.dashboard.clearDashBoard();//Select Enemies later
+					}
 			}
-			else
-			{
-				activeState.add(selector);
-				if (inputState == SELECTING)
+			else if (inputState == MOVING)
+			{			
+				if (selector.width < activeState.getLevel().tiledLevel.tilewidth && selector.height < activeState.getLevel().tiledLevel.tileheight)
 				{
-					selector.alpha = .5;
+					FlxG.overlap(selector, flxNodes, moveToNode);
 				}
-				else
+			}
+			else if (inputState == ATTACKING)
+			{			
+				if (selector.width < activeState.getLevel().tiledLevel.tilewidth && selector.height < activeState.getLevel().tiledLevel.tileheight)
 				{
-					selector.alpha = 0;
+					FlxG.overlap(selector, flxNodes, AttackClick);
 				}
-				selectorStartX = FlxG.mouse.x;
-				selectorStartY = FlxG.mouse.y;
-				selector.x = selectorStartX;
-				selector.y = selectorStartY;
-				selector.setGraphicSize(1, 1);
-				selector.updateHitbox();
 			}
-			wasLeftMouseDown = true;
-		}
-		else
-		{
-			if (wasLeftMouseDown && FlxG.mouse.pressedRight == false)
-			{
-				click();
-			}
-			wasLeftMouseDown = false;
-		}
-		
-		if (FlxG.mouse.pressedRight)
-		{
+			resetInputState();
 			
-			
-			wasRightMouseDown = true;
 		}
-		else
-		{
-			wasRightMouseDown = false;
-		}
+		activeState.remove(selector);
 	}
 	
 	private function Move(sprite:FlxSprite = null)
@@ -344,8 +277,77 @@ class InputHandler
 		}
 		resetInputState();
 	}
+	
 	public function resetInputState()
 	{
 		inputState = SELECTING;
 	}
+	
+	private function moveToNode(selector:FlxObject,node:Node):Void
+	{
+		var i:Int;
+		if (selectedUnits.length > 0 && node.isPassible() && (node.occupant == null || node.occupant.team != activeState.activeTeam.id))
+		{
+			for (i in 0...selectedUnits.length)
+			{
+				selectedUnits[i].resetStates();
+				selectedUnits[i].targetNode = node;
+			}
+		}
+	}
+	
+	private function AttackClick(selector:FlxObject,node:Node):Void
+	{
+		var i:Int;
+		if (selectedUnits.length > 0 && node.isPassible() && node.occupant == null)
+		{
+			for (i in 0...selectedUnits.length)
+			{
+				selectedUnits[i].resetStates();
+				selectedUnits[i].targetNode = node;
+			}
+		}
+		else if (node.occupant != null && node.occupant.team != activeState.activeTeam.id)
+		{
+			for (i in 0...selectedUnits.length)
+			{
+				selectedUnits[i].resetStates();
+				selectedUnits[i].targetEnemy = node.occupant;
+			}
+		}
+	}
+	
+	private function attackOverlap(selector:FlxObject, unit:BaseActor):Void
+	{
+		var i:Int;
+		for (i in 0...selectedUnits.length)
+		{
+			selectedUnits[i].targetEnemy = unit;
+		}
+	}
+	
+	private function selectOverlapUnits(selector:FlxObject, unit:Unit):Void
+	{
+		if (newLeftClick)
+		{
+			deselectUnits();
+			selectedUnits = [];
+			activeState.dashboard.clearDashBoard();
+			activeState.dashboard.setSelected(unit);
+		}
+		activeState.dashboard.addSelectedUnit(unit);
+		selectedUnits.push(unit);
+		unit.select();
+		newLeftClick = false;
+	}
+	
+	private function deselectUnits():Void
+	{
+		var i:Int;
+		for (i in 0...selectedUnits.length)
+		{
+			selectedUnits[i].resetSelect();
+		}
+	}
+	
 }
