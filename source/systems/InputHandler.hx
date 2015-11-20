@@ -92,15 +92,15 @@ class InputHandler
 		{
 			if (controls[i].type == ActorControlTypes.MOVE)
 			{
-				MouseEventManager.add(controls[i], null, Move, controls[i].hover, controls[i].out, false, true, false);
+				MouseEventManager.add(controls[i], null, move, controls[i].hover, controls[i].out, false, true, false);
 			}
 			else if (controls[i].type == ActorControlTypes.ATTACK)
 			{
-				MouseEventManager.add(controls[i], null, Attack, controls[i].hover, controls[i].out, false, true, false);
+				MouseEventManager.add(controls[i], null, attack, controls[i].hover, controls[i].out, false, true, false);
 			}
 			else if (controls[i].type == ActorControlTypes.STOP)
 			{
-				MouseEventManager.add(controls[i], null, Stop, controls[i].hover, controls[i].out, false, true, false);
+				MouseEventManager.add(controls[i], null, stop, controls[i].hover, controls[i].out, false, true, false);
 			}
 			
 		}
@@ -111,15 +111,15 @@ class InputHandler
 		
 		if (FlxG.keys.pressed.M)
 		{
-			Move();
+			move();
 		}
 		else if (FlxG.keys.pressed.S)
 		{
-			Stop();
+			stop();
 		}
 		else if (FlxG.keys.pressed.A)
 		{
-			Attack();
+			attack();
 		}
 		
 		if (FlxG.mouse.pressed && FlxG.mouse.justPressed == false)
@@ -237,7 +237,7 @@ class InputHandler
 			{			
 				if (selector.width < activeState.getLevel().tiledLevel.tilewidth && selector.height < activeState.getLevel().tiledLevel.tileheight)
 				{
-					FlxG.overlap(selector, flxNodes, AttackClick);
+					FlxG.overlap(selector, flxNodes, attackClick);
 				}
 			}
 			resetInputState();
@@ -260,24 +260,24 @@ class InputHandler
 		{
 			if (selector.width < activeState.getLevel().tiledLevel.tilewidth && selector.height < activeState.getLevel().tiledLevel.tileheight)
 			{
-				FlxG.overlap(selector, flxNodes, AttackClick);
+				FlxG.overlap(selector, flxNodes, attackClick);
 			}
 		}
 		activeState.remove(selector);
 		selector = null;
 	}
 	
-	private function Move(sprite:FlxSprite = null)
+	private function move(sprite:FlxSprite = null)
 	{
 		inputState = MOVING;
 	}
 	
-	private function Attack(sprite:FlxSprite = null)
+	private function attack(sprite:FlxSprite = null)
 	{
 		inputState = ATTACKING;
 	}
 	
-	private function Stop(sprite:FlxSprite = null)
+	private function stop(sprite:FlxSprite = null)
 	{
 		var i:Int;
 		for (i in 0...selectedUnits.length)
@@ -305,7 +305,7 @@ class InputHandler
 		}
 	}
 	
-	private function AttackClick(selector:FlxObject,node:Node):Void
+	private function attackClick(selector:FlxObject,node:Node):Void
 	{
 		var i:Int;
 		if (selectedUnits.length > 0 && node.isPassible() && node.occupant == null)
