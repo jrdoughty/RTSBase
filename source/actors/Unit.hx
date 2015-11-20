@@ -16,6 +16,7 @@ class Unit extends BaseActor
 {
 		
 	private	var path:Array<Node> = [];
+	private var failedToMove:Bool = false;
 	public var targetNode:Node;
 	private var unitControlTypes: Array<ActorControlTypes> = [ActorControlTypes.ATTACK,
 		ActorControlTypes.STOP,
@@ -40,21 +41,18 @@ class Unit extends BaseActor
 	private function move():Void
 	{
 		var nextMove:Node;
+		failedToMove = false;
 		
 		state = MOVING;
 		
 		if ((targetNode != null && path.length == 0|| targetNode != lastTargetNode) && targetNode.isPassible())
 		{
-			path = AStar.newPath(currentNode, targetNode);
+			path = AStar.newPath(currentNode, targetNode);//remember path[0] is the last 
 		}
 		if (path.length > 1 && path[path.length - 2].occupant == null)
 		{
-			path.splice(path.length - 1,1)[0].occupant = null;
-			currentNode = path[path.length - 1];
-			currentNode.occupant = this;
-			FlxTween.tween(this, { x:currentNode.x, y:currentNode.y }, speed / 1000);
-			FlxTween.tween(healthBar, { x:currentNode.x, y:currentNode.y - 1}, speed / 1000);
-			FlxTween.tween(healthBarFill, { x:currentNode.x, y:currentNode.y - 1 }, speed / 1000);
+			moveAlongPath();
+			
 			if (currentNode == targetNode)
 			{
 				path = [];
@@ -72,12 +70,13 @@ class Unit extends BaseActor
 			{
 				nextMove = path[path.length - 2];
 				path = AStar.newPath(currentNode, targetNode);
-				if (path.length > 1 && nextMove != path[path.length -2] )
+				if (path.length > 1 && nextMove != path[path.length -2])//In Plain english, if the new path is indeed a new path
 				{
 					move();//try new path					
 				}
 				else
 				{
+					failedToMove = true;
 					/*we wait for now
 					path = [];
 					targetNode = null;
@@ -99,6 +98,7 @@ class Unit extends BaseActor
 		var nextMove:Node;
 		var inRange:Bool = false;
 		var i:Int;
+		failedToMove = false;
 		
 		state = CHASING;
 		
@@ -118,19 +118,15 @@ class Unit extends BaseActor
 			}
 			else
 			{
-				if (targetEnemy.currentNode.isPassible())
+				if ((path.length == 0 || path[0] != targetEnemy.currentNode) && targetEnemy.currentNode.isPassible())
 				{
 					path = AStar.newPath(currentNode, targetEnemy.currentNode);
 				}
 				
+				
 				if (path.length > 1 && path[path.length - 2].occupant == null)
 				{
-					path.splice(path.length - 1,1)[0].occupant = null;
-					currentNode = path[path.length - 1];
-					currentNode.occupant = this;
-					FlxTween.tween(this, { x:currentNode.x, y:currentNode.y }, speed / 1000);
-					FlxTween.tween(healthBar, { x:currentNode.x, y:currentNode.y - 1}, speed / 1000);
-					FlxTween.tween(healthBarFill, { x:currentNode.x, y:currentNode.y - 1 }, speed / 1000);
+					moveAlongPath();
 					for (i in 0...currentNode.neighbors.length)
 					{
 						if (currentNode.neighbors[i].occupant == targetEnemy)
@@ -244,5 +240,15 @@ class Unit extends BaseActor
 	{
 		super.resetStates();
 		targetNode = null;
+	}
+	
+	@:extern inline function moveAlongPath()
+	{
+		path.splice(path.length - 1,1)[0].occupant = null;
+		currentNode = path[path.length - 1];
+		currentNode.occupant = this;
+		FlxTween.tween(this, { x:currentNode.x, y:currentNode.y }, speed / 1000);
+		FlxTween.tween(healthBar, { x:currentNode.x, y:currentNode.y - 1}, speed / 1000);
+		FlxTween.tween(healthBarFill, { x:currentNode.x, y:currentNode.y - 1 }, speed / 1000);
 	}
 }

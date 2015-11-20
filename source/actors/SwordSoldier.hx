@@ -3,6 +3,7 @@ import flixel.FlxG;
 import world.Node;
 import actors.BaseActor.ActorState;
 import interfaces.IGameState;
+import flixel.util.FlxColor;
 
 /**
  * ...
@@ -18,15 +19,22 @@ class SwordSoldier extends Unit
 		animation.add("active", [0, 1], 5, true);
 		animation.add("attack", [0, 4], 5, true);
 		team = 1;
-		//speed = 200;
+		healthBarFill.makeGraphic(8, 1, FlxColor.GREEN);
 		idleFrame = 0;
 	}
 
 	
 	override private function move() 
 	{
-			super.move();
+		super.move();
+		if (failedToMove)
+		{
+			animation.pause();
+		}
+		else
+		{
 			animation.play("active");
+		}
 	}
 	
 	override private function idle()
@@ -45,6 +53,13 @@ class SwordSoldier extends Unit
 	override private function chase()
 	{
 		super.chase();
-		animation.play("active");
+		if (failedToMove)
+		{
+			animation.pause();
+		}
+		else
+		{
+			animation.play("active");
+		}
 	}
 }
