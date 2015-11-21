@@ -11,8 +11,7 @@ class ActorRepresentative extends FlxSprite
 {
 	public var healthBar:FlxSprite;
 	public var healthBarFill:FlxSprite;
-	
-	private var baseActor:BaseActor;
+	public var baseActor:BaseActor;
 	
 	public function new(base:BaseActor, X:Float=0, Y:Float=0, width:Int = 16, height:Int = 16) 
 	{
