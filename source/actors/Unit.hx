@@ -42,7 +42,7 @@ class Unit extends BaseActor
 	
 	public function MoveToNode(node:Node)
 	{
-		selectedUnits[i].resetStates();
+		resetStates();
 		targetNode = node;
 	}
 	
@@ -59,7 +59,12 @@ class Unit extends BaseActor
 		
 		state = MOVING;
 		
-		
+		if (aggressive && enemyInRange() != null)
+		{
+			targetEnemy = enemyInRange();
+			attack();
+			return;
+		}
 		
 		if ((targetNode != null && path.length == 0|| targetNode != lastTargetNode) && targetNode.isPassible())
 		{
@@ -180,13 +185,9 @@ class Unit extends BaseActor
 					break;
 				}
 			}
-			if (inRange() != null)
+			if (inRange)
 			{
-				targetEnemy.hurt(damage / targetEnemy.healthMax);
-				if (targetEnemy.alive == false)
-				{
-					targetEnemy = null;
-				}
+				hit();
 			}
 			else
 			{
@@ -203,7 +204,7 @@ class Unit extends BaseActor
 		}
 	}
 	
-	private function inRange():BaseActor
+	private function enemyInRange():BaseActor
 	{
 		var result:BaseActor = null;
 		var i:Int;
@@ -217,14 +218,7 @@ class Unit extends BaseActor
 		}
 		return result;
 	}
-	private function hit()
-	{
-		targetEnemy.hurt(damage / targetEnemy.healthMax);
-		if (targetEnemy.alive == false)
-		{
-			targetEnemy = null;
-		}
-	}
+	
 	private function idle()
 	{
 		state = IDLE;
@@ -240,14 +234,10 @@ class Unit extends BaseActor
 		}
 		else
 		{
-			for (i in 0...currentNode.neighbors.length)
+			if (enemyInRange() != null)
 			{
-				if (currentNode.neighbors[i].occupant != null && currentNode.neighbors[i].occupant.team != team)
-				{
-					targetEnemy = currentNode.neighbors[i].occupant;
-					attack();
-					break;
-				}
+				targetEnemy = enemyInRange();
+				attack();
 			}
 		}
 	}
