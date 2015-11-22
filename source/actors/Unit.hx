@@ -15,7 +15,7 @@ import actors.BaseActor.ActorControlTypes;
 class Unit extends BaseActor
 {
 		
-	private var targetNode:Node;
+	public var targetNode(default,null):Node;
 	private	var path:Array<Node> = [];
 	private var failedToMove:Bool = false;
 	private var aggressive:Bool = false;
@@ -180,7 +180,7 @@ class Unit extends BaseActor
 					break;
 				}
 			}
-			if (inRange)
+			if (inRange() != null)
 			{
 				targetEnemy.hurt(damage / targetEnemy.healthMax);
 				if (targetEnemy.alive == false)
@@ -209,27 +209,26 @@ class Unit extends BaseActor
 		var i:Int;
 		for (i in 0...currentNode.neighbors.length)
 		{
-			if (currentNode.neighbors[i].occupant)
+			if (currentNode.neighbors[i].occupant != null && currentNode.neighbors[i].occupant.team != team)
 			{
-				inRange = true;
+				result = currentNode.neighbors[i].occupant;
 				break;
 			}
 		}
-		if (inRange)
+		return result;
+	}
+	private function hit()
+	{
+		targetEnemy.hurt(damage / targetEnemy.healthMax);
+		if (targetEnemy.alive == false)
 		{
-			targetEnemy.hurt(damage / targetEnemy.healthMax);
-			if (targetEnemy.alive == false)
-			{
-				targetEnemy = null;
-			}
+			targetEnemy = null;
 		}
 	}
-	
 	private function idle()
 	{
 		state = IDLE;
 		var i:Int;
-		
 		
 		if (targetNode != null)
 		{
