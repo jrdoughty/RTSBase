@@ -59,6 +59,8 @@ class Unit extends BaseActor
 		
 		state = MOVING;
 		
+		
+		
 		if ((targetNode != null && path.length == 0|| targetNode != lastTargetNode) && targetNode.isPassible())
 		{
 			path = AStar.newPath(currentNode, targetNode);//remember path[0] is the last 
@@ -198,6 +200,28 @@ class Unit extends BaseActor
 		else
 		{
 			state = IDLE;
+		}
+	}
+	
+	private function inRange():BaseActor
+	{
+		var result:BaseActor = null;
+		var i:Int;
+		for (i in 0...currentNode.neighbors.length)
+		{
+			if (currentNode.neighbors[i].occupant)
+			{
+				inRange = true;
+				break;
+			}
+		}
+		if (inRange)
+		{
+			targetEnemy.hurt(damage / targetEnemy.healthMax);
+			if (targetEnemy.alive == false)
+			{
+				targetEnemy = null;
+			}
 		}
 	}
 	
