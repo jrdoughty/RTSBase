@@ -15,9 +15,10 @@ import actors.BaseActor.ActorControlTypes;
 class Unit extends BaseActor
 {
 		
+	private var targetNode:Node;
 	private	var path:Array<Node> = [];
 	private var failedToMove:Bool = false;
-	public var targetNode:Node;
+	private var aggressive:Bool = false;
 	private var unitControlTypes: Array<ActorControlTypes> = [ActorControlTypes.ATTACK,
 		ActorControlTypes.STOP,
 		ActorControlTypes.MOVE, 
@@ -36,6 +37,19 @@ class Unit extends BaseActor
 			controls.push(new Control(i, unitControlTypes[i]));
 		}
 		
+	}
+	
+	
+	public function MoveToNode(node:Node)
+	{
+		selectedUnits[i].resetStates();
+		targetNode = node;
+	}
+	
+	public function AttackToNode(node:Node)
+	{
+		MoveToNode(node);
+		aggressive = true;
 	}
 	
 	private function move():Void
@@ -239,6 +253,7 @@ class Unit extends BaseActor
 	override public function resetStates():Void 
 	{
 		super.resetStates();
+		aggressive = false;
 		targetNode = null;
 	}
 	

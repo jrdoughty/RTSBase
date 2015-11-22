@@ -299,8 +299,7 @@ class InputHandler
 		{
 			for (i in 0...selectedUnits.length)
 			{
-				selectedUnits[i].resetStates();
-				selectedUnits[i].targetNode = node;
+				selectedUnits[i].MoveToNode(node);
 			}
 		}
 	}
@@ -312,8 +311,7 @@ class InputHandler
 		{
 			for (i in 0...selectedUnits.length)
 			{
-				selectedUnits[i].resetStates();
-				selectedUnits[i].targetNode = node;
+				selectedUnits[i].AttackToNode(node);
 			}
 		}
 		else if (node.occupant != null && node.occupant.team != activeState.activeTeam.id)
