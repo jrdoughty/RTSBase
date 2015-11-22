@@ -24,8 +24,15 @@ class SpearSoldier extends Unit
 	
 	override private function move() 
 	{
-			super.move();
+		super.move();
+		if (failedToMove)
+		{
+			animation.pause();
+		}
+		else
+		{
 			animation.play("active");
+		}
 	
 	}
 	
@@ -39,7 +46,14 @@ class SpearSoldier extends Unit
 	override private function attack()
 	{
 		super.attack();
-		animation.play("attack");
+		if (failedToMove)
+		{
+			animation.pause();
+		}
+		else
+		{
+			animation.play("active");
+		}
 	}
 	
 }

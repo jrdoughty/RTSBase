@@ -14,11 +14,13 @@ import flixel.FlxG;
 class Dashboard extends FlxGroup
 {
 	public var background:FlxSprite;
+	public var activeControls:Array<Control> = [];
+	
 	private var controls:FlxSprite;
 	private var inputHandler:InputHandler;
 	private var selected:FlxSprite;
-	private var activeControls:Array<Control> = [];
-	private var activeUnits:Array<ActorRepresentative> = [];
+	private var activeUnits:Array<BaseActor> = [];
+	private var representatives:Array<ActorRepresentative> = [];
 	private var baseY:Int = 0;
 	private var baseX:Int = 0;
 	
@@ -40,7 +42,7 @@ class Dashboard extends FlxGroup
 		
 		add(background);
 		add(controls);
-		add(selected);
+		//add(selected);
 	}
 	
 	public function setSelected(baseA:BaseActor):Void
@@ -52,49 +54,59 @@ class Dashboard extends FlxGroup
 		selected.updateHitbox();
 		selected.animation.frameIndex = baseA.animation.frameIndex;
 		selected.animation.pause();
-		
+		add(selected);
 		activeControls = baseA.controls;
 		
-		for (i in 0...baseA.controls.length)
+		for (i in 0...activeControls.length)
 		{
-			add(baseA.controls[i]);
-			baseA.controls[i].x = 2 + (i % 3) * 18;
-			baseA.controls[i].y = 184 + Math.floor(i / 3) * 18 + 2;
+			
+			add(activeControls[i]);
+			activeControls[i].x = 2 + (i % 3) * 18;
+			activeControls[i].y = 184 + Math.floor(i / 3) * 18 + 2;
 		}
+		inputHandler.setupClickControls(activeControls);
 	}
 	
 	public function clearDashBoard():Void
 	{
 		var i:Int;
 		
+		remove(selected);
+		
 		for (i in 0...activeControls.length)
 		{
 			remove(activeControls[i]);			
 		}
-		for (i in 0...activeUnits.length)
+		
+		for (i in 0...representatives.length)
 		{
-			remove(activeUnits[i]);
-			remove(activeUnits[i].healthBarFill);
-			remove(activeUnits[i].healthBar);
+			remove(representatives[i]);
+			remove(representatives[i].healthBarFill);
+			remove(representatives[i].healthBar);
 		}
 		activeUnits = [];
+		representatives = [];
 	}
 	
 	public function addSelectedUnit(baseA:BaseActor):Void
 	{
-		var sprite:ActorRepresentative = new ActorRepresentative(baseA,112 + activeUnits.length * 16, 184);
-		activeUnits.push(sprite);
-		add(sprite);
-		add(sprite.healthBar);
-		add(sprite.healthBarFill);
+		if (activeUnits.indexOf(baseA) == -1)
+		{
+			activeUnits.push(baseA);
+			var sprite:ActorRepresentative = new ActorRepresentative(baseA,112 + representatives.length * 16, 184);
+			representatives.push(sprite);
+			add(sprite);
+			add(sprite.healthBar);
+			add(sprite.healthBarFill);
+		}
 	}
 	
 	private function redoDashboard():Void
 	{
 		var i:Int;
-		for (i in 0...activeUnits.length)
+		for (i in 0...representatives.length)
 		{
-			activeUnits[i].setDashPos(112 + i * 16, 184);
+			representatives[i].setDashPos(112 + i * 16, 184);
 		}
 	}
 	
@@ -106,20 +118,28 @@ class Dashboard extends FlxGroup
 		
 		background.y = baseY - FlxG.camera.y;
 		
-		while(i < activeUnits.length)
+		while(i < representatives.length)//because the length gets stored ahead in haxe for loops, the changing length breaks this loop
 		{
-			if (activeUnits[i].alive)
+			if (representatives[i].alive)
 			{
-				activeUnits[i].update();
+				representatives[i].update();
 			}
 			else
 			{
-				trace("REMOVE");
-				remove(activeUnits[i]);
-				remove(activeUnits[i].healthBarFill);
-				remove(activeUnits[i].healthBar);
-				activeUnits.splice(i, 1);
-				redoDashboard();
+				activeUnits.splice(activeUnits.indexOf(representatives[i].baseActor), 1);
+				remove(representatives[i]);
+				remove(representatives[i].healthBarFill);
+				remove(representatives[i].healthBar);
+				representatives.splice(i, 1);
+				if (representatives.length == 0)
+				{
+					clearDashBoard();
+					inputHandler.resetInputState();
+				}
+				else
+				{
+					redoDashboard();
+				}
 			}
 			i++;
 		}

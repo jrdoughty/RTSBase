@@ -23,6 +23,17 @@ enum ActorState
 	BUSY;
 	CHASING;
 }
+
+enum ActorControlTypes 
+{
+	ATTACK;
+	STOP;
+	MOVE;
+	PATROL;
+	CAST;
+	BUILD;
+	HOLD;
+}
  
  
 class BaseActor extends FlxSprite
@@ -112,5 +123,14 @@ class BaseActor extends FlxSprite
 		activeState.remove(healthBarFill);
 		activeState.remove(this);
 		destroy();
+	}
+	
+	private function hit()
+	{
+		targetEnemy.hurt(damage / targetEnemy.healthMax);
+		if (targetEnemy.alive == false)
+		{
+			targetEnemy = null;
+		}
 	}
 }

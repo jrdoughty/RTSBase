@@ -5,6 +5,7 @@ import interfaces.IGameState;
 import systems.AStar;
 import flixel.tweens.FlxTween;
 import dashboard.Control;
+import actors.BaseActor.ActorControlTypes;
 /**
  * ...
  * @author ...
@@ -14,38 +15,65 @@ import dashboard.Control;
 class Unit extends BaseActor
 {
 		
+	public var targetNode(default,null):Node;
 	private	var path:Array<Node> = [];
-	public var targetNode:Node;
+	private var failedToMove:Bool = false;
+	private var aggressive:Bool = false;
+	private var unitControlTypes: Array<ActorControlTypes> = [ActorControlTypes.ATTACK,
+		ActorControlTypes.STOP,
+		ActorControlTypes.MOVE, 
+		ActorControlTypes.PATROL, 
+		ActorControlTypes.CAST, 
+		ActorControlTypes.BUILD, 
+		ActorControlTypes.HOLD];
+	
 	
 	public function new(node:Node, state:IGameState) 
 	{
 		var i:Int;
 		super(node, state);
-		for (i in 0...8)
+		for (i in 0...3)
 		{
-			controls.push(new Control(i));
+			controls.push(new Control(i, unitControlTypes[i]));
 		}
 		
+	}
+	
+	
+	public function MoveToNode(node:Node)
+	{
+		resetStates();
+		targetNode = node;
+	}
+	
+	public function AttackToNode(node:Node)
+	{
+		MoveToNode(node);
+		aggressive = true;
 	}
 	
 	private function move():Void
 	{
 		var nextMove:Node;
+		failedToMove = false;
 		
 		state = MOVING;
 		
+		if (aggressive && enemyInRange() != null)
+		{
+			targetEnemy = enemyInRange();
+			attack();
+			return;
+		}
+		
 		if ((targetNode != null && path.length == 0|| targetNode != lastTargetNode) && targetNode.isPassible())
 		{
-			path = AStar.newPath(currentNode, targetNode);
+			path = AStar.newPath(currentNode, targetNode);//remember path[0] is the last 
 		}
 		if (path.length > 1 && path[path.length - 2].occupant == null)
 		{
-			path.splice(path.length - 1,1)[0].occupant = null;
-			currentNode = path[path.length - 1];
-			currentNode.occupant = this;
-			FlxTween.tween(this, { x:currentNode.x, y:currentNode.y }, speed / 1000);
-			FlxTween.tween(healthBar, { x:currentNode.x, y:currentNode.y - 1}, speed / 1000);
-			FlxTween.tween(healthBarFill, { x:currentNode.x, y:currentNode.y - 1 }, speed / 1000);
+			moveAlongPath();
+			
 			if (currentNode == targetNode)
 			{
 				path = [];
@@ -63,12 +91,13 @@ class Unit extends BaseActor
 			{
 				nextMove = path[path.length - 2];
 				path = AStar.newPath(currentNode, targetNode);
-				if (path.length > 1 && nextMove != path[path.length -2] )
+				if (path.length > 1 && nextMove != path[path.length -2])//In Plain english, if the new path is indeed a new path
 				{
 					move();//try new path					
 				}
 				else
 				{
+					failedToMove = true;
 					/*we wait for now
 					path = [];
 					targetNode = null;
@@ -90,6 +119,7 @@ class Unit extends BaseActor
 		var nextMove:Node;
 		var inRange:Bool = false;
 		var i:Int;
+		failedToMove = false;
 		
 		state = CHASING;
 		
@@ -109,19 +139,15 @@ class Unit extends BaseActor
 			}
 			else
 			{
-				if (targetEnemy.currentNode.isPassible())
+				if ((path.length == 0 || path[0] != targetEnemy.currentNode) && targetEnemy.currentNode.isPassible())
 				{
 					path = AStar.newPath(currentNode, targetEnemy.currentNode);
 				}
 				
+				
 				if (path.length > 1 && path[path.length - 2].occupant == null)
 				{
-					path.splice(path.length - 1,1)[0].occupant = null;
-					currentNode = path[path.length - 1];
-					currentNode.occupant = this;
-					FlxTween.tween(this, { x:currentNode.x, y:currentNode.y }, speed / 1000);
-					FlxTween.tween(healthBar, { x:currentNode.x, y:currentNode.y - 1}, speed / 1000);
-					FlxTween.tween(healthBarFill, { x:currentNode.x, y:currentNode.y - 1 }, speed / 1000);
+					moveAlongPath();
 					for (i in 0...currentNode.neighbors.length)
 					{
 						if (currentNode.neighbors[i].occupant == targetEnemy)
@@ -161,11 +187,7 @@ class Unit extends BaseActor
 			}
 			if (inRange)
 			{
-				targetEnemy.hurt(damage / targetEnemy.healthMax);
-				if (targetEnemy.alive == false)
-				{
-					targetEnemy = null;
-				}
+				hit();
 			}
 			else
 			{
@@ -182,11 +204,25 @@ class Unit extends BaseActor
 		}
 	}
 	
+	private function enemyInRange():BaseActor
+	{
+		var result:BaseActor = null;
+		var i:Int;
+		for (i in 0...currentNode.neighbors.length)
+		{
+			if (currentNode.neighbors[i].occupant != null && currentNode.neighbors[i].occupant.team != team)
+			{
+				result = currentNode.neighbors[i].occupant;
+				break;
+			}
+		}
+		return result;
+	}
+	
 	private function idle()
 	{
 		state = IDLE;
 		var i:Int;
-		
 		
 		if (targetNode != null)
 		{
@@ -198,14 +234,10 @@ class Unit extends BaseActor
 		}
 		else
 		{
-			for (i in 0...currentNode.neighbors.length)
+			if (enemyInRange() != null)
 			{
-				if (currentNode.neighbors[i].occupant != null && currentNode.neighbors[i].occupant.team != team)
-				{
-					targetEnemy = currentNode.neighbors[i].occupant;
-					attack();
-					break;
-				}
+				targetEnemy = enemyInRange();
+				attack();
 			}
 		}
 	}
@@ -234,6 +266,17 @@ class Unit extends BaseActor
 	override public function resetStates():Void 
 	{
 		super.resetStates();
+		aggressive = false;
 		targetNode = null;
+	}
+	
+	@:extern inline function moveAlongPath()
+	{
+		path.splice(path.length - 1,1)[0].occupant = null;
+		currentNode = path[path.length - 1];
+		currentNode.occupant = this;
+		FlxTween.tween(this, { x:currentNode.x, y:currentNode.y }, speed / 1000);
+		FlxTween.tween(healthBar, { x:currentNode.x, y:currentNode.y - 1}, speed / 1000);
+		FlxTween.tween(healthBarFill, { x:currentNode.x, y:currentNode.y - 1 }, speed / 1000);
 	}
 }

@@ -1,6 +1,8 @@
 package dashboard;
 
+import actors.BaseActor.ActorControlTypes;
 import flixel.FlxSprite;
+import openfl.display.Sprite;
 
 /**
  * ...
@@ -8,9 +10,12 @@ import flixel.FlxSprite;
  */
 class Control extends FlxSprite
 {	
-	public function new(frame:Int=7, ?spriteString:String) 
+	public var type:ActorControlTypes;
+	
+	public function new(frame:Int=7, type:ActorControlTypes, ?spriteString:String) 
 	{
 		super(0, 0);
+		this.type = type;
 		if (spriteString == null)
 		{
 			loadGraphic("assets/images/controls.png", false, 8, 8);
@@ -22,6 +27,16 @@ class Control extends FlxSprite
 		animation.frameIndex = frame;
 		scale.set(2, 2);
 		updateHitbox();
+	}
+	
+	public function hover(sprite:Control)
+	{
+		color = 0xBBBBBB;
+	}
+	
+	public function out(sprite:Control)
+	{
+		color = 0xFFFFFF;
 	}
 	
 }
