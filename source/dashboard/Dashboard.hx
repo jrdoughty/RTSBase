@@ -93,11 +93,13 @@ class Dashboard extends FlxGroup
 		if (activeUnits.indexOf(baseA) == -1)
 		{
 			activeUnits.push(baseA);
-			var sprite:ActorRepresentative = new ActorRepresentative(baseA,112 + representatives.length * 16, 184);
+			var sprite:ActorRepresentative = new ActorRepresentative(baseA);
 			representatives.push(sprite);
 			add(sprite);
 			add(sprite.healthBar);
 			add(sprite.healthBarFill);
+			sprite.setDashPos(112 + Math.floor((representatives.length - 1) % ((background.width -112) / 16)) * 16, 184 + 16 * Math.floor((representatives.length - 1) * 16 / (background.width -112)));
+			
 		}
 	}
 	
@@ -106,7 +108,7 @@ class Dashboard extends FlxGroup
 		var i:Int;
 		for (i in 0...representatives.length)
 		{
-			representatives[i].setDashPos(112 + i * 16, 184);
+			representatives[i].setDashPos(112 + Math.floor(i % ((background.width -112) / 16)) * 16, 184 + 16 * Math.floor(i * 16 / (background.width -112)));
 		}
 	}
 	
