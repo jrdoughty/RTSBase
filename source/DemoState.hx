@@ -15,7 +15,7 @@ class DemoState extends BaseState
 	public function new() 
 	{
 		super();
-		levelAssetPath = "assets/data/moreopen.json";
+		levelAssetPath = "assets/data/realisticlvl1.json";
 	}
 	
 	override private function createTeams():Void 
