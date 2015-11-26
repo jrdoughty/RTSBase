@@ -39,7 +39,7 @@ enum ActorControlTypes
 class BaseActor extends FlxSprite
 {
 
-	public var currentNode:Node;
+	public var currentNodes:Array<Node> = [];
 	public var targetEnemy:BaseActor;
 	public var team:Int = 0;
 	public var damage:Int = 1;
@@ -62,7 +62,7 @@ class BaseActor extends FlxSprite
 		activeState = state;
 		super(node.x, node.y);
 		node.occupant = this;
-		currentNode = node;
+		currentNodes[0] = node;
 		
 		delayTimer = new Timer(Math.floor(1000*Math.random()));//Keeps mass created units from updating at the exact same time. Idea from: http://answers.unity3d.com/questions/419786/a-pathfinding-multiple-enemies-MOVING-target-effic.html
 		delayTimer.run = delayedStart;
@@ -117,7 +117,7 @@ class BaseActor extends FlxSprite
 	{
 		super.kill();
 		resetStates();
-		currentNode.occupant = null;
+		currentNodes[0].occupant = null;
 		actionTimer.stop();
 		activeState.remove(healthBar);
 		activeState.remove(healthBarFill);

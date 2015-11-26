@@ -10,10 +10,10 @@ import world.Node;
 class Building extends BaseActor
 {
 
-	public function new(node:Node, state:IGameState) 
+	public function new(topLeftNode:Node, state:IGameState) 
 	{
-		super(node, state);
-		
+		super(topLeftNode, state);
+		loadGraphic("assets/images/building.png");
 	}
 	
 }

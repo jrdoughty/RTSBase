@@ -68,13 +68,13 @@ class Unit extends BaseActor
 		
 		if ((targetNode != null && path.length == 0|| targetNode != lastTargetNode) && targetNode.isPassible())
 		{
-			path = AStar.newPath(currentNode, targetNode);//remember path[0] is the last 
+			path = AStar.newPath(currentNodes[0], targetNode);//remember path[0] is the last 
 		}
 		if (path.length > 1 && path[path.length - 2].occupant == null)
 		{
 			moveAlongPath();
 			
-			if (currentNode == targetNode)
+			if (currentNodes[0] == targetNode)
 			{
 				path = [];
 				state = IDLE;//Unlike other cases, this is after the action has been carried out.
@@ -90,7 +90,7 @@ class Unit extends BaseActor
 			else
 			{
 				nextMove = path[path.length - 2];
-				path = AStar.newPath(currentNode, targetNode);
+				path = AStar.newPath(currentNodes[0], targetNode);
 				if (path.length > 1 && nextMove != path[path.length -2])//In Plain english, if the new path is indeed a new path
 				{
 					move();//try new path					
@@ -125,9 +125,9 @@ class Unit extends BaseActor
 		
 		if (targetEnemy != null && targetEnemy.alive)
 		{
-			for (i in 0...currentNode.neighbors.length)
+			for (i in 0...currentNodes[0].neighbors.length)
 			{
-				if (currentNode.neighbors[i].occupant == targetEnemy)
+				if (currentNodes[0].neighbors[i].occupant == targetEnemy)
 				{
 					inRange = true;
 					break;
@@ -139,18 +139,18 @@ class Unit extends BaseActor
 			}
 			else
 			{
-				if ((path.length == 0 || path[0] != targetEnemy.currentNode) && targetEnemy.currentNode.isPassible())
+				if ((path.length == 0 || path[0] != targetEnemy.currentNodes[0]) && targetEnemy.currentNodes[0].isPassible())
 				{
-					path = AStar.newPath(currentNode, targetEnemy.currentNode);
+					path = AStar.newPath(currentNodes[0], targetEnemy.currentNodes[0]);
 				}
 				
 				
 				if (path.length > 1 && path[path.length - 2].occupant == null)
 				{
 					moveAlongPath();
-					for (i in 0...currentNode.neighbors.length)
+					for (i in 0...currentNodes[0].neighbors.length)
 					{
-						if (currentNode.neighbors[i].occupant == targetEnemy)
+						if (currentNodes[0].neighbors[i].occupant == targetEnemy)
 						{
 							inRange = true;
 							break;
@@ -177,9 +177,9 @@ class Unit extends BaseActor
 		state = ATTACKING;
 		if (targetEnemy != null && targetEnemy.alive)
 		{
-			for (i in 0...currentNode.neighbors.length)
+			for (i in 0...currentNodes[0].neighbors.length)
 			{
-				if (currentNode.neighbors[i].occupant == targetEnemy)
+				if (currentNodes[0].neighbors[i].occupant == targetEnemy)
 				{
 					inRange = true;
 					break;
@@ -208,11 +208,11 @@ class Unit extends BaseActor
 	{
 		var result:BaseActor = null;
 		var i:Int;
-		for (i in 0...currentNode.neighbors.length)
+		for (i in 0...currentNodes[0].neighbors.length)
 		{
-			if (currentNode.neighbors[i].occupant != null && currentNode.neighbors[i].occupant.team != team)
+			if (currentNodes[0].neighbors[i].occupant != null && currentNodes[0].neighbors[i].occupant.team != team)
 			{
-				result = currentNode.neighbors[i].occupant;
+				result = currentNodes[0].neighbors[i].occupant;
 				break;
 			}
 		}
@@ -273,10 +273,10 @@ class Unit extends BaseActor
 	@:extern inline function moveAlongPath()
 	{
 		path.splice(path.length - 1,1)[0].occupant = null;
-		currentNode = path[path.length - 1];
-		currentNode.occupant = this;
-		FlxTween.tween(this, { x:currentNode.x, y:currentNode.y }, speed / 1000);
-		FlxTween.tween(healthBar, { x:currentNode.x, y:currentNode.y - 1}, speed / 1000);
-		FlxTween.tween(healthBarFill, { x:currentNode.x, y:currentNode.y - 1 }, speed / 1000);
+		currentNodes[0] = path[path.length - 1];
+		currentNodes[0].occupant = this;
+		FlxTween.tween(this, { x:currentNodes[0].x, y:currentNodes[0].y }, speed / 1000);
+		FlxTween.tween(healthBar, { x:currentNodes[0].x, y:currentNodes[0].y - 1}, speed / 1000);
+		FlxTween.tween(healthBarFill, { x:currentNodes[0].x, y:currentNodes[0].y - 1 }, speed / 1000);
 	}
 }

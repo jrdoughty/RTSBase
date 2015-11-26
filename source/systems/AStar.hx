@@ -1,5 +1,6 @@
 package systems ;
 import world.Node;
+import flixel.util.FlxColor;
 import world.SelfLoadingLevel;
 
 /**
@@ -162,18 +163,22 @@ class AStar
                 if (j - 1 >= 0) 
 				{
                     Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i + (j - 1) * levelWidth]);
+					Node.activeNodes[i + j * levelWidth].topNode = Node.activeNodes[i + (j - 1) * levelWidth];
                 }
                 if (i - 1 >= 0) 
 				{
                     Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i - 1 + j * levelWidth]);
+					Node.activeNodes[i + j * levelWidth].leftNode = Node.activeNodes[i - 1 + j * levelWidth];
                 }
                 if (i + 1 < levelWidth) 
 				{
                     Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i + 1 + j * levelWidth]);
+					Node.activeNodes[i + j * levelWidth].rightNode = Node.activeNodes[i + 1 + j * levelWidth];
                 }
                 if (j + 1 < levelHeight) 
 				{
                     Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i + (j + 1) * levelWidth]);
+					Node.activeNodes[i + j * levelWidth].bottomNode = Node.activeNodes[i + (j + 1) * levelWidth];
                 }
             }
         }

@@ -1,4 +1,5 @@
 package;
+import actors.Building;
 import systems.Team;
 import actors.SwordSoldier;
 import actors.SpearSoldier;
@@ -23,10 +24,10 @@ class DemoState extends BaseState
 		super.createTeams();
 		Teams.push(new Team());
 		Teams[0].addUnit(new SwordSoldier(Node.activeNodes[0],this));
-		Teams[0].addUnit(new SwordSoldier(Node.activeNodes[1],this));
-		Teams[0].addUnit(new SwordSoldier(Node.activeNodes[2],this));
+		Teams[0].addUnit(new SwordSoldier(Node.activeNodes[1],this));		
 		Teams[0].addUnit(new SwordSoldier(Node.activeNodes[50],this));
 		Teams[1].addUnit(new SpearSoldier(Node.activeNodes[616],this));
 		Teams[1].addUnit(new SpearSoldier(Node.activeNodes[499],this));	
+		add(new Building(Node.activeNodes[2], this));
 	}
 }

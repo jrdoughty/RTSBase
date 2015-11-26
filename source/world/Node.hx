@@ -10,6 +10,14 @@ class Node extends FlxSprite
 {
 
 	public var neighbors:Array<Node> = [];
+	public var leftNode:Node;
+	public var rightNode:Node;
+	public var topNode:Node;
+	public var bottomNode:Node;
+	public var topLeftNode:Node;
+	public var topRightNode:Node;
+	public var bottomLeftNode:Node;
+	public var bottomRightNode:Node;
 	public static var activeNodes = [];
 	public var parentNode:Node;
 	public var occupant:BaseActor = null;
@@ -30,9 +38,6 @@ class Node extends FlxSprite
 		animation.play("main");
 		
 		passable = pass;
-		
-		
-
 	}
 	
 	public function isPassible():Bool
@@ -49,4 +54,38 @@ class Node extends FlxSprite
 	{
 		return heiristic + g;
 	}
+	
+
+    public function getAllFromRight(widthToGo:Int):Array<Node>
+    {
+		if (rightNode != null)
+		{
+			result.push(rightNode);
+			widthToGo--;
+			if(widthToGo > 0)
+			{
+				result = result.concat(rightNode.getAllFromRight(widthToGo));
+			}
+		}
+        return result;
+    }
+	
+    public function getAllNodes(widthToGo:Int, heightToGo:Int):Array<Node>
+    {
+        var result:Array<Node> = [this];
+		if (rightNode != null)
+		{
+			result.push(getAllFromRight(widthToGo));
+		}
+		if (bottomNode != null && heightToGo > 0)
+		{
+			result.push(bottomNode);
+			heightToGo--;
+			if(heightToGo > 0)
+			{
+				result = result.concat(getAllFromRight(widthToGo));
+			}
+		}
+        return result;
+    }
 }
