@@ -74,6 +74,7 @@ class SelfLoadingLevel extends FlxGroup
 					Node.activeNodes.push(new Node(asset, frame,tiledLevel.tilewidth,tiledLevel.tileheight, x, y, pass));
 					add(Node.activeNodes[i]);
 				}
+				Node.createNeighbors(width,height);
 				break;
 			}
 			for (i in 0...tiledLevel.tilesets.length)

@@ -77,7 +77,6 @@ class BaseState extends FlxState implements IGameState
 		if (activeLevel == null)
 		{
 			activeLevel = new SelfLoadingLevel(Assets.getText(levelAssetPath));
-			AStar.setActiveLevel(activeLevel);
 		}
 		
 		return activeLevel;

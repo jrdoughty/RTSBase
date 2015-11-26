@@ -26,6 +26,7 @@ class Node extends FlxSprite
 	public var nodeX:Int;
 	public var nodeY:Int;
 	private var passable:Bool = true;
+	private static inline var diagonal:Bool = false;
 	
 	public function new(asset:String, frame:Int, width:Int, height, X:Int = 0, Y:Int = 0, pass:Bool = true ) 
 	{
@@ -58,14 +59,23 @@ class Node extends FlxSprite
 
     public function getAllFromRight(widthToGo:Int):Array<Node>
     {
+        var result:Array<Node> = [];
+		
+		trace("widthToGo:" + widthToGo);
+		
 		if (rightNode != null)
 		{
 			result.push(rightNode);
-			widthToGo--;
 			if(widthToGo > 0)
 			{
+				trace("width");
+				widthToGo--;
 				result = result.concat(rightNode.getAllFromRight(widthToGo));
 			}
+		}
+		else
+		{
+			trace("Null");
 		}
         return result;
     }
@@ -73,16 +83,72 @@ class Node extends FlxSprite
     public function getAllNodes(widthToGo:Int, heightToGo:Int):Array<Node>
     {
         var result:Array<Node> = [this];
-		if (rightNode != null)
+		
+		trace("heightToGo:" + heightToGo);
+		trace("widthToGo:" + widthToGo);
+		
+		if (rightNode != null && widthToGo > 0)
 		{
-			result.push(getAllFromRight(widthToGo));
+			result.concat(getAllFromRight(widthToGo));
 		}
 		if (bottomNode != null && heightToGo > 0)
 		{
 			heightToGo--;
-			result = result.concat(getAllNodes(widthToGo, heightToGo));
+			result = result.concat(bottomNode.getAllNodes(widthToGo, heightToGo));
 			
 		}
         return result;
     }
+	
+	public static function createNeighbors(levelWidth, levelHeight)
+	{
+		var i:Int;
+		var j:Int;
+		for (i in 0...levelWidth) 
+		{
+            for (j in 0...levelHeight) 
+			{
+				Node.activeNodes[i + j * levelWidth].neighbors = [];
+				if (diagonal)
+				{
+					if (i - 1 >= 0 && j - 1 >= 0) 
+					{
+						Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i - 1 + (j - 1) * levelWidth]);
+					}
+					if (i + 1 < levelWidth && j - 1 >= 0) 
+					{
+						Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i + 1 + (j - 1) * levelWidth]);
+					}
+					if (i - 1 >= 0 && j + 1 < levelHeight) 
+					{
+						Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i - 1 + (j + 1) * levelWidth]);
+					}
+					if (i + 1 < levelWidth && j + 1 < levelHeight) 
+					{
+						Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i + 1 + (j + 1) * levelWidth]);
+					}
+				}
+                if (j - 1 >= 0) 
+				{
+                    Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i + (j - 1) * levelWidth]);
+					Node.activeNodes[i + j * levelWidth].topNode = Node.activeNodes[i + (j - 1) * levelWidth];
+                }
+                if (i - 1 >= 0) 
+				{
+                    Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i - 1 + j * levelWidth]);
+					Node.activeNodes[i + j * levelWidth].leftNode = Node.activeNodes[i - 1 + j * levelWidth];
+                }
+                if (i + 1 < levelWidth) 
+				{
+                    Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i + 1 + j * levelWidth]);
+					Node.activeNodes[i + j * levelWidth].rightNode = Node.activeNodes[i + 1 + j * levelWidth];
+                }
+                if (j + 1 < levelHeight) 
+				{
+                    Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i + (j + 1) * levelWidth]);
+					Node.activeNodes[i + j * levelWidth].bottomNode = Node.activeNodes[i + (j + 1) * levelWidth];
+                }
+            }
+        }
+	}
 }

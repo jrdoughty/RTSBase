@@ -14,10 +14,11 @@ class AStar
 	private static var closedList:Array<Node> = [];
 	private static var pathHeiristic:Int;
 	private static var costToMove:Int;
-	private static var levelWidth:Int;
-	private static var levelHeight:Int;
+	//private static var levelWidth:Int;
+	//private static var levelHeight:Int;
 	private static var end:Node;
-	private static var diagonal:Bool = false;
+	//private static var diagonal:Bool = false;
+	/*
 	private static var activeLevel:SelfLoadingLevel;
 	
 	public static function setActiveLevel(level:SelfLoadingLevel)
@@ -25,19 +26,17 @@ class AStar
 		activeLevel = level;
 		levelWidth = activeLevel.width;
 	}
-	
+	*/
 	public static function newPath(start:Node, endNode:Node):Array<Node>
 	{
 		cleanParentNodes();//ensure everying this ready
 		cleanUp();
 		
 		path = [];
-		levelHeight = Math.floor(Node.activeNodes.length / levelWidth);
 		end = endNode;
 		start.heiristic = calculateHeiristic(start.nodeX, start.nodeY, end.nodeX, end.nodeY);
 		start.g = 0;
 		openList.push(start);
-		createNeighbors();
 		if (calculate() && start != endNode)
 		{
 			cleanUp();
@@ -132,57 +131,6 @@ class AStar
 		}
 	}
 	
-	private static function createNeighbors()
-	{
-		var i:Int;
-		var j:Int;
-		for (i in 0...levelWidth) 
-		{
-            for (j in 0...levelHeight) 
-			{
-				Node.activeNodes[i + j * levelWidth].neighbors = [];
-				if (diagonal)
-				{
-					if (i - 1 >= 0 && j - 1 >= 0) 
-					{
-						Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i - 1 + (j - 1) * levelWidth]);
-					}
-					if (i + 1 < levelWidth && j - 1 >= 0) 
-					{
-						Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i + 1 + (j - 1) * levelWidth]);
-					}
-					if (i - 1 >= 0 && j + 1 < levelHeight) 
-					{
-						Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i - 1 + (j + 1) * levelWidth]);
-					}
-					if (i + 1 < levelWidth && j + 1 < levelHeight) 
-					{
-						Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i + 1 + (j + 1) * levelWidth]);
-					}
-				}
-                if (j - 1 >= 0) 
-				{
-                    Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i + (j - 1) * levelWidth]);
-					Node.activeNodes[i + j * levelWidth].topNode = Node.activeNodes[i + (j - 1) * levelWidth];
-                }
-                if (i - 1 >= 0) 
-				{
-                    Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i - 1 + j * levelWidth]);
-					Node.activeNodes[i + j * levelWidth].leftNode = Node.activeNodes[i - 1 + j * levelWidth];
-                }
-                if (i + 1 < levelWidth) 
-				{
-                    Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i + 1 + j * levelWidth]);
-					Node.activeNodes[i + j * levelWidth].rightNode = Node.activeNodes[i + 1 + j * levelWidth];
-                }
-                if (j + 1 < levelHeight) 
-				{
-                    Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i + (j + 1) * levelWidth]);
-					Node.activeNodes[i + j * levelWidth].bottomNode = Node.activeNodes[i + (j + 1) * levelWidth];
-                }
-            }
-        }
-	}
 	@:extern private static inline function calculateHeiristic (startX:Int, startY:Int, endX:Int, endY:Int) 
 	{
         var h = Std.int(10 * Math.abs(startX - endX) + 10 * Math.abs(startY - endY));
