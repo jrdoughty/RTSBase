@@ -79,12 +79,9 @@ class Node extends FlxSprite
 		}
 		if (bottomNode != null && heightToGo > 0)
 		{
-			result.push(bottomNode);
 			heightToGo--;
-			if(heightToGo > 0)
-			{
-				result = result.concat(getAllFromRight(widthToGo));
-			}
+			result = result.concat(getAllNodes(widthToGo, heightToGo));
+			
 		}
         return result;
     }
