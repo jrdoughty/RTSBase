@@ -61,13 +61,18 @@ class BaseActor extends FlxSprite
 	{
 		activeState = state;
 		super(node.x, node.y);
-		node.occupant = this;
-		currentNodes[0] = node;
 		
 		delayTimer = new Timer(Math.floor(1000*Math.random()));//Keeps mass created units from updating at the exact same time. Idea from: http://answers.unity3d.com/questions/419786/a-pathfinding-multiple-enemies-MOVING-target-effic.html
 		delayTimer.run = delayedStart;
 		setupGraphics();
+		setupNodes(node);
 		createHealthBar();
+	}
+	
+	private function setupNodes(node:Node)
+	{
+		node.occupant = this;
+		currentNodes[0] = node;
 	}
 	
 	private function setupGraphics()

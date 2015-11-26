@@ -14,18 +14,22 @@ class Building extends BaseActor
 	{
 		var i:Int;
 		super(topLeftNode, state);
-		currentNodes = topLeftNode.getAllNodes(Std.int(width / 8) - 1, Std.int(height / 8) - 1);
+	}
+	
+	private override function setupGraphics() 
+	{
+		super.setupGraphics();
+		loadGraphic("assets/images/building.png");
+	}
+	
+	private override function setupNodes(node:Node)
+	{	
+		currentNodes = node.getAllNodes(Std.int(width / 8) - 1, Std.int(height / 8) - 1);
 		
 		for (i in 0...currentNodes.length)
 		{
 			currentNodes[i].occupant = this;
 		}
-	}
-	
-	override function setupGraphics() 
-	{
-		super.setupGraphics();
-		loadGraphic("assets/images/building.png");
 	}
 	
 }

@@ -17,7 +17,6 @@ class SwordSoldier extends Unit
 		loadGraphic("assets/images/soldiers.png", true, 8, 8);
 		animation.add("active", [0, 1], 5, true);
 		animation.add("attack", [0, 4], 5, true);
-		team = 1;
 		idleFrame = 0;
 	}
 
