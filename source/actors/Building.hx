@@ -12,10 +12,20 @@ class Building extends BaseActor
 
 	public function new(topLeftNode:Node, state:IGameState) 
 	{
+		var i:Int;
 		super(topLeftNode, state);
-		loadGraphic("assets/images/building.png");
 		currentNodes = topLeftNode.getAllNodes(Std.int(width / 8) - 1, Std.int(height / 8) - 1);
-		trace(currentNodes.length);
+		
+		for (i in 0...currentNodes.length)
+		{
+			currentNodes[i].occupant = this;
+		}
+	}
+	
+	override function setupGraphics() 
+	{
+		super.setupGraphics();
+		loadGraphic("assets/images/building.png");
 	}
 	
 }

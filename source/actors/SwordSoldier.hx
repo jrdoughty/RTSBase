@@ -11,15 +11,13 @@ import flixel.util.FlxColor;
  */
 class SwordSoldier extends Unit
 {
-
-	public function new(node:Node, state:IGameState) 
+	override function setupGraphics() 
 	{
-		super(node, state);
+		super.setupGraphics();	
 		loadGraphic("assets/images/soldiers.png", true, 8, 8);
 		animation.add("active", [0, 1], 5, true);
 		animation.add("attack", [0, 4], 5, true);
 		team = 1;
-		healthBarFill.makeGraphic(8, 1, FlxColor.GREEN);
 		idleFrame = 0;
 	}
 

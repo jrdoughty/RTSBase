@@ -66,15 +66,25 @@ class BaseActor extends FlxSprite
 		
 		delayTimer = new Timer(Math.floor(1000*Math.random()));//Keeps mass created units from updating at the exact same time. Idea from: http://answers.unity3d.com/questions/419786/a-pathfinding-multiple-enemies-MOVING-target-effic.html
 		delayTimer.run = delayedStart;
-		health = 1;
-		healthBar = new FlxSprite(x, y - 1);
-		healthBar.makeGraphic(8, 1, FlxColor.BLACK);
-		activeState.add(healthBar);
-		healthBarFill = new FlxSprite(x, y - 1);
-		healthBarFill.makeGraphic(8, 1, FlxColor.RED);
-		activeState.add(healthBarFill);
+		setupGraphics();
+		createHealthBar();
 	}
 	
+	private function setupGraphics()
+	{
+		
+	}
+	
+	private function createHealthBar()
+	{
+		health = 1;
+		healthBar = new FlxSprite(x, y - 1);
+		healthBar.makeGraphic(Std.int(width), 1, FlxColor.BLACK);
+		activeState.add(healthBar);
+		healthBarFill = new FlxSprite(x, y - 1);
+		healthBarFill.makeGraphic(Std.int(width), 1, FlxColor.RED);
+		activeState.add(healthBarFill);		
+	}
 	private function delayedStart()
 	{
 		delayTimer.stop();
@@ -85,8 +95,11 @@ class BaseActor extends FlxSprite
 	override public function update()
 	{
 		super.update();
-		healthBarFill.scale.set(health, 1);
-		healthBarFill.updateHitbox();
+		if (healthBarFill != null)
+		{
+			healthBarFill.scale.set(health, 1);
+			healthBarFill.updateHitbox();
+		}
 	}
 	
 	private function takeAction()

@@ -8,6 +8,10 @@ import flixel.FlxSprite;
  */
 class Node extends FlxSprite
 {
+	public static var activeNodes = [];
+	private static var levelWidth;
+	private static var levelHeight;
+	private static inline var diagonal:Bool = false;
 
 	public var neighbors:Array<Node> = [];
 	public var leftNode:Node;
@@ -18,15 +22,14 @@ class Node extends FlxSprite
 	public var topRightNode:Node;
 	public var bottomLeftNode:Node;
 	public var bottomRightNode:Node;
-	public static var activeNodes = [];
 	public var parentNode:Node;
 	public var occupant:BaseActor = null;
 	public var g:Int = -1;
 	public var heiristic:Int = -1;
 	public var nodeX:Int;
 	public var nodeY:Int;
+	
 	private var passable:Bool = true;
-	private static inline var diagonal:Bool = false;
 	
 	public function new(asset:String, frame:Int, width:Int, height, X:Int = 0, Y:Int = 0, pass:Bool = true ) 
 	{
@@ -66,16 +69,11 @@ class Node extends FlxSprite
 		if (rightNode != null)
 		{
 			result.push(rightNode);
+			widthToGo--;
 			if(widthToGo > 0)
 			{
-				trace("width");
-				widthToGo--;
 				result = result.concat(rightNode.getAllFromRight(widthToGo));
 			}
-		}
-		else
-		{
-			trace("Null");
 		}
         return result;
     }
@@ -84,12 +82,9 @@ class Node extends FlxSprite
     {
         var result:Array<Node> = [this];
 		
-		trace("heightToGo:" + heightToGo);
-		trace("widthToGo:" + widthToGo);
-		
 		if (rightNode != null && widthToGo > 0)
 		{
-			result.concat(getAllFromRight(widthToGo));
+			result = result.concat(getAllFromRight(widthToGo));
 		}
 		if (bottomNode != null && heightToGo > 0)
 		{
@@ -100,53 +95,66 @@ class Node extends FlxSprite
         return result;
     }
 	
-	public static function createNeighbors(levelWidth, levelHeight)
+	public static function getNodeByGridXY(x:Int,y:Int):Node
+	{
+		var result:Node = null;
+		var index:Int = x + y * levelWidth;
+		if (activeNodes.length > index)
+		{
+			result = activeNodes[index];
+		}
+		return result;
+	}
+	
+	public static function createNeighbors(levelW, levelH)
 	{
 		var i:Int;
 		var j:Int;
-		for (i in 0...levelWidth) 
+		levelWidth = levelW;
+		levelHeight = levelH;
+		for (i in 0...levelW) 
 		{
-            for (j in 0...levelHeight) 
+            for (j in 0...levelH) 
 			{
-				Node.activeNodes[i + j * levelWidth].neighbors = [];
+				Node.activeNodes[i + j * levelW].neighbors = [];
 				if (diagonal)
 				{
 					if (i - 1 >= 0 && j - 1 >= 0) 
 					{
-						Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i - 1 + (j - 1) * levelWidth]);
+						Node.activeNodes[i + j * levelW].neighbors.push(Node.activeNodes[i - 1 + (j - 1) * levelW]);
 					}
-					if (i + 1 < levelWidth && j - 1 >= 0) 
+					if (i + 1 < levelW && j - 1 >= 0) 
 					{
-						Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i + 1 + (j - 1) * levelWidth]);
+						Node.activeNodes[i + j * levelW].neighbors.push(Node.activeNodes[i + 1 + (j - 1) * levelW]);
 					}
-					if (i - 1 >= 0 && j + 1 < levelHeight) 
+					if (i - 1 >= 0 && j + 1 < levelH) 
 					{
-						Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i - 1 + (j + 1) * levelWidth]);
+						Node.activeNodes[i + j * levelW].neighbors.push(Node.activeNodes[i - 1 + (j + 1) * levelW]);
 					}
-					if (i + 1 < levelWidth && j + 1 < levelHeight) 
+					if (i + 1 < levelW && j + 1 < levelH) 
 					{
-						Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i + 1 + (j + 1) * levelWidth]);
+						Node.activeNodes[i + j * levelW].neighbors.push(Node.activeNodes[i + 1 + (j + 1) * levelW]);
 					}
 				}
                 if (j - 1 >= 0) 
 				{
-                    Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i + (j - 1) * levelWidth]);
-					Node.activeNodes[i + j * levelWidth].topNode = Node.activeNodes[i + (j - 1) * levelWidth];
+                    Node.activeNodes[i + j * levelW].neighbors.push(Node.activeNodes[i + (j - 1) * levelW]);
+					Node.activeNodes[i + j * levelW].topNode = Node.activeNodes[i + (j - 1) * levelW];
                 }
                 if (i - 1 >= 0) 
 				{
-                    Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i - 1 + j * levelWidth]);
-					Node.activeNodes[i + j * levelWidth].leftNode = Node.activeNodes[i - 1 + j * levelWidth];
+                    Node.activeNodes[i + j * levelW].neighbors.push(Node.activeNodes[i - 1 + j * levelW]);
+					Node.activeNodes[i + j * levelW].leftNode = Node.activeNodes[i - 1 + j * levelW];
                 }
-                if (i + 1 < levelWidth) 
+                if (i + 1 < levelW) 
 				{
-                    Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i + 1 + j * levelWidth]);
-					Node.activeNodes[i + j * levelWidth].rightNode = Node.activeNodes[i + 1 + j * levelWidth];
+                    Node.activeNodes[i + j * levelW].neighbors.push(Node.activeNodes[i + 1 + j * levelW]);
+					Node.activeNodes[i + j * levelW].rightNode = Node.activeNodes[i + 1 + j * levelW];
                 }
-                if (j + 1 < levelHeight) 
+                if (j + 1 < levelH) 
 				{
-                    Node.activeNodes[i + j * levelWidth].neighbors.push(Node.activeNodes[i + (j + 1) * levelWidth]);
-					Node.activeNodes[i + j * levelWidth].bottomNode = Node.activeNodes[i + (j + 1) * levelWidth];
+                    Node.activeNodes[i + j * levelW].neighbors.push(Node.activeNodes[i + (j + 1) * levelW]);
+					Node.activeNodes[i + j * levelW].bottomNode = Node.activeNodes[i + (j + 1) * levelW];
                 }
             }
         }
