@@ -223,13 +223,10 @@ class Unit extends BaseActor
 		{
 			attack();
 		}
-		else
+		else if (isEnemyInRange())
 		{
-			if (isEnemyInRange())
-			{
-				targetEnemy = getEnemyInRange();
-				attack();
-			}
+			targetEnemy = getEnemyInRange();
+			attack();
 		}
 	}
 	
