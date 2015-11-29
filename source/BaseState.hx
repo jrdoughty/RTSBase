@@ -64,11 +64,11 @@ class BaseState extends FlxState implements IGameState
 	private function setupUnitsInPlay():Void
 	{
 		var i:Int;
-		var unitsInPlay:Array<Unit>;
-		unitsInPlay = getUnitsInPlay();
-		for (i in 0...unitsInPlay.length)
+		var actorsInPlay:Array<BaseActor>;
+		actorsInPlay = getUnitsInPlay();
+		for (i in 0...actorsInPlay.length)
 		{
-			add(unitsInPlay[i]);
+			add(actorsInPlay[i]);
 		}
 	}
 	
@@ -83,14 +83,22 @@ class BaseState extends FlxState implements IGameState
 	}
 	
 	
-	private function getUnitsInPlay():Array<Unit>
+	private function getUnitsInPlay():Array<BaseActor>
 	{
 		var i:Int;
-		var result:Array<Unit> = [];
+		var j:Int;
+		var result:Array<BaseActor> = [];
 		
 		for (i in 0...Teams.length)
 		{
-			result = result.concat(Teams[i].units);
+			for (j in 0...Teams[i].units.length)
+			{
+				result.push(Teams[i].units[j]);
+			}
+			for (j in 0...Teams[i].buildings.length)
+			{
+				result.push(Teams[i].buildings[j]);
+			}
 		}
 		
 		return result;

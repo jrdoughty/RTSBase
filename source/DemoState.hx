@@ -29,7 +29,7 @@ class DemoState extends BaseState
 		Teams[0].addUnit(new SwordSoldier(Node.getNodeByGridXY(0,1),this));
 		Teams[1].addUnit(new SpearSoldier(Node.activeNodes[616],this));
 		Teams[1].addUnit(new SpearSoldier(Node.activeNodes[499],this));	
-		add(new Building(Node.activeNodes[2], this));
-		add(new Building(Node.getNodeByGridXY(0,14), this));
+		Teams[0].addBuilding(new Building(Node.activeNodes[2], this));
+		Teams[0].addBuilding(new Building(Node.getNodeByGridXY(0,14), this));
 	}
 }
