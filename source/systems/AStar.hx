@@ -76,7 +76,7 @@ class AStar
 	{
 		if (node.parentNode != null)
 		{
-			path.push(node.parentNode);
+			path.insert(0,node.parentNode);
 			createPath(node.parentNode);
 		}
 	}
