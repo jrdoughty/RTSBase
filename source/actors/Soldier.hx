@@ -4,12 +4,11 @@ import world.Node;
 import actors.BaseActor.ActorState;
 import interfaces.IGameState;
 import flixel.util.FlxColor;
-
 /**
  * ...
  * @author John Doughty
  */
-class SwordSoldier extends Unit
+class Soldier extends Unit
 {
 	override function setupGraphics() 
 	{

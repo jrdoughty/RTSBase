@@ -1,9 +1,13 @@
 package;
 import actors.Building;
+import haxe.Resource;
+import openfl.Assets;
 import systems.Team;
-import actors.SwordSoldier;
-import actors.SpearSoldier;
+import actors.Soldier;
+import actors.Devil;
 import world.Node;
+import systems.Data;
+import actors.CastleDBUnit;
 
 
 /**
@@ -23,13 +27,15 @@ class DemoState extends BaseState
 	{
 		super.createTeams();
 		Teams.push(new Team());
-		Teams[0].addUnit(new SwordSoldier(Node.getNodeByGridXY(0,0),this));
-		Teams[0].addUnit(new SwordSoldier(Node.getNodeByGridXY(1,0),this));		
-		Teams[0].addUnit(new SwordSoldier(Node.getNodeByGridXY(1,1),this));	
-		Teams[0].addUnit(new SwordSoldier(Node.getNodeByGridXY(0,1),this));
-		Teams[1].addUnit(new SpearSoldier(Node.activeNodes[616],this));
-		Teams[1].addUnit(new SpearSoldier(Node.activeNodes[499],this));	
+		Teams[0].addUnit(new Soldier(Node.getNodeByGridXY(0,0),this));
+		Teams[0].addUnit(new Soldier(Node.getNodeByGridXY(1,0),this));		
+		Teams[0].addUnit(new Soldier(Node.getNodeByGridXY(1,1),this));	
+		Teams[0].addUnit(new Soldier(Node.getNodeByGridXY(0,1),this));
+		Teams[1].addUnit(new Devil(Node.activeNodes[616],this));
+		Teams[1].addUnit(new Devil(Node.activeNodes[499],this));	
 		Teams[0].addBuilding(new Building(Node.activeNodes[2], this));
-		Teams[0].addBuilding(new Building(Node.getNodeByGridXY(0,14), this));
+		Teams[0].addBuilding(new Building(Node.getNodeByGridXY(0, 14), this));
+		add(new CastleDBUnit("SwordSoldier", Node.getNodeByGridXY(24, 24), this));
+		
 	}
 }

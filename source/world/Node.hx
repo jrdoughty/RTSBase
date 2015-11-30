@@ -64,8 +64,6 @@ class Node extends FlxSprite
     {
         var result:Array<Node> = [];
 		
-		trace("widthToGo:" + widthToGo);
-		
 		if (rightNode != null)
 		{
 			result.push(rightNode);

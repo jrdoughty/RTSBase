@@ -7,6 +7,8 @@ import flash.events.Event;
 import flash.Lib;
 import flixel.FlxGame;
 import flixel.FlxState;
+import systems.Data;
+import openfl.Assets;
 
 class Main extends Sprite 
 {
@@ -45,6 +47,12 @@ class Main extends Sprite
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 		}
+		
+		//#if js
+		//	systems.Data.load(Resource.getString(null));
+		//#else
+		systems.Data.load(Assets.getText("assets/data/database.cdb"));
+		//#end
 		
 		setupGame();
 	}

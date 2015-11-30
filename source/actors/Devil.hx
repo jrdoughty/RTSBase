@@ -8,7 +8,7 @@ import actors.BaseActor.ActorState;
  * ...
  * @author John Doughty
  */
-class SpearSoldier extends Unit
+class Devil extends Unit
 {
 
 	override function setupGraphics() 

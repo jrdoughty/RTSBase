@@ -1,8 +1,8 @@
 package ;
 
 import actors.BaseActor;
-import actors.SpearSoldier;
-import actors.SwordSoldier;
+import actors.Devil;
+import actors.Soldier;
 import dashboard.Dashboard;
 import flixel.FlxG;
 import flixel.group.FlxGroup;
