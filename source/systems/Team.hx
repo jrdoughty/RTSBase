@@ -15,7 +15,8 @@ class Team
 	public var flxBuildings:FlxTypedGroup<Building> = new FlxTypedGroup<Building>();//to use flixel overlap
 	public var units:Array<Unit> = [];
 	public var buildings:Array<Building> = [];
-	public var id(default,null):Int;
+	public var id(default, null):Int;
+	public var allies:Array<Int> = [];
 
 	private static var teamIds = 0;
 	
