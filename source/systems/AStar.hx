@@ -47,7 +47,7 @@ class AStar
 		{
 			path = [];
 		}
-		trace(path.length);
+		
 		cleanParentNodes();
 		return path;
 	}
