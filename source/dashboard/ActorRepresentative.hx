@@ -34,6 +34,9 @@ class ActorRepresentative extends FlxSprite
 		this.x = x;
 		healthBar.x = x;
 		healthBarFill.x = x;
+		this.y = y;
+		healthBar.y = y;
+		healthBarFill.y = y;
 	}
 	
 	override public function update():Void

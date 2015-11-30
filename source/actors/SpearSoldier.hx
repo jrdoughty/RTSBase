@@ -11,16 +11,15 @@ import actors.BaseActor.ActorState;
 class SpearSoldier extends Unit
 {
 
-	public function new(node:Node, state:IGameState) 
+	override function setupGraphics() 
 	{
-		super(node, state);
+		super.setupGraphics();
 		loadGraphic("assets/images/soldiers.png", true, 8, 8);
 		animation.add("active", [2, 3], 5, true);
 		animation.add("attack", [2, 6], 5, true);
 		animation.frameIndex = 2;
 		idleFrame = 2;
 	}
-	
 	
 	override private function move() 
 	{

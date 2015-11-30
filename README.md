@@ -21,4 +21,4 @@ Selecting and moving multiple units
 
 .1 took a week of 1-2 hours a night, but I expect a month to get everything finished for v.2
 
-I'm no longer making it a goal to be portable from HaxeFlixel. This is in part because I am enjoying HaxeFlixel, finding the performance of OpenFL as it grows more mature to be satisfactor, but also because I think that if i do port this it will be independant of calling this project a success.
+I'm no longer making it a goal to be portable from HaxeFlixel. This is in part because I am enjoying HaxeFlixel, finding the performance of OpenFL as it grows more mature to be satisfactory, but also because I think that if i do port this it will be independant of calling this project a success.

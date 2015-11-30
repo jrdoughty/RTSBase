@@ -6,6 +6,7 @@ import systems.AStar;
 import flixel.tweens.FlxTween;
 import dashboard.Control;
 import actors.BaseActor.ActorControlTypes;
+import actors.BaseActor.ActorState;
 /**
  * ...
  * @author ...
@@ -56,54 +57,33 @@ class Unit extends BaseActor
 	{
 		var nextMove:Node;
 		failedToMove = false;
-		
 		state = MOVING;
 		
-		if (aggressive && enemyInRange() != null)
+		if (aggressive && isEnemyInRange())
 		{
-			targetEnemy = enemyInRange();
+			targetEnemy = getEnemyInRange();
 			attack();
 			return;
 		}
 		
 		if ((targetNode != null && path.length == 0|| targetNode != lastTargetNode) && targetNode.isPassible())
 		{
-			path = AStar.newPath(currentNode, targetNode);//remember path[0] is the last 
+			path = AStar.newPath(currentNodes[0], targetNode);//remember path[0] is the last 
 		}
-		if (path.length > 1 && path[path.length - 2].occupant == null)
+		
+		if (path.length > 1 && path[1].occupant == null)
 		{
 			moveAlongPath();
 			
-			if (currentNode == targetNode)
+			if (currentNodes[0] == targetNode)
 			{
 				path = [];
 				state = IDLE;//Unlike other cases, this is after the action has been carried out.
 			}
 		}
-		else if (path.length > 1 && path[path.length - 2].occupant != null)
+		else if (path.length > 1 && path[1].occupant != null)
 		{
-			if (path[path.length - 2].occupant.team != team)
-			{
-				targetEnemy = path[path.length - 2].occupant;
-				attack();
-			}
-			else
-			{
-				nextMove = path[path.length - 2];
-				path = AStar.newPath(currentNode, targetNode);
-				if (path.length > 1 && nextMove != path[path.length -2])//In Plain english, if the new path is indeed a new path
-				{
-					move();//try new path					
-				}
-				else
-				{
-					failedToMove = true;
-					/*we wait for now
-					path = [];
-					targetNode = null;
-					*/
-				}
-			}
+			newPath();
 		}
 		else
 		{
@@ -113,11 +93,31 @@ class Unit extends BaseActor
 		lastTargetNode = targetNode;
 	}
 	
+	@:extern inline private function newPath()
+	{
+		var nextMove = path[1];
+		path = AStar.newPath(currentNodes[0], targetNode);
+		if (path.length > 1 && nextMove != path[1])//In Plain english, if the new path is indeed a new path
+		{
+			if (state == ActorState.MOVING)
+			{
+				move();//try new path	
+			} 
+			else if (state == ActorState.CHASING)
+			{
+				chase();
+			}
+		}
+		else
+		{
+			failedToMove = true;
+		}
+	}
+	
 	
 	private function chase()
 	{
 		var nextMove:Node;
-		var inRange:Bool = false;
 		var i:Int;
 		failedToMove = false;
 		
@@ -125,42 +125,28 @@ class Unit extends BaseActor
 		
 		if (targetEnemy != null && targetEnemy.alive)
 		{
-			for (i in 0...currentNode.neighbors.length)
-			{
-				if (currentNode.neighbors[i].occupant == targetEnemy)
-				{
-					inRange = true;
-					break;
-				}
-			}
-			if (inRange)
+			
+			if (isEnemyInRange())
 			{
 				attack();
 			}
 			else
 			{
-				if ((path.length == 0 || path[0] != targetEnemy.currentNode) && targetEnemy.currentNode.isPassible())
+				targetNode = targetEnemy.currentNodes[0];
+				
+				if (path.length == 0 || path[path.length - 1] != targetNode)
 				{
-					path = AStar.newPath(currentNode, targetEnemy.currentNode);
+					path = AStar.newPath(currentNodes[0], targetNode);
 				}
 				
 				
-				if (path.length > 1 && path[path.length - 2].occupant == null)
+				if (path.length > 1 && path[1].occupant == null)
 				{
 					moveAlongPath();
-					for (i in 0...currentNode.neighbors.length)
-					{
-						if (currentNode.neighbors[i].occupant == targetEnemy)
-						{
-							inRange = true;
-							break;
-						}
-					}
-					if (inRange)
-					{
-						path = [];
-						state = ATTACKING;
-					}
+				}
+				else
+				{
+					newPath();
 				}
 			}
 		}
@@ -173,19 +159,10 @@ class Unit extends BaseActor
 	private function attack()
 	{
 		var i:Int;
-		var inRange:Bool = false;
 		state = ATTACKING;
 		if (targetEnemy != null && targetEnemy.alive)
 		{
-			for (i in 0...currentNode.neighbors.length)
-			{
-				if (currentNode.neighbors[i].occupant == targetEnemy)
-				{
-					inRange = true;
-					break;
-				}
-			}
-			if (inRange)
+			if (isEnemyInRange())
 			{
 				hit();
 			}
@@ -194,29 +171,10 @@ class Unit extends BaseActor
 				chase();
 			}
 		}
-		else if (targetNode != null)
-		{
-			move();
-		}
 		else
 		{
 			state = IDLE;
 		}
-	}
-	
-	private function enemyInRange():BaseActor
-	{
-		var result:BaseActor = null;
-		var i:Int;
-		for (i in 0...currentNode.neighbors.length)
-		{
-			if (currentNode.neighbors[i].occupant != null && currentNode.neighbors[i].occupant.team != team)
-			{
-				result = currentNode.neighbors[i].occupant;
-				break;
-			}
-		}
-		return result;
 	}
 	
 	private function idle()
@@ -232,13 +190,10 @@ class Unit extends BaseActor
 		{
 			attack();
 		}
-		else
+		else if (isEnemyInRange())
 		{
-			if (enemyInRange() != null)
-			{
-				targetEnemy = enemyInRange();
-				attack();
-			}
+			targetEnemy = getEnemyInRange();
+			attack();
 		}
 	}
 	
@@ -272,11 +227,44 @@ class Unit extends BaseActor
 	
 	@:extern inline function moveAlongPath()
 	{
-		path.splice(path.length - 1,1)[0].occupant = null;
-		currentNode = path[path.length - 1];
-		currentNode.occupant = this;
-		FlxTween.tween(this, { x:currentNode.x, y:currentNode.y }, speed / 1000);
-		FlxTween.tween(healthBar, { x:currentNode.x, y:currentNode.y - 1}, speed / 1000);
-		FlxTween.tween(healthBarFill, { x:currentNode.x, y:currentNode.y - 1 }, speed / 1000);
+		path.splice(0,1)[0].occupant = null;
+		currentNodes[0] = path[0];
+		currentNodes[0].occupant = this;
+		FlxTween.tween(this, { x:currentNodes[0].x, y:currentNodes[0].y }, speed / 1000);
+		FlxTween.tween(healthBar, { x:currentNodes[0].x, y:currentNodes[0].y - 1}, speed / 1000);
+		FlxTween.tween(healthBarFill, { x:currentNodes[0].x, y:currentNodes[0].y - 1 }, speed / 1000);
+	}
+	
+	private function isEnemyInRange():Bool
+	{
+		var i:Int;
+		var inRange:Bool = false;
+		
+		for (i in 0...currentNodes[0].neighbors.length)
+		{
+			if (currentNodes[0].neighbors[i].occupant == targetEnemy && currentNodes[0].neighbors[i].occupant != null || //if your target is close
+			targetEnemy == null && currentNodes[0].neighbors[i].occupant != null && currentNodes[0].neighbors[i].occupant.team != team) // if you are near an enemy with no target of your own
+			{
+				inRange = true;
+				break;
+			}
+		}
+		
+		return inRange;
+	}
+	
+	private function getEnemyInRange():BaseActor
+	{
+		var result:BaseActor = null;
+		var i:Int;
+		for (i in 0...currentNodes[0].neighbors.length)
+		{
+			if (currentNodes[0].neighbors[i].occupant != null && currentNodes[0].neighbors[i].occupant.team != team)
+			{
+				result = currentNodes[0].neighbors[i].occupant;
+				break;
+			}
+		}
+		return result;
 	}
 }
