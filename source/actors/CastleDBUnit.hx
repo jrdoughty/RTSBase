@@ -11,15 +11,14 @@ import openfl.Assets;
  */
 class CastleDBUnit extends BaseActor
 {
-	var id:String;
-	var name:String;
-	var data:Dynamic;
+	private var data:Dynamic;
+	private var unit:Dynamic;
 	
 	public function new(unitID:String,node:Node, state:IGameState) 
 	{
-		id = unitID;
 		data = systems.Data;
-		name = data.Actors.get(unitID).name;
+		unit = data.Actors.get(unitID);
+		speed = unit.speed;
 		super(node, state);
 	}
 	override function setupGraphics() 
