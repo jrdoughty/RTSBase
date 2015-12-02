@@ -35,7 +35,7 @@ class DemoState extends BaseState
 		Teams[1].addUnit(new Devil(Node.activeNodes[499],this));	
 		Teams[0].addBuilding(new Building(Node.activeNodes[2], this));
 		Teams[0].addBuilding(new Building(Node.getNodeByGridXY(0, 14), this));
-		add(new CastleDBUnit("SwordSoldier", Node.getNodeByGridXY(24, 24), this));
+		Teams[0].addUnit(new CastleDBUnit("SwordSoldier", Node.getNodeByGridXY(10, 10), this));
 		
 	}
 }

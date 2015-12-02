@@ -122,12 +122,12 @@ class InputHandler
 			attack();
 		}
 		
-		if (FlxG.mouse.pressed && FlxG.mouse.justPressed == false)
+		if (FlxG.mouse.pressed && wasLeftMouseDown)
 		{
 			setupSelectorSize();
 			wasLeftMouseDown = true;
 		}
-		else if (FlxG.mouse.justPressed)
+		else if (FlxG.mouse.pressed && wasLeftMouseDown == false)
 		{
 			selector = new FlxSprite(-1,-1);
 			selector.makeGraphic(1, 1, FlxColor.WHITE);
@@ -146,7 +146,9 @@ class InputHandler
 			selector.y = selectorStartY;
 			selector.setGraphicSize(1, 1);
 			selector.updateHitbox();
-		} else if (wasLeftMouseDown && FlxG.mouse.pressed == false)
+			wasLeftMouseDown = true;
+		} 
+		else if (wasLeftMouseDown && FlxG.mouse.pressed == false)
 		{
 			click();
 			wasLeftMouseDown = false;
@@ -158,7 +160,7 @@ class InputHandler
 		}
 	}
 	
-	@:extern inline private function setupSelectorSize()
+	private function setupSelectorSize()
 	{
 		var width:Int;
 		var height:Int;

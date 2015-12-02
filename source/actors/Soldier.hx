@@ -18,44 +18,4 @@ class Soldier extends Unit
 		animation.add("attack", [0, 4], 5, true);
 		idleFrame = 0;
 	}
-
-	
-	override private function move() 
-	{
-		super.move();
-		if (failedToMove)
-		{
-			animation.pause();
-		}
-		else
-		{
-			animation.play("active");
-		}
-	}
-	
-	override private function idle()
-	{
-		super.idle();
-		animation.frameIndex = 0;
-		animation.pause();
-	}
-	
-	override private function attack()
-	{
-		super.attack();
-		animation.play("attack");
-	}
-	
-	override private function chase()
-	{
-		super.chase();
-		if (failedToMove)
-		{
-			animation.pause();
-		}
-		else
-		{
-			animation.play("active");
-		}
-	}
 }

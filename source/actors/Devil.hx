@@ -20,39 +20,4 @@ class Devil extends Unit
 		animation.frameIndex = 2;
 		idleFrame = 2;
 	}
-	
-	override private function move() 
-	{
-		super.move();
-		if (failedToMove)
-		{
-			animation.pause();
-		}
-		else
-		{
-			animation.play("active");
-		}
-	
-	}
-	
-	override private function idle()
-	{
-		super.idle();
-		animation.frameIndex = 2;
-		animation.pause();
-	}
-	
-	override private function attack()
-	{
-		super.attack();
-		if (failedToMove)
-		{
-			animation.pause();
-		}
-		else
-		{
-			animation.play("active");
-		}
-	}
-	
 }

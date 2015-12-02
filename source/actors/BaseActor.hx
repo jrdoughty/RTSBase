@@ -145,6 +145,7 @@ class BaseActor extends FlxSprite
 	
 	private function hit()
 	{
+		trace(damage);
 		targetEnemy.hurt(damage / targetEnemy.healthMax);
 		if (targetEnemy.alive == false)
 		{

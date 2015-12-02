@@ -91,6 +91,14 @@ class Unit extends BaseActor
 			state = IDLE;
 		}
 		lastTargetNode = targetNode;
+		if (failedToMove)
+		{
+			animation.pause();
+		}
+		else
+		{
+			animation.play("active");
+		}
 	}
 	
 	@:extern inline private function newPath()
@@ -154,6 +162,14 @@ class Unit extends BaseActor
 		{
 			state = IDLE;
 		}
+		if (failedToMove)
+		{
+			animation.pause();
+		}
+		else
+		{
+			animation.play("active");
+		}
 	}
 	
 	private function attack()
@@ -175,6 +191,7 @@ class Unit extends BaseActor
 		{
 			state = IDLE;
 		}
+		animation.play("attack");
 	}
 	
 	private function idle()
@@ -195,6 +212,8 @@ class Unit extends BaseActor
 			targetEnemy = getEnemyInRange();
 			attack();
 		}
+		animation.frameIndex = idleFrame;
+		animation.pause();
 	}
 	
 	override function takeAction() 
