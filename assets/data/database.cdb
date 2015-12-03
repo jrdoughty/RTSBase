@@ -18,11 +18,6 @@
 					"opt": true
 				},
 				{
-					"typeStr": "7",
-					"name": "sprite",
-					"opt": true
-				},
-				{
 					"typeStr": "3",
 					"name": "speed",
 					"display": null
@@ -40,21 +35,67 @@
 			"lines": [
 				{
 					"name": "Sword Solder",
-					"speed": 100,
-					"id": "SwordSoldier",
+					"speed": 200,
+					"id": "SoldierSword",
 					"health": 8,
-					"damage": 3,
-					"sprite": "7b3ce3f681669a8cad4d85432cd2a6bb",
+					"damage": 1,
 					"spriteFile": "../images/swordSoldier.png"
 				},
 				{
-					"id": "SpearSoldier",
+					"id": "SoldierSpear",
 					"name": "Spear Soldier",
 					"speed": 250,
 					"health": 9,
 					"damage": 1,
-					"sprite": "5d295e81da6d101b4d4612cf2f622b3a",
 					"spriteFile": "../images/spearSoldier.png"
+				},
+				{
+					"id": "DevilWhip",
+					"name": "Whip Devil",
+					"speed": 200,
+					"spriteFile": "../images/devilwhip.png",
+					"health": 4,
+					"damage": 2
+				},
+				{
+					"id": "DevilSpear",
+					"name": "Spear Devil",
+					"speed": 225,
+					"spriteFile": "../images/devilspear.png",
+					"health": 7,
+					"damage": 1
+				},
+				{
+					"id": "LizardClaw",
+					"name": "Claw Lizard",
+					"speed": 200,
+					"spriteFile": "../images/lizardclaw.png",
+					"health": 9,
+					"damage": 1
+				},
+				{
+					"id": "LizardSpear",
+					"name": "Spear Lizard",
+					"speed": 250,
+					"spriteFile": "../images/lizardspear.png",
+					"health": 9,
+					"damage": 1
+				},
+				{
+					"id": "OrcClub",
+					"name": "Club Orc",
+					"speed": 300,
+					"spriteFile": "../images/orcclub.png",
+					"health": 8,
+					"damage": 3
+				},
+				{
+					"id": "OrcAxe",
+					"name": "Axe Orc",
+					"speed": 250,
+					"spriteFile": "../images/orcaxe.png",
+					"health": 7,
+					"damage": 1
 				}
 			],
 			"separators": [],

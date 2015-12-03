@@ -19,6 +19,7 @@ class CastleDBUnit extends Unit
 		data = systems.Data;//hack
 		unitData = data.Actors.get(unitID);//supposedly Actors doesn't have get
 		super(node, state);//super is called after because setup graphics, called by super, needs the unit data
+		healthMax = unitData.health;
 		speed = unitData.speed;
 		damage = unitData.damage;
 	}
