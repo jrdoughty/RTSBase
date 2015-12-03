@@ -102,7 +102,14 @@ class BaseActor extends FlxSprite
 		super.update();
 		if (healthBarFill != null)
 		{
-			healthBarFill.scale.set(health, 1);
+			if (health > 0)
+			{
+				healthBarFill.scale.set(health, 1);
+			}
+			else
+			{
+				healthBarFill.scale.set(0, 1);
+			}
 			healthBarFill.updateHitbox();
 		}
 	}

@@ -1,6 +1,6 @@
 #RTS Base
 RTS Base is going to be a basic RTS system built in HaxeFlixel.
-
+A playable Demo can be found here: http://kingmaker.works/rtsb/RTS.swf
 
 #Project Goals:
 Must be simple to utilize
