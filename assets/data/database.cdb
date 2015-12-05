@@ -96,6 +96,14 @@
 					"spriteFile": "../images/orcaxe.png",
 					"health": 7,
 					"damage": 1
+				},
+				{
+					"id": "Wizard",
+					"name": "Wizard",
+					"speed": 250,
+					"spriteFile": "../images/wizard.png",
+					"health": 7,
+					"damage": 1
 				}
 			],
 			"separators": [],
