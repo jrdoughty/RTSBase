@@ -108,7 +108,7 @@ class InputHandler
 	
 	public function update()
 	{
-		
+		cameraUpdate();
 		if (FlxG.keys.pressed.M)
 		{
 			move();
@@ -357,6 +357,12 @@ class InputHandler
 		{
 			selectedUnits[i].resetSelect();
 		}
+	}
+	
+	
+	private function cameraUpdate()
+	{
+		
 	}
 	
 }

@@ -87,7 +87,7 @@
 					"speed": 300,
 					"spriteFile": "../images/orcclub.png",
 					"health": 8,
-					"damage": 3
+					"damage": 2
 				},
 				{
 					"id": "OrcAxe",
@@ -100,10 +100,10 @@
 				{
 					"id": "Wizard",
 					"name": "Wizard",
-					"speed": 250,
+					"speed": 300,
 					"spriteFile": "../images/wizard.png",
-					"health": 7,
-					"damage": 1
+					"health": 5,
+					"damage": 3
 				}
 			],
 			"separators": [],

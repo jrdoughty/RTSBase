@@ -122,7 +122,7 @@ class BaseActor extends FlxSprite
 	
 	public function select():Void
 	{
-		color = 0x99ff66;
+		//color = 0x99ff66;
 		selected = true;
 	}
 	
