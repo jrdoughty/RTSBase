@@ -6,6 +6,7 @@ import haxe.Json;
 import world.TiledTypes.Layer;
 import world.TiledTypes.TiledLevel;
 import openfl.Assets;
+import flixel.FlxG;
 
 
 /**
@@ -43,7 +44,7 @@ class SelfLoadingLevel extends FlxGroup
 		
 		width = tiledLevel.width;
 		height = tiledLevel.height;
-		
+		FlxG.camera.setBounds(0, 0, width * tiledLevel.tilewidth, height * tiledLevel.tileheight);
 		for (i in 0...tiledLevel.layers.length)
 		{
 			if (tiledLevel.layers[i].name == "graphic")
@@ -74,7 +75,7 @@ class SelfLoadingLevel extends FlxGroup
 					Node.activeNodes.push(new Node(asset, frame,tiledLevel.tilewidth,tiledLevel.tileheight, x, y, pass));
 					add(Node.activeNodes[i]);
 				}
-				Node.createNeighbors(width,height);
+				Node.createNeighbors(width, height);
 				break;
 			}
 			for (i in 0...tiledLevel.tilesets.length)

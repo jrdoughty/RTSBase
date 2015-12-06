@@ -362,7 +362,22 @@ class InputHandler
 	
 	private function cameraUpdate()
 	{
-		
+		if (FlxG.mouse.x - FlxG.camera.scroll.x > FlxG.camera.width - FlxG.camera.width/9)
+		{
+			FlxG.camera.scroll.x += 2;
+		}
+		else if (FlxG.mouse.x - FlxG.camera.scroll.x < FlxG.camera.width/9)
+		{
+			FlxG.camera.scroll.x -= 2;
+		}
+		if (FlxG.mouse.y - FlxG.camera.scroll.y > FlxG.camera.height - FlxG.camera.height/9)
+		{
+			FlxG.camera.scroll.y += 2;
+		}
+		else if (FlxG.mouse.y - FlxG.camera.scroll.y < FlxG.camera.width/9)
+		{
+			FlxG.camera.scroll.y -= 2;
+		}
 	}
 	
 }
