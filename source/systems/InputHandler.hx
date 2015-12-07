@@ -370,6 +370,7 @@ class InputHandler
 		{
 			FlxG.camera.scroll.x -= 2;
 		}
+		
 		if (FlxG.mouse.y - FlxG.camera.scroll.y > FlxG.camera.height - FlxG.camera.height/10)
 		{
 			FlxG.camera.scroll.y += 2;

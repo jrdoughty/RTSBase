@@ -44,7 +44,6 @@ class SelfLoadingLevel extends FlxGroup
 		
 		width = tiledLevel.width;
 		height = tiledLevel.height;
-		FlxG.camera.setBounds(0, 0, width * tiledLevel.tilewidth, height * tiledLevel.tileheight);
 		for (i in 0...tiledLevel.layers.length)
 		{
 			if (tiledLevel.layers[i].name == "graphic")

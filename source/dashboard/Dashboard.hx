@@ -21,24 +21,22 @@ class Dashboard extends FlxGroup
 	private var selected:FlxSprite;
 	private var activeUnits:Array<BaseActor> = [];
 	private var representatives:Array<ActorRepresentative> = [];
-	private var baseY:Int = 0;
-	private var baseX:Int = 0;
+	private var baseX:Float;
 	
-	public function new(x:Int, y:Int, inputH:InputHandler):Void
+	public function new(inputH:InputHandler):Void
 	{
 		super();
 		
-		baseX = x;
-		baseY = y;
-		
 		inputHandler = inputH;
-		background = new FlxSprite(baseX, baseY);
+		background = new FlxSprite();
 		background.loadGraphic("assets/images/dashBG.png");
-		controls = new FlxSprite(baseX,baseY).loadGraphic("assets/images/controlsBG.png");
+		baseX = background.width *= -1;
+		background.x = baseX;
+		controls = new FlxSprite(baseX,0).loadGraphic("assets/images/controlsBG.png");
 		
 		selected = new FlxSprite();
-		selected.x = controls.width + 4;
-		selected.y = baseY + 4;
+		selected.x = baseX + controls.width + 4;
+		selected.y = 4;
 		
 		add(background);
 		add(controls);
@@ -98,8 +96,8 @@ class Dashboard extends FlxGroup
 			add(sprite);
 			add(sprite.healthBar);
 			add(sprite.healthBarFill);
-			sprite.setDashPos(112 + Math.floor((representatives.length - 1) % ((background.width -112) / 16)) * 16, 184 + 16 * Math.floor((representatives.length - 1) * 16 / (background.width -112)));
-			
+			sprite.setDashPos(Std.int(baseX) + 112 + Math.floor((representatives.length - 1) % ((background.width -112) / 16)) * 16, 16 * Math.floor((representatives.length - 1) * 16 / (background.width -112)));
+			trace(sprite.y);
 		}
 	}
 	
@@ -108,7 +106,7 @@ class Dashboard extends FlxGroup
 		var i:Int;
 		for (i in 0...representatives.length)
 		{
-			representatives[i].setDashPos(112 + Math.floor(i % ((background.width -112) / 16)) * 16, 184 + 16 * Math.floor(i * 16 / (background.width -112)));
+			representatives[i].setDashPos(Std.int(baseX) + 112 + Math.floor(i % ((background.width -112) / 16)) * 16, 16 * Math.floor(i * 16 / (background.width -112)));
 		}
 	}
 	
@@ -117,8 +115,6 @@ class Dashboard extends FlxGroup
 		var i:Int = 0;
 				
 		super.update();
-		
-		background.y = baseY - FlxG.camera.y;
 		
 		while(i < representatives.length)//because the length gets stored ahead in haxe for loops, the changing length breaks this loop
 		{
