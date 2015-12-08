@@ -30,7 +30,7 @@ class Dashboard extends FlxGroup
 		inputHandler = inputH;
 		background = new FlxSprite();
 		background.loadGraphic("assets/images/dashBG.png");
-		baseX = background.width *= -1;
+		baseX = background.width * -1;
 		background.x = baseX;
 		controls = new FlxSprite(baseX,0).loadGraphic("assets/images/controlsBG.png");
 		
@@ -96,8 +96,7 @@ class Dashboard extends FlxGroup
 			add(sprite);
 			add(sprite.healthBar);
 			add(sprite.healthBarFill);
-			sprite.setDashPos(Std.int(baseX) + 112 + Math.floor((representatives.length - 1) % ((background.width -112) / 16)) * 16, 16 * Math.floor((representatives.length - 1) * 16 / (background.width -112)));
-			trace(sprite.y);
+			sprite.setDashPos(Std.int(baseX) + 112 + Math.floor((representatives.length - 1) % ((background.width -112) / 16)) * 16, 16 * Math.floor((representatives.length - 1) * 16 / (background.width - 112)));
 		}
 	}
 	
