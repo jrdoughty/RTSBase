@@ -5,31 +5,30 @@ import world.Node;
 
 /**
  * ...
- * @author ...
+ * @author John Doughty
  */
 class Building extends BaseActor
 {
+	private var data:Dynamic;
+	private var unitData:Dynamic;
 
-	public function new(topLeftNode:Node, state:IGameState) 
+	public function new(uniqueID:String, node:Node, state:IGameState) 
 	{
 		var i:Int;
-		super(topLeftNode, state);
-	}
-	
-	private override function setupGraphics() 
-	{
-		super.setupGraphics();
-		loadGraphic("assets/images/building.png");
-	}
-	
-	private override function setupNodes(node:Node)
-	{	
-		currentNodes = node.getAllNodes(Std.int(width / 8) - 1, Std.int(height / 8) - 1);
+		data = systems.Data;//hack
+		unitData = data.Buildings.get(uniqueID);//supposedly Actors doesn't have get
 		
-		for (i in 0...currentNodes.length)
-		{
-			currentNodes[i].occupant = this;
-		}
+		super(node, state);
+		
+		healthMax = unitData.health;
+	}
+	
+	override function setupGraphics() 
+	{
+		var assetPath:String = "assets" + unitData.spriteFile.substr(2);
+		super.setupGraphics();
+		
+		loadGraphic(assetPath);
 	}
 	
 }

@@ -1,8 +1,6 @@
 package ;
 
 import actors.BaseActor;
-import actors.Devil;
-import actors.Soldier;
 import dashboard.Dashboard;
 import flixel.FlxCamera;
 import flixel.FlxG;

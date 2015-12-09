@@ -71,8 +71,12 @@ class BaseActor extends FlxSprite
 	
 	private function setupNodes(node:Node)
 	{
-		node.occupant = this;
-		currentNodes[0] = node;
+		currentNodes = node.getAllNodes(Std.int(width / 8) - 1, Std.int(height / 8) - 1);
+		
+		for (i in 0...currentNodes.length)
+		{
+			currentNodes[i].occupant = this;
+		}
 	}
 	
 	private function setupGraphics()

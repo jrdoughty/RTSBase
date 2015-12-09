@@ -1,13 +1,12 @@
 package;
-import actors.Building;
+import actors.Barraks;
 import haxe.Resource;
 import openfl.Assets;
 import systems.Team;
-import actors.Soldier;
-import actors.Devil;
 import world.Node;
 import systems.Data;
-import actors.CastleDBUnit;
+import actors.Unit;
+import actors.Building;
 
 
 /**
@@ -27,17 +26,17 @@ class DemoState extends BaseState
 	{
 		super.createTeams();
 		Teams.push(new Team());
-		Teams[0].addUnit(new CastleDBUnit("SoldierSword",Node.getNodeByGridXY(0,0),this));
-		Teams[0].addUnit(new CastleDBUnit("SoldierSpear",Node.getNodeByGridXY(1,0),this));		
-		Teams[0].addUnit(new CastleDBUnit("OrcAxe",Node.getNodeByGridXY(1,1),this));			
-		Teams[0].addUnit(new CastleDBUnit("Wizard",Node.getNodeByGridXY(2,2),this));	
-		Teams[0].addUnit(new CastleDBUnit("OrcClub",Node.getNodeByGridXY(0,1),this));
-		Teams[1].addUnit(new CastleDBUnit("DevilSpear",Node.activeNodes[616],this));
-		Teams[1].addUnit(new CastleDBUnit("DevilWhip",Node.activeNodes[499],this));	
-		Teams[1].addUnit(new CastleDBUnit("LizardClaw",Node.getNodeByGridXY(23,13),this));	
-		Teams[1].addUnit(new CastleDBUnit("LizardSpear",Node.getNodeByGridXY(19,15),this));	
-		Teams[0].addBuilding(new Building(Node.getNodeByGridXY(2,0), this));
-		Teams[0].addBuilding(new Building(Node.getNodeByGridXY(0, 14), this));
+		Teams[0].addUnit(new Unit("SoldierSword",Node.getNodeByGridXY(0,0),this));
+		Teams[0].addUnit(new Unit("SoldierSpear",Node.getNodeByGridXY(1,0),this));		
+		Teams[0].addUnit(new Unit("OrcAxe",Node.getNodeByGridXY(1,1),this));			
+		Teams[0].addUnit(new Unit("Wizard",Node.getNodeByGridXY(2,2),this));	
+		Teams[0].addUnit(new Unit("OrcClub",Node.getNodeByGridXY(0,1),this));
+		Teams[1].addUnit(new Unit("DevilSpear",Node.activeNodes[616],this));
+		Teams[1].addUnit(new Unit("DevilWhip",Node.activeNodes[499],this));	
+		Teams[1].addUnit(new Unit("LizardClaw",Node.getNodeByGridXY(23,13),this));	
+		Teams[1].addUnit(new Unit("LizardSpear",Node.getNodeByGridXY(19,15),this));	
+		Teams[0].addBuilding(new Building("Barracks",Node.getNodeByGridXY(2,0), this));
+		Teams[0].addBuilding(new Building("Barracks",Node.getNodeByGridXY(0, 14), this));
 		
 	}
 }

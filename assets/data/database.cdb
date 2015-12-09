@@ -108,6 +108,95 @@
 			],
 			"separators": [],
 			"props": {}
+		},
+		{
+			"name": "Buildings",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id",
+					"display": null
+				},
+				{
+					"typeStr": "1",
+					"name": "name"
+				},
+				{
+					"typeStr": "3",
+					"name": "health"
+				},
+				{
+					"typeStr": "8",
+					"name": "Actions",
+					"opt": true
+				},
+				{
+					"typeStr": "8",
+					"name": "Units",
+					"opt": true
+				},
+				{
+					"typeStr": "13",
+					"name": "spriteFile",
+					"display": null
+				}
+			],
+			"lines": [
+				{
+					"id": "Barracks",
+					"name": "Barracks",
+					"health": 20,
+					"Actions": [
+						{
+							"id": "Build"
+						},
+						{
+							"id": "Attack"
+						}
+					],
+					"spriteFile": "../images/building.png",
+					"Units": [
+						{
+							"Unit": "SoldierSword"
+						},
+						{
+							"Unit": "SoldierSpear"
+						}
+					]
+				}
+			],
+			"separators": [],
+			"props": {}
+		},
+		{
+			"name": "Buildings@Actions",
+			"props": {
+				"hide": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": [
+				{
+					"typeStr": "1",
+					"name": "id",
+					"display": null
+				}
+			]
+		},
+		{
+			"name": "Buildings@Units",
+			"props": {
+				"hide": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": [
+				{
+					"typeStr": "6:Actors",
+					"name": "Unit",
+					"display": null
+				}
+			]
 		}
 	],
 	"customTypes": [],
