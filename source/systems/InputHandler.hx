@@ -1,6 +1,7 @@
 package systems;
 import actors.BaseActor;
 import actors.Unit;
+import actors.Building;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
@@ -33,7 +34,9 @@ class InputHandler
 	
 	private var flxTeamUnits:FlxGroup = new FlxGroup();
 	private var flxActiveTeamUnits:FlxGroup = new FlxGroup();
+	private var flxActiveTeamBuildings:FlxGroup = new FlxGroup();
 	private var selectedUnits:Array<Unit> = [];
+	private var selectedBuildings:Array<Building> = [];
 	private var flxNodes:FlxGroup = new FlxGroup();
 	private var nodes:Array<Node>;
 	private var selector:FlxSprite;
@@ -59,6 +62,7 @@ class InputHandler
 			flxTeamUnits.add(activeState.Teams[i].flxUnits);
 		}
 		flxActiveTeamUnits.add(activeState.activeTeam.flxUnits);
+		flxActiveTeamBuildings.add(activeState.activeTeam.flxBuildings);
 	}
 	
 	private function onOver(sprite:Node):Void
@@ -225,8 +229,11 @@ class InputHandler
 			{
 					if (FlxG.overlap(selector, flxActiveTeamUnits, selectOverlapUnits) == false)
 					{
-						activeState.dashboard.clearDashBoard();//Select Enemies later
-					}
+						if (FlxG.overlap(selector, flxActiveTeamBuildings, selectOverlapBuildings) == false)
+						{
+							activeState.dashboard.clearDashBoard();//Select Enemies later
+						}
+					} 
 			}
 			else if (inputState == MOVING)
 			{			
@@ -335,28 +342,46 @@ class InputHandler
 		}
 	}
 	
-	private function selectOverlapUnits(selector:FlxObject, unit:Unit):Void
-	{
-		if (newLeftClick)
-		{
-			deselectUnits();
-			selectedUnits = [];
-			activeState.dashboard.clearDashBoard();
-			activeState.dashboard.setSelected(unit);
-		}
-		activeState.dashboard.addSelectedUnit(unit);
-		selectedUnits.push(unit);
-		unit.select();
-		newLeftClick = false;
-	}
-	
-	private function deselectUnits():Void
+	private function clearSelected()
 	{
 		var i:Int;
 		for (i in 0...selectedUnits.length)
 		{
 			selectedUnits[i].resetSelect();
 		}
+		for (i in 0...selectedBuildings.length)
+		{
+			//selectedBuildings[i].resetSelect();
+		}
+		selectedUnits = [];
+		selectedBuildings = [];
+		activeState.dashboard.clearDashBoard();
+	}
+	
+	private function selectOverlapUnits(selector:FlxObject, unit:Unit):Void
+	{
+		if (newLeftClick)
+		{
+			clearSelected();
+			activeState.dashboard.setSelected(unit);
+		}
+		activeState.dashboard.addSelectedActor(unit);
+		selectedUnits.push(unit);
+		unit.select();
+		newLeftClick = false;
+	}
+	
+	private function selectOverlapBuildings(selector:FlxObject, building:Building):Void
+	{
+		if (newLeftClick)
+		{
+			clearSelected();
+			activeState.dashboard.setSelected(building);
+		}
+		activeState.dashboard.addSelectedActor(building);
+		selectedBuildings.push(building);
+		building.select();
+		newLeftClick = false;
 	}
 	
 	

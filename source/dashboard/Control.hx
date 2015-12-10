@@ -22,6 +22,7 @@ class Control extends FlxSprite
 		}
 		else
 		{
+			trace(spriteString);
 			loadGraphic(spriteString, false, 8, 8);
 		}
 		animation.frameIndex = frame;

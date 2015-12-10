@@ -57,10 +57,10 @@ class Dashboard extends FlxGroup
 		
 		for (i in 0...activeControls.length)
 		{
-			
+			trace(i);
 			add(activeControls[i]);
-			activeControls[i].x = 2 + (i % 3) * 18;
-			activeControls[i].y = 184 + Math.floor(i / 3) * 18 + 2;
+			activeControls[i].x = 2 + (i % 3) * 18 - background.width;
+			activeControls[i].y = Math.floor(i / 3) * 18 + 2;
 		}
 		inputHandler.setupClickControls(activeControls);
 	}
@@ -86,7 +86,7 @@ class Dashboard extends FlxGroup
 		representatives = [];
 	}
 	
-	public function addSelectedUnit(baseA:BaseActor):Void
+	public function addSelectedActor(baseA:BaseActor):Void
 	{
 		if (activeUnits.indexOf(baseA) == -1)
 		{

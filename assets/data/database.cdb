@@ -127,12 +127,12 @@
 				},
 				{
 					"typeStr": "8",
-					"name": "Actions",
+					"name": "actions",
 					"opt": true
 				},
 				{
 					"typeStr": "8",
-					"name": "Units",
+					"name": "units",
 					"opt": true
 				},
 				{
@@ -146,7 +146,8 @@
 					"id": "Barracks",
 					"name": "Barracks",
 					"health": 20,
-					"Actions": [
+					"spriteFile": "../images/building.png",
+					"actions": [
 						{
 							"id": "Build"
 						},
@@ -154,13 +155,12 @@
 							"id": "Attack"
 						}
 					],
-					"spriteFile": "../images/building.png",
-					"Units": [
+					"units": [
 						{
-							"Unit": "SoldierSword"
+							"unit": "SoldierSword"
 						},
 						{
-							"Unit": "SoldierSpear"
+							"unit": "SoldierSpear"
 						}
 					]
 				}
@@ -169,7 +169,7 @@
 			"props": {}
 		},
 		{
-			"name": "Buildings@Actions",
+			"name": "Buildings@actions",
 			"props": {
 				"hide": true
 			},
@@ -184,7 +184,7 @@
 			]
 		},
 		{
-			"name": "Buildings@Units",
+			"name": "Buildings@units",
 			"props": {
 				"hide": true
 			},
@@ -193,8 +193,7 @@
 			"columns": [
 				{
 					"typeStr": "6:Actors",
-					"name": "Unit",
-					"display": null
+					"name": "unit"
 				}
 			]
 		}
