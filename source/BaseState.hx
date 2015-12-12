@@ -41,7 +41,7 @@ class BaseState extends FlxState implements IGameState
 	private var inputHandler:InputHandler;
 	private var activeLevel:SelfLoadingLevel = null;
 	private var levelAssetPath:String = "";
-	private var dashCam:FlxCamera;
+	//private var dashCam:FlxCamera;
 	
 	override public function create():Void
 	{
@@ -59,13 +59,14 @@ class BaseState extends FlxState implements IGameState
 	{
 		var level = getLevel();
 		FlxG.camera.setBounds(0, 0, level.width * level.tiledLevel.tilewidth, level.height * level.tiledLevel.tileheight);
+		/*
 		#if flash
 		dashCam = new FlxCamera(0, 684, 320, 56);
 		#else
 		dashCam = new FlxCamera(0, 370, 320, 56);
 		#end
 		dashCam.scroll.x = dashboard.background.x;
-		FlxG.cameras.add(dashCam);
+		FlxG.cameras.add(dashCam);*/
 	}
 	
 	private function setupDashboard()

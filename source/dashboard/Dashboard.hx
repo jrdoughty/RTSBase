@@ -30,13 +30,13 @@ class Dashboard extends FlxGroup
 		inputHandler = inputH;
 		background = new FlxSprite();
 		background.loadGraphic("assets/images/dashBG.png");
-		baseX = background.width * -1;
-		background.x = baseX;
-		controls = new FlxSprite(baseX,0).loadGraphic("assets/images/controlsBG.png");
+		background.x = 0;
+		background.y = 184;
+		controls = new FlxSprite(background.x,background.y).loadGraphic("assets/images/controlsBG.png");
 		
 		selected = new FlxSprite();
-		selected.x = baseX + controls.width + 4;
-		selected.y = 4;
+		selected.x = background.x + controls.width + 4;
+		selected.y = 4 + background.y;
 		
 		add(background);
 		add(controls);
@@ -60,7 +60,7 @@ class Dashboard extends FlxGroup
 			trace(i);
 			add(activeControls[i]);
 			activeControls[i].x = 2 + (i % 3) * 18 - background.width;
-			activeControls[i].y = Math.floor(i / 3) * 18 + 2;
+			activeControls[i].y = Math.floor(i / 3) * 18 + 2+background.y;
 		}
 		inputHandler.setupClickControls(activeControls);
 	}
@@ -96,7 +96,8 @@ class Dashboard extends FlxGroup
 			add(sprite);
 			add(sprite.healthBar);
 			add(sprite.healthBarFill);
-			sprite.setDashPos(Std.int(baseX) + 112 + Math.floor((representatives.length - 1) % ((background.width -112) / 16)) * 16, 16 * Math.floor((representatives.length - 1) * 16 / (background.width - 112)));
+			sprite.setDashPos(Std.int(background.x) + 112 + Math.floor((representatives.length - 1) % ((background.width -112) / 16)) * 16,
+			16 * Math.floor((representatives.length - 1) * 16 / (background.width - 112))+Std.int(background.y));
 		}
 	}
 	
@@ -105,7 +106,7 @@ class Dashboard extends FlxGroup
 		var i:Int;
 		for (i in 0...representatives.length)
 		{
-			representatives[i].setDashPos(Std.int(baseX) + 112 + Math.floor(i % ((background.width -112) / 16)) * 16, 16 * Math.floor(i * 16 / (background.width -112)));
+			representatives[i].setDashPos(Std.int(background.x) + 112 + Math.floor(i % ((background.width -112) / 16)) * 16, 16 * Math.floor(i * 16 / (background.width -112))+Std.int(background.y));
 		}
 	}
 	
@@ -140,5 +141,16 @@ class Dashboard extends FlxGroup
 			}
 			i++;
 		}
+	}
+	public function adjustPos(x:Float,y:Float)
+	{
+		var i:Int;
+		background.x = x;
+		background.y = y + 184;
+		redoDashboard();
+		selected.x = background.x + controls.width + 4;
+		selected.y = 4 + background.y;
+		controls.x = background.x;
+		controls.y = background.y;
 	}
 }

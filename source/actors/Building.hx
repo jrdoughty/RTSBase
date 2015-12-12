@@ -1,9 +1,12 @@
 package actors;
 
+import dashboard.UnitControl;
 import interfaces.IGameState;
 import dashboard.Control;
 import world.Node;
 import actors.BaseActor;
+import flixel.FlxSprite;
+import actors.Unit;
 
 /**
  * ...
@@ -28,8 +31,13 @@ class Building extends BaseActor
 		for (i in 0...buildingData.units.length)
 		{
 			unitsToProduce.push(buildingData.units[i].unit);
-			controls.push(new Control(0, ActorControlTypes.BUILD, "assets"+data.Actors.get(unitsToProduce[i]).spriteFile.substr(2)));
+			controls.push(new UnitControl(0, ActorControlTypes.PRODUCE, createUnit, "assets"+data.Actors.get(unitsToProduce[i]).spriteFile.substr(2),data.Actors.get(unitsToProduce[i]).id));
 		}
+	}
+	
+	private function createUnit()
+	{
+		activeState.add(new Unit(data.Actors.get(unitsToProduce[0]).id,Node.getNodeByGridXY(5,5),activeState));
 	}
 	
 	override function setupGraphics() 

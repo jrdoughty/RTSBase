@@ -33,6 +33,7 @@ enum ActorControlTypes
 	CAST;
 	BUILD;
 	HOLD;
+	PRODUCE;
 }
  
  
