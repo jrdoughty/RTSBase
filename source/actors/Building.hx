@@ -7,6 +7,7 @@ import world.Node;
 import actors.BaseActor;
 import flixel.FlxSprite;
 import actors.Unit;
+import flixel.FlxG;
 
 /**
  * ...
@@ -18,14 +19,14 @@ class Building extends BaseActor
 	private var buildingData:Dynamic;
 	private var unitsToProduce:Array<String> = [];
 
-	public function new(uniqueID:String, node:Node, state:IGameState) 
+	public function new(uniqueID:String, node:Node) 
 	{
 		var i:Int;
 		var spriteFile:String;
 		data = systems.Data;//hack
 		buildingData = data.Buildings.get(uniqueID);//supposedly Actors doesn't have get
 		
-		super(node, state);
+		super(node);
 		
 		healthMax = buildingData.health;
 		for (i in 0...buildingData.units.length)
@@ -37,7 +38,7 @@ class Building extends BaseActor
 	
 	private function createUnit()
 	{
-		activeState.add(new Unit(data.Actors.get(unitsToProduce[0]).id,Node.getNodeByGridXY(5,5),activeState));
+		FlxG.state.add(new Unit(data.Actors.get(unitsToProduce[0]).id,Node.getNodeByGridXY(5,5)));
 	}
 	
 	override function setupGraphics() 

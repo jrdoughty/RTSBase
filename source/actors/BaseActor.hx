@@ -56,11 +56,9 @@ class BaseActor extends FlxSprite
 	private var healthMax:Int = 8;
 	private var healthBar:FlxSprite;
 	private var healthBarFill:FlxSprite;
-	private var activeState:IGameState;
 	
-	public function new(node:Node, state:IGameState) 
+	public function new(node:Node) 
 	{
-		activeState = state;
 		super(node.x, node.y);
 		
 		delayTimer = new Timer(Math.floor(1000*Math.random()));//Keeps mass created units from updating at the exact same time. Idea from: http://answers.unity3d.com/questions/419786/a-pathfinding-multiple-enemies-MOVING-target-effic.html
@@ -90,10 +88,10 @@ class BaseActor extends FlxSprite
 		health = 1;
 		healthBar = new FlxSprite(x, y - 1);
 		healthBar.makeGraphic(Std.int(width), 1, FlxColor.BLACK);
-		activeState.add(healthBar);
+		FlxG.state.add(healthBar);
 		healthBarFill = new FlxSprite(x, y - 1);
 		healthBarFill.makeGraphic(Std.int(width), 1, FlxColor.RED);
-		activeState.add(healthBarFill);		
+		FlxG.state.add(healthBarFill);		
 	}
 	private function delayedStart()
 	{
@@ -149,9 +147,9 @@ class BaseActor extends FlxSprite
 		resetStates();
 		currentNodes[0].occupant = null;
 		actionTimer.stop();
-		activeState.remove(healthBar);
-		activeState.remove(healthBarFill);
-		activeState.remove(this);
+		FlxG.state.remove(healthBar);
+		FlxG.state.remove(healthBarFill);
+		FlxG.state.remove(this);
 		destroy();
 	}
 	

@@ -34,13 +34,13 @@ class Unit extends BaseActor
 		ActorControlTypes.HOLD];
 	
 	
-	public function new(unitID:String, node:Node, state:IGameState) 
+	public function new(unitID:String, node:Node) 
 	{
 		var i:Int;
 		data = systems.Data;//hack
 		unitData = data.Actors.get(unitID);//supposedly Actors doesn't have get
 		
-		super(node, state);
+		super(node);
 		
 		for (i in 0...3)
 		{
