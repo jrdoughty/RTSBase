@@ -69,6 +69,20 @@ class BaseActor extends FlxSprite
 		createHealthBar();
 	}
 	
+	public function killVisibility()
+	{
+		visible = false;
+		healthBar.visible = false;
+		healthBarFill.visible = false;
+	}
+	
+	public function makeVisible()
+	{
+		visible = true;
+		healthBar.visible = true;
+		healthBarFill.visible = true;
+	}
+	
 	private function setupNodes(node:Node)
 	{
 		currentNodes = node.getAllNodes(Std.int(width / 8) - 1, Std.int(height / 8) - 1);

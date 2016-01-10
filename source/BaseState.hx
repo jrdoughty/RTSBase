@@ -22,6 +22,7 @@ import world.TiledTypes;
 import openfl.Assets;
 import flixel.plugin.MouseEventManager;
 import actors.Unit;
+import openfl.geom.Point;
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -134,17 +135,36 @@ class BaseState extends FlxState implements IGameState
 		super.destroy();
 	}
 
+	private var positions:Array<Array<Int>> = [];
+	
 	/**
 	 * Function that is called once every frame.
 	 */
 	override public function update():Void
 	{
 		super.update();
-	
+		var newPositions:Array<Array<Int>> = [];
 		inputHandler.update();
 		for (actor in activeTeam.flxUnits.members)
 		{
-			
+			newPositions.push([actor.currentNodes[0].nodeX, actor.currentNodes[0].nodeY]);
 		}
+		if (positions.toString() != newPositions.toString())
+		{
+			for (node in Node.activeNodes)
+			{
+				node.addOverlay();
+			}
+			for (actor in activeTeam.flxUnits.members)
+			{
+				if (actor.alive)
+				{
+					actor.clearedNodes = [];
+					actor.clearFogOfWar(actor.currentNodes[0]);
+				}
+			}
+			getLevel().rebuildFog();
+		}
+		positions = newPositions;
 	}
 }

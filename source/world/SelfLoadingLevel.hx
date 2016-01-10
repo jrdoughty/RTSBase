@@ -25,14 +25,15 @@ class SelfLoadingLevel extends FlxGroup
 	public var tiledLevel(default,null):TiledLevel;
 	
 	private var background:FlxSprite;
+	private var fog:FlxSprite;
 	private var selectedNode:Node;
 	
 	public function new(json:String) 
 	{
 		super();
 		var i:Int = 0;
-		var tileSetId:Int = 0;
 		var j:Int = 0;
+		var tileSetId:Int = 0;
 		
 		var asset:String = "";
 		var frame:Int = 0;
@@ -50,6 +51,9 @@ class SelfLoadingLevel extends FlxGroup
 		background = new FlxSprite();
 		background.pixels = new BitmapData(Std.int(width * tiledLevel.tilewidth), height * tiledLevel.tileheight, true, 0xFFFFFF);
 		add(background);
+		fog = new FlxSprite();
+		fog.pixels = new BitmapData(Std.int(width * tiledLevel.tilewidth), height * tiledLevel.tileheight, true, 0xFFFFFF);
+		add(fog);
 		for (i in 0...tiledLevel.layers.length)
 		{
 			if (tiledLevel.layers[i].name == "graphic")
@@ -84,7 +88,6 @@ class SelfLoadingLevel extends FlxGroup
 					background.pixels.copyPixels(Node.activeNodes[i].getFlxFrameBitmapData(), sourceRect, destPoint, null, null, true);
 					background.frame.destroyBitmapDatas();
 					background.dirty = true;
-					add(Node.activeNodes[i].overlay);
 				}
 				Node.createNeighbors(width, height);
 				break;
@@ -99,5 +102,17 @@ class SelfLoadingLevel extends FlxGroup
 				}
 			}
 		}
-	}	
+	}
+	public function rebuildFog()
+	{
+		fog.pixels = new BitmapData(Std.int(width * tiledLevel.tilewidth), height * tiledLevel.tileheight, true, 0xFFFFFF);
+		for (i in 0...Node.activeNodes.length)
+		{
+			var sourceRect:Rectangle = new Rectangle(0, 0, Node.activeNodes[i].width, Node.activeNodes[i].height);
+			var destPoint:Point = new Point(Std.int(Node.activeNodes[i].x), Node.activeNodes[i].y);
+			fog.pixels.copyPixels(Node.activeNodes[i].overlay.getFlxFrameBitmapData(), sourceRect, destPoint, null, null, true);
+			fog.frame.destroyBitmapDatas();
+		}
+		fog.dirty = true;
+	}
 }

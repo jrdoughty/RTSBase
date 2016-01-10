@@ -19,13 +19,13 @@ class Unit extends BaseActor
 {
 		
 	public var targetNode(default, null):Node;
+	public var clearedNodes:Array<Node> = [];
 	
 	private var data:Dynamic;
 	private var unitData:Dynamic;
 	private	var path:Array<Node> = [];
 	private var failedToMove:Bool = false;
 	private var aggressive:Bool = false;
-	private var clearedNodes:Array<Node> = [];
 	private var unitControlTypes: Array<ActorControlTypes> = [ActorControlTypes.ATTACK,
 		ActorControlTypes.STOP,
 		ActorControlTypes.MOVE, 
@@ -259,7 +259,7 @@ class Unit extends BaseActor
 		}
 	}
 	
-	private function clearFogOfWar(node:Node)
+	public function clearFogOfWar(node:Node)
 	{
 		var n;
 		var distance:Float;
@@ -279,12 +279,6 @@ class Unit extends BaseActor
 				}
 			}
 		}
-	}
-	override public function update() 
-	{
-		super.update();
-		clearedNodes = [];
-		clearFogOfWar(currentNodes[0]);
 	}
 	
 	override public function resetStates():Void 
