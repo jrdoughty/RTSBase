@@ -73,6 +73,7 @@ class SelfLoadingLevel extends FlxGroup
 					pass = collisionLayer.data[i] == 0;
 					Node.activeNodes.push(new Node(asset, frame,tiledLevel.tilewidth,tiledLevel.tileheight, x, y, pass));
 					add(Node.activeNodes[i]);
+					add(Node.activeNodes[i].overlay);
 				}
 				Node.createNeighbors(width, height);
 				break;
