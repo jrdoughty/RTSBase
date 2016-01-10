@@ -128,7 +128,7 @@ class InputHandler
 	
 	public function update()
 	{
-		cameraUpdate();
+		//cameraUpdate();
 		if (FlxG.keys.pressed.M)
 		{
 			move();

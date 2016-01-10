@@ -58,7 +58,7 @@ class BaseState extends FlxState implements IGameState
 	private function setupCameras()
 	{
 		var level = getLevel();
-		FlxG.camera.setBounds(0, 0, level.width * level.tiledLevel.tilewidth, level.height * level.tiledLevel.tileheight);
+		//FlxG.camera.setBounds(0, 0, level.width * level.tiledLevel.tilewidth, level.height * level.tiledLevel.tileheight);
 		/*
 		#if flash
 		dashCam = new FlxCamera(0, 684, 320, 56);
@@ -142,5 +142,9 @@ class BaseState extends FlxState implements IGameState
 		super.update();
 	
 		inputHandler.update();
+		for (actor in activeTeam.flxUnits.members)
+		{
+			
+		}
 	}
 }
