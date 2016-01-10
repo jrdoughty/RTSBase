@@ -56,6 +56,7 @@ class BaseActor extends FlxSprite
 	private var healthMax:Int = 8;
 	private var healthBar:FlxSprite;
 	private var healthBarFill:FlxSprite;
+	private var viewRange:Int = 2;
 	
 	public function new(node:Node) 
 	{

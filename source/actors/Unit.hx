@@ -25,6 +25,7 @@ class Unit extends BaseActor
 	private	var path:Array<Node> = [];
 	private var failedToMove:Bool = false;
 	private var aggressive:Bool = false;
+	private var clearedNodes:Array<Node> = [];
 	private var unitControlTypes: Array<ActorControlTypes> = [ActorControlTypes.ATTACK,
 		ActorControlTypes.STOP,
 		ActorControlTypes.MOVE, 
@@ -39,9 +40,8 @@ class Unit extends BaseActor
 		var i:Int;
 		data = systems.Data;//hack
 		unitData = data.Actors.get(unitID);//supposedly Actors doesn't have get
-		
 		super(node);
-		
+		viewRange = 5;
 		for (i in 0...3)
 		{
 			controls.push(new Control(i, unitControlTypes[i]));
@@ -257,6 +257,34 @@ class Unit extends BaseActor
 		{
 			chase();
 		}
+	}
+	
+	private function clearFogOfWar(node:Node)
+	{
+		var n;
+		var distance:Float;
+		for (n in node.neighbors)
+		{
+			if (clearedNodes.indexOf(n) == -1)
+			{
+				distance = Math.sqrt(Math.pow(Math.abs(currentNodes[0].nodeX - n.nodeX), 2) + Math.pow(Math.abs(currentNodes[0].nodeY - n.nodeY), 2));
+				if (distance <= viewRange)
+				{
+					n.removeOverlay();
+					clearedNodes.push(n);
+					if (distance < viewRange)
+					{
+						clearFogOfWar(n);
+					}
+				}
+			}
+		}
+	}
+	override public function update() 
+	{
+		super.update();
+		clearedNodes = [];
+		clearFogOfWar(currentNodes[0]);
 	}
 	
 	override public function resetStates():Void 

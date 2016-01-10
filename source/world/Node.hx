@@ -40,7 +40,7 @@ class Node extends FlxSprite
 		nodeY = Y;
 		loadGraphic(asset, false, width, height);
 		overlay.loadGraphic(asset, false, width, height);
-		overlay.animation.frameIndex = 6;
+		overlay.animation.frameIndex = 3;
 		overlay.alpha = .5;
 		
 		animation.add("main",[frame],0,false);
@@ -81,6 +81,16 @@ class Node extends FlxSprite
 		}
         return result;
     }
+	
+	public function removeOverlay()
+	{
+		overlay.alpha = 0;
+	}
+	
+	public function addOverlay()
+	{
+		overlay.alpha = .5;
+	}
 	
     public function getAllNodes(widthToGo:Int, heightToGo:Int):Array<Node>
     {
