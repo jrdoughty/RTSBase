@@ -41,7 +41,7 @@ class Unit extends BaseActor
 		data = systems.Data;//hack
 		unitData = data.Actors.get(unitID);//supposedly Actors doesn't have get
 		super(node);
-		viewRange = 5;
+		viewRange = 4;
 		for (i in 0...3)
 		{
 			controls.push(new Control(i, unitControlTypes[i]));
@@ -272,7 +272,7 @@ class Unit extends BaseActor
 				{
 					n.removeOverlay();
 					clearedNodes.push(n);
-					if (distance < viewRange)
+					if (distance < viewRange && n.isPassible())
 					{
 						clearFogOfWar(n);
 					}
