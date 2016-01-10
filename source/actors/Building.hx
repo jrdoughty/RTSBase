@@ -28,6 +28,8 @@ class Building extends BaseActor
 		
 		super(node);
 		
+		viewRange = buildingData.viewRange;
+		
 		healthMax = buildingData.health;
 		for (i in 0...buildingData.units.length)
 		{

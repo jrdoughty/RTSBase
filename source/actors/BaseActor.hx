@@ -46,6 +46,7 @@ class BaseActor extends FlxSprite
 	public var damage:Int = 1;
 	public var controls:Array<Control> = [];
 	public var idleFrame:Int = 0;
+	public var clearedNodes:Array<Node> = [];
 	
 	private var lastTargetNode:Node;
 	private var selected:Bool = false;
@@ -177,4 +178,28 @@ class BaseActor extends FlxSprite
 			targetEnemy = null;
 		}
 	}
+	
+	
+	public function clearFogOfWar(node:Node)
+	{
+		var n;
+		var distance:Float;
+		for (n in node.neighbors)
+		{
+			if (clearedNodes.indexOf(n) == -1)
+			{
+				distance = Math.sqrt(Math.pow(Math.abs(currentNodes[0].nodeX - n.nodeX), 2) + Math.pow(Math.abs(currentNodes[0].nodeY - n.nodeY), 2));
+				if (distance <= viewRange)
+				{
+					n.removeOverlay();
+					clearedNodes.push(n);
+					if (distance < viewRange && n.isPassible())
+					{
+						clearFogOfWar(n);
+					}
+				}
+			}
+		}
+	}
+	
 }

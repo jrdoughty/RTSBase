@@ -30,6 +30,10 @@
 				{
 					"typeStr": "13",
 					"name": "spriteFile"
+				},
+				{
+					"typeStr": "3",
+					"name": "viewRange"
 				}
 			],
 			"lines": [
@@ -39,7 +43,8 @@
 					"id": "SoldierSword",
 					"health": 8,
 					"damage": 1,
-					"spriteFile": "../images/swordSoldier.png"
+					"spriteFile": "../images/swordSoldier.png",
+					"viewRange": 4
 				},
 				{
 					"id": "SoldierSpear",
@@ -47,7 +52,8 @@
 					"speed": 250,
 					"health": 9,
 					"damage": 1,
-					"spriteFile": "../images/spearSoldier.png"
+					"spriteFile": "../images/spearSoldier.png",
+					"viewRange": 4
 				},
 				{
 					"id": "DevilWhip",
@@ -55,7 +61,8 @@
 					"speed": 200,
 					"spriteFile": "../images/devilwhip.png",
 					"health": 4,
-					"damage": 2
+					"damage": 2,
+					"viewRange": 4
 				},
 				{
 					"id": "DevilSpear",
@@ -63,7 +70,8 @@
 					"speed": 225,
 					"spriteFile": "../images/devilspear.png",
 					"health": 7,
-					"damage": 1
+					"damage": 1,
+					"viewRange": 4
 				},
 				{
 					"id": "LizardClaw",
@@ -71,7 +79,8 @@
 					"speed": 200,
 					"spriteFile": "../images/lizardclaw.png",
 					"health": 9,
-					"damage": 1
+					"damage": 1,
+					"viewRange": 3
 				},
 				{
 					"id": "LizardSpear",
@@ -79,7 +88,8 @@
 					"speed": 250,
 					"spriteFile": "../images/lizardspear.png",
 					"health": 9,
-					"damage": 1
+					"damage": 1,
+					"viewRange": 4
 				},
 				{
 					"id": "OrcClub",
@@ -87,7 +97,8 @@
 					"speed": 300,
 					"spriteFile": "../images/orcclub.png",
 					"health": 8,
-					"damage": 2
+					"damage": 2,
+					"viewRange": 3
 				},
 				{
 					"id": "OrcAxe",
@@ -95,7 +106,8 @@
 					"speed": 250,
 					"spriteFile": "../images/orcaxe.png",
 					"health": 7,
-					"damage": 1
+					"damage": 1,
+					"viewRange": 3
 				},
 				{
 					"id": "Wizard",
@@ -103,7 +115,8 @@
 					"speed": 300,
 					"spriteFile": "../images/wizard.png",
 					"health": 5,
-					"damage": 3
+					"damage": 3,
+					"viewRange": 4
 				}
 			],
 			"separators": [],
@@ -139,6 +152,11 @@
 					"typeStr": "13",
 					"name": "spriteFile",
 					"display": null
+				},
+				{
+					"typeStr": "3",
+					"name": "viewRange",
+					"display": null
 				}
 			],
 			"lines": [
@@ -162,7 +180,8 @@
 						{
 							"unit": "SoldierSpear"
 						}
-					]
+					],
+					"viewRange": 7
 				}
 			],
 			"separators": [],

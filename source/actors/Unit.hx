@@ -19,7 +19,6 @@ class Unit extends BaseActor
 {
 		
 	public var targetNode(default, null):Node;
-	public var clearedNodes:Array<Node> = [];
 	
 	private var data:Dynamic;
 	private var unitData:Dynamic;
@@ -41,7 +40,6 @@ class Unit extends BaseActor
 		data = systems.Data;//hack
 		unitData = data.Actors.get(unitID);//supposedly Actors doesn't have get
 		super(node);
-		viewRange = 4;
 		for (i in 0...3)
 		{
 			controls.push(new Control(i, unitControlTypes[i]));
@@ -50,6 +48,7 @@ class Unit extends BaseActor
 		healthMax = unitData.health;
 		speed = unitData.speed;
 		damage = unitData.damage;
+		viewRange = unitData.viewRange;
 	}
 	
 	override function setupGraphics() 
@@ -256,28 +255,6 @@ class Unit extends BaseActor
 		else if (state == CHASING)
 		{
 			chase();
-		}
-	}
-	
-	public function clearFogOfWar(node:Node)
-	{
-		var n;
-		var distance:Float;
-		for (n in node.neighbors)
-		{
-			if (clearedNodes.indexOf(n) == -1)
-			{
-				distance = Math.sqrt(Math.pow(Math.abs(currentNodes[0].nodeX - n.nodeX), 2) + Math.pow(Math.abs(currentNodes[0].nodeY - n.nodeY), 2));
-				if (distance <= viewRange)
-				{
-					n.removeOverlay();
-					clearedNodes.push(n);
-					if (distance < viewRange && n.isPassible())
-					{
-						clearFogOfWar(n);
-					}
-				}
-			}
 		}
 	}
 	

@@ -42,6 +42,7 @@ class BaseState extends FlxState implements IGameState
 	private var inputHandler:InputHandler;
 	private var activeLevel:SelfLoadingLevel = null;
 	private var levelAssetPath:String = "";
+	private var positions:Array<Array<Int>> = [];
 	//private var dashCam:FlxCamera;
 	
 	override public function create():Void
@@ -134,8 +135,6 @@ class BaseState extends FlxState implements IGameState
 	{
 		super.destroy();
 	}
-
-	private var positions:Array<Array<Int>> = [];
 	
 	/**
 	 * Function that is called once every frame.
@@ -156,6 +155,14 @@ class BaseState extends FlxState implements IGameState
 				node.addOverlay();
 			}
 			for (actor in activeTeam.flxUnits.members)
+			{
+				if (actor.alive)
+				{
+					actor.clearedNodes = [];
+					actor.clearFogOfWar(actor.currentNodes[0]);
+				}
+			}
+			for (actor in activeTeam.flxBuildings.members)
 			{
 				if (actor.alive)
 				{
