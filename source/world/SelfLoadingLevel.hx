@@ -9,7 +9,7 @@ import openfl.Assets;
 import flixel.FlxG;
 import openfl.geom.Rectangle;
 import openfl.geom.Point;
-
+import openfl.display.BitmapData;
 
 /**
  * ...
@@ -24,6 +24,7 @@ class SelfLoadingLevel extends FlxGroup
 	
 	public var tiledLevel(default,null):TiledLevel;
 	
+	private var background:FlxSprite;
 	private var selectedNode:Node;
 	
 	public function new(json:String) 
@@ -46,6 +47,9 @@ class SelfLoadingLevel extends FlxGroup
 		
 		width = tiledLevel.width;
 		height = tiledLevel.height;
+		background = new FlxSprite();
+		background.pixels = new BitmapData(Std.int(width * tiledLevel.tilewidth), height * tiledLevel.tileheight, true, 0xFFFFFF);
+		add(background);
 		for (i in 0...tiledLevel.layers.length)
 		{
 			if (tiledLevel.layers[i].name == "graphic")
@@ -81,7 +85,6 @@ class SelfLoadingLevel extends FlxGroup
 					background.frame.destroyBitmapDatas();
 					background.dirty = true;
 				}
-				add(background);
 				Node.createNeighbors(width, height);
 				break;
 			}
@@ -96,5 +99,4 @@ class SelfLoadingLevel extends FlxGroup
 			}
 		}
 	}	
-	var background:FlxSprite = new FlxSprite(0,0);
 }
