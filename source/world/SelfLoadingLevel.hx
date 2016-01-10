@@ -7,6 +7,8 @@ import world.TiledTypes.Layer;
 import world.TiledTypes.TiledLevel;
 import openfl.Assets;
 import flixel.FlxG;
+import openfl.geom.Rectangle;
+import openfl.geom.Point;
 
 
 /**
@@ -72,8 +74,14 @@ class SelfLoadingLevel extends FlxGroup
 					y = Math.floor(i / width);
 					pass = collisionLayer.data[i] == 0;
 					Node.activeNodes.push(new Node(asset, frame,tiledLevel.tilewidth,tiledLevel.tileheight, x, y, pass));
-					add(Node.activeNodes[i]);
+					
+					var sourceRect:Rectangle = new Rectangle(0, 0, Node.activeNodes[i].width, Node.activeNodes[i].height);
+					var destPoint:Point = new Point(Std.int(Node.activeNodes[i].x), Node.activeNodes[i].y);
+					background.pixels.copyPixels(Node.activeNodes[i].getFlxFrameBitmapData(), sourceRect, destPoint, null, null, true);
+					background.frame.destroyBitmapDatas();
+					background.dirty = true;
 				}
+				add(background);
 				Node.createNeighbors(width, height);
 				break;
 			}
@@ -87,7 +95,6 @@ class SelfLoadingLevel extends FlxGroup
 				}
 			}
 		}
-		
-		
 	}	
+	var background:FlxSprite = new FlxSprite(0,0);
 }
