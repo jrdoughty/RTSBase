@@ -7,7 +7,9 @@ import world.TiledTypes.Layer;
 import world.TiledTypes.TiledLevel;
 import openfl.Assets;
 import flixel.FlxG;
-
+import openfl.geom.Rectangle;
+import openfl.geom.Point;
+import openfl.display.BitmapData;
 
 /**
  * ...
@@ -22,6 +24,7 @@ class SelfLoadingLevel extends FlxGroup
 	
 	public var tiledLevel(default,null):TiledLevel;
 	
+	private var background:FlxSprite;
 	private var selectedNode:Node;
 	
 	public function new(json:String) 
@@ -44,6 +47,9 @@ class SelfLoadingLevel extends FlxGroup
 		
 		width = tiledLevel.width;
 		height = tiledLevel.height;
+		background = new FlxSprite();
+		background.pixels = new BitmapData(Std.int(width * tiledLevel.tilewidth), height * tiledLevel.tileheight, true, 0xFFFFFF);
+		add(background);
 		for (i in 0...tiledLevel.layers.length)
 		{
 			if (tiledLevel.layers[i].name == "graphic")
@@ -72,7 +78,12 @@ class SelfLoadingLevel extends FlxGroup
 					y = Math.floor(i / width);
 					pass = collisionLayer.data[i] == 0;
 					Node.activeNodes.push(new Node(asset, frame,tiledLevel.tilewidth,tiledLevel.tileheight, x, y, pass));
-					add(Node.activeNodes[i]);
+					
+					var sourceRect:Rectangle = new Rectangle(0, 0, Node.activeNodes[i].width, Node.activeNodes[i].height);
+					var destPoint:Point = new Point(Std.int(Node.activeNodes[i].x), Node.activeNodes[i].y);
+					background.pixels.copyPixels(Node.activeNodes[i].getFlxFrameBitmapData(), sourceRect, destPoint, null, null, true);
+					background.frame.destroyBitmapDatas();
+					background.dirty = true;
 					add(Node.activeNodes[i].overlay);
 				}
 				Node.createNeighbors(width, height);
@@ -88,7 +99,5 @@ class SelfLoadingLevel extends FlxGroup
 				}
 			}
 		}
-		
-		
 	}	
 }
