@@ -34,6 +34,10 @@
 				{
 					"typeStr": "3",
 					"name": "viewRange"
+				},
+				{
+					"typeStr": "3",
+					"name": "cost"
 				}
 			],
 			"lines": [
@@ -44,7 +48,8 @@
 					"health": 8,
 					"damage": 1,
 					"spriteFile": "../images/swordSoldier.png",
-					"viewRange": 4
+					"viewRange": 4,
+					"cost": 75
 				},
 				{
 					"id": "SoldierSpear",
@@ -53,7 +58,8 @@
 					"health": 9,
 					"damage": 1,
 					"spriteFile": "../images/spearSoldier.png",
-					"viewRange": 4
+					"viewRange": 4,
+					"cost": 50
 				},
 				{
 					"id": "DevilWhip",
@@ -62,7 +68,8 @@
 					"spriteFile": "../images/devilwhip.png",
 					"health": 4,
 					"damage": 2,
-					"viewRange": 4
+					"viewRange": 4,
+					"cost": 50
 				},
 				{
 					"id": "DevilSpear",
@@ -71,7 +78,8 @@
 					"spriteFile": "../images/devilspear.png",
 					"health": 7,
 					"damage": 1,
-					"viewRange": 4
+					"viewRange": 4,
+					"cost": 50
 				},
 				{
 					"id": "LizardClaw",
@@ -80,7 +88,8 @@
 					"spriteFile": "../images/lizardclaw.png",
 					"health": 9,
 					"damage": 1,
-					"viewRange": 3
+					"viewRange": 3,
+					"cost": 80
 				},
 				{
 					"id": "LizardSpear",
@@ -89,7 +98,8 @@
 					"spriteFile": "../images/lizardspear.png",
 					"health": 9,
 					"damage": 1,
-					"viewRange": 4
+					"viewRange": 4,
+					"cost": 60
 				},
 				{
 					"id": "OrcClub",
@@ -98,7 +108,8 @@
 					"spriteFile": "../images/orcclub.png",
 					"health": 8,
 					"damage": 2,
-					"viewRange": 3
+					"viewRange": 3,
+					"cost": 60
 				},
 				{
 					"id": "OrcAxe",
@@ -107,7 +118,8 @@
 					"spriteFile": "../images/orcaxe.png",
 					"health": 7,
 					"damage": 1,
-					"viewRange": 3
+					"viewRange": 3,
+					"cost": 45
 				},
 				{
 					"id": "Wizard",
@@ -116,7 +128,8 @@
 					"spriteFile": "../images/wizard.png",
 					"health": 5,
 					"damage": 3,
-					"viewRange": 4
+					"viewRange": 4,
+					"cost": 100
 				}
 			],
 			"separators": [],
