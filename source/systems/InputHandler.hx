@@ -309,7 +309,7 @@ class InputHandler
 	private function moveToNode(selector:FlxObject,node:Node):Void
 	{
 		var i:Int;
-		if (selectedUnits.length > 0 && node.isPassible() && (node.occupant == null || node.occupant.team != activeState.activeTeam.id))
+		if (selectedUnits.length > 0 && node.isPassible() && (node.occupant == null || node.occupant.team.id != activeState.activeTeam.id))
 		{
 			for (i in 0...selectedUnits.length)
 			{
@@ -328,7 +328,7 @@ class InputHandler
 				selectedUnits[i].AttackToNode(node);
 			}
 		}
-		else if (node.occupant != null && node.occupant.team != activeState.activeTeam.id)
+		else if (node.occupant != null && node.occupant.team.id != activeState.activeTeam.id)
 		{
 			for (i in 0...selectedUnits.length)
 			{

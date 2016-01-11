@@ -40,7 +40,9 @@ class Building extends BaseActor
 	
 	private function createUnit()
 	{
-		FlxG.state.add(new Unit(data.Actors.get(unitsToProduce[0]).id,Node.getNodeByGridXY(5,5)));
+		var newUnit:Unit = new Unit(data.Actors.get(unitsToProduce[0]).id, Node.getNodeByGridXY(5, 5));
+		team.addUnit(newUnit);
+		FlxG.state.add(newUnit);
 	}
 	
 	override function setupGraphics() 

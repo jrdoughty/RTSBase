@@ -150,7 +150,7 @@ class BaseState extends FlxState implements IGameState
 		{
 			newPositions.push([actor.currentNodes[0].nodeX, actor.currentNodes[0].nodeY]);
 		}
-		if (positions.toString() != newPositions.toString() && frame % fogRedrawFrame == 0)//this is currently a heavy load, so we are making it happen once in a few frames
+		if (positions.toString() != newPositions.toString())// fast units mess this up && frame % fogRedrawFrame == 0)//this is currently a heavy load, so we are making it happen once in a few frames
 		{
 			for (node in Node.activeNodes)
 			{

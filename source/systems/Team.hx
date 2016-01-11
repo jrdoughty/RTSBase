@@ -27,13 +27,13 @@ class Team
 	{
 		units.push(unit);
 		flxUnits.add(unit);
-		unit.team = id;
+		unit.team = this;
 	}
 	
 	public function addBuilding(building:BaseActor):Void
 	{
 		buildings.push(building);
 		flxBuildings.add(building);
-		building.team = id;
+		building.team = this;
 	}
 }

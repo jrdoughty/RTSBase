@@ -283,7 +283,7 @@ class Unit extends BaseActor
 		for (i in 0...currentNodes[0].neighbors.length)
 		{
 			if (currentNodes[0].neighbors[i].occupant == targetEnemy && currentNodes[0].neighbors[i].occupant != null || //if your target is close
-			targetEnemy == null && currentNodes[0].neighbors[i].occupant != null && currentNodes[0].neighbors[i].occupant.team != team) // if you are near an enemy with no target of your own
+			targetEnemy == null && currentNodes[0].neighbors[i].occupant != null && currentNodes[0].neighbors[i].occupant.team.id != team.id) // if you are near an enemy with no target of your own
 			{
 				inRange = true;
 				break;
@@ -299,7 +299,7 @@ class Unit extends BaseActor
 		var i:Int;
 		for (i in 0...currentNodes[0].neighbors.length)
 		{
-			if (currentNodes[0].neighbors[i].occupant != null && currentNodes[0].neighbors[i].occupant.team != team)
+			if (currentNodes[0].neighbors[i].occupant != null && currentNodes[0].neighbors[i].occupant.team.id != team.id)
 			{
 				result = currentNodes[0].neighbors[i].occupant;
 				break;
