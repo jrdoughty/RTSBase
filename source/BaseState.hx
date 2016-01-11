@@ -43,6 +43,8 @@ class BaseState extends FlxState implements IGameState
 	private var activeLevel:SelfLoadingLevel = null;
 	private var levelAssetPath:String = "";
 	private var positions:Array<Array<Int>> = [];
+	private var fogRedrawFrame:Int = 2;
+	private var frame:Int = 0;
 	//private var dashCam:FlxCamera;
 	
 	override public function create():Void
@@ -148,7 +150,7 @@ class BaseState extends FlxState implements IGameState
 		{
 			newPositions.push([actor.currentNodes[0].nodeX, actor.currentNodes[0].nodeY]);
 		}
-		if (positions.toString() != newPositions.toString())
+		if (positions.toString() != newPositions.toString() && frame % fogRedrawFrame == 0)//this is currently a heavy load, so we are making it happen once in a few frames
 		{
 			for (node in Node.activeNodes)
 			{
@@ -173,5 +175,6 @@ class BaseState extends FlxState implements IGameState
 			getLevel().rebuildFog();
 		}
 		positions = newPositions;
+		frame++;
 	}
 }
