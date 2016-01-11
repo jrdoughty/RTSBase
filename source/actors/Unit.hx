@@ -7,6 +7,8 @@ import flixel.tweens.FlxTween;
 import dashboard.Control;
 import actors.BaseActor.ActorControlTypes;
 import actors.BaseActor.ActorState;
+import systems.Data;
+import openfl.Assets;
 /**
  * ...
  * @author ...
@@ -16,7 +18,10 @@ import actors.BaseActor.ActorState;
 class Unit extends BaseActor
 {
 		
-	public var targetNode(default,null):Node;
+	public var targetNode(default, null):Node;
+	
+	private var data:Dynamic;
+	private var unitData:Dynamic;
 	private	var path:Array<Node> = [];
 	private var failedToMove:Bool = false;
 	private var aggressive:Bool = false;
@@ -29,17 +34,33 @@ class Unit extends BaseActor
 		ActorControlTypes.HOLD];
 	
 	
-	public function new(node:Node, state:IGameState) 
+	public function new(unitID:String, node:Node) 
 	{
 		var i:Int;
-		super(node, state);
+		data = systems.Data;//hack
+		unitData = data.Actors.get(unitID);//supposedly Actors doesn't have get
+		super(node);
 		for (i in 0...3)
 		{
 			controls.push(new Control(i, unitControlTypes[i]));
 		}
 		
+		healthMax = unitData.health;
+		speed = unitData.speed;
+		damage = unitData.damage;
+		viewRange = unitData.viewRange;
 	}
 	
+	override function setupGraphics() 
+	{
+		var assetPath:String = "assets" + unitData.spriteFile.substr(2);
+		super.setupGraphics();
+		
+		loadGraphic(assetPath, true, 8, 8);
+		animation.add("active", [0, 1], 5, true);
+		animation.add("attack", [0, 2], 5, true);
+		idleFrame = 0;
+	}
 	
 	public function MoveToNode(node:Node)
 	{

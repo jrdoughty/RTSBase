@@ -28,15 +28,21 @@ class Node extends FlxSprite
 	public var heiristic:Int = -1;
 	public var nodeX:Int;
 	public var nodeY:Int;
+	public var overlay:FlxSprite;
 	
 	private var passable:Bool = true;
 	
 	public function new(asset:String, frame:Int, width:Int, height, X:Int = 0, Y:Int = 0, pass:Bool = true ) 
 	{
 		super(X * width, Y * height);
+		overlay = new FlxSprite(X * width, Y * height);
 		nodeX = X;
 		nodeY = Y;
 		loadGraphic(asset, false, width, height);
+		overlay.loadGraphic(asset, false, width, height);
+		overlay.animation.frameIndex = 6;
+		overlay.alpha = .5;
+		
 		animation.add("main",[frame],0,false);
 		animation.add("clicked",[9],0,false);
 		animation.play("main");
@@ -75,6 +81,24 @@ class Node extends FlxSprite
 		}
         return result;
     }
+	
+	public function removeOverlay()
+	{
+		overlay.alpha = 0;
+		if (occupant != null)
+		{
+			occupant.makeVisible();
+		}
+	}
+	
+	public function addOverlay()
+	{
+		overlay.alpha = .5;
+		if (occupant != null)
+		{
+			occupant.killVisibility();
+		}
+	}
 	
     public function getAllNodes(widthToGo:Int, heightToGo:Int):Array<Node>
     {

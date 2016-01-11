@@ -1,6 +1,7 @@
 package systems;
 import actors.BaseActor;
 import actors.Unit;
+import actors.Building;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
@@ -8,6 +9,7 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.plugin.MouseEventManager;
 import flixel.util.FlxColor;
+import haxe.Constraints.Function;
 import interfaces.IGameState;
 import flixel.FlxCamera;
 import dashboard.Control;
@@ -33,7 +35,9 @@ class InputHandler
 	
 	private var flxTeamUnits:FlxGroup = new FlxGroup();
 	private var flxActiveTeamUnits:FlxGroup = new FlxGroup();
+	private var flxActiveTeamBuildings:FlxGroup = new FlxGroup();
 	private var selectedUnits:Array<Unit> = [];
+	private var selectedBuildings:Array<Building> = [];
 	private var flxNodes:FlxGroup = new FlxGroup();
 	private var nodes:Array<Node>;
 	private var selector:FlxSprite;
@@ -59,6 +63,7 @@ class InputHandler
 			flxTeamUnits.add(activeState.Teams[i].flxUnits);
 		}
 		flxActiveTeamUnits.add(activeState.activeTeam.flxUnits);
+		flxActiveTeamBuildings.add(activeState.activeTeam.flxBuildings);
 	}
 	
 	private function onOver(sprite:Node):Void
@@ -90,7 +95,12 @@ class InputHandler
 		var i:Int;
 		for (i in 0...controls.length)
 		{
-			if (controls[i].type == ActorControlTypes.MOVE)
+			if (controls[i].callbackFunction != null)
+			{
+				var func:Function = controls[i].callbackFunction;
+				MouseEventManager.add(controls[i], null, controls[i].useCallback, controls[i].hover, controls[i].out, false, true, false);
+			}
+			else if (controls[i].type == ActorControlTypes.MOVE)
 			{
 				MouseEventManager.add(controls[i], null, move, controls[i].hover, controls[i].out, false, true, false);
 			}
@@ -106,9 +116,19 @@ class InputHandler
 		}
 	}
 	
+	private function move(sprite:FlxSprite = null)
+	{
+		inputState = MOVING;
+	}
+	
+	private function attack(sprite:FlxSprite = null)
+	{
+		inputState = ATTACKING;
+	}
+	
 	public function update()
 	{
-		cameraUpdate();
+		//cameraUpdate();
 		if (FlxG.keys.pressed.M)
 		{
 			move();
@@ -225,8 +245,11 @@ class InputHandler
 			{
 					if (FlxG.overlap(selector, flxActiveTeamUnits, selectOverlapUnits) == false)
 					{
-						activeState.dashboard.clearDashBoard();//Select Enemies later
-					}
+						if (FlxG.overlap(selector, flxActiveTeamBuildings, selectOverlapBuildings) == false)
+						{
+							activeState.dashboard.clearDashBoard();//Select Enemies later
+						}
+					} 
 			}
 			else if (inputState == MOVING)
 			{			
@@ -267,16 +290,6 @@ class InputHandler
 		}
 		activeState.remove(selector);
 		selector = null;
-	}
-	
-	private function move(sprite:FlxSprite = null)
-	{
-		inputState = MOVING;
-	}
-	
-	private function attack(sprite:FlxSprite = null)
-	{
-		inputState = ATTACKING;
 	}
 	
 	private function stop(sprite:FlxSprite = null)
@@ -335,33 +348,53 @@ class InputHandler
 		}
 	}
 	
-	private function selectOverlapUnits(selector:FlxObject, unit:Unit):Void
-	{
-		if (newLeftClick)
-		{
-			deselectUnits();
-			selectedUnits = [];
-			activeState.dashboard.clearDashBoard();
-			activeState.dashboard.setSelected(unit);
-		}
-		activeState.dashboard.addSelectedUnit(unit);
-		selectedUnits.push(unit);
-		unit.select();
-		newLeftClick = false;
-	}
-	
-	private function deselectUnits():Void
+	private function clearSelected()
 	{
 		var i:Int;
 		for (i in 0...selectedUnits.length)
 		{
 			selectedUnits[i].resetSelect();
 		}
+		for (i in 0...selectedBuildings.length)
+		{
+			//selectedBuildings[i].resetSelect();
+		}
+		selectedUnits = [];
+		selectedBuildings = [];
+		activeState.dashboard.clearDashBoard();
+	}
+	
+	private function selectOverlapUnits(selector:FlxObject, unit:Unit):Void
+	{
+		if (newLeftClick)
+		{
+			clearSelected();
+			activeState.dashboard.setSelected(unit);
+		}
+		activeState.dashboard.addSelectedActor(unit);
+		selectedUnits.push(unit);
+		unit.select();
+		newLeftClick = false;
+	}
+	
+	private function selectOverlapBuildings(selector:FlxObject, building:Building):Void
+	{
+		if (newLeftClick)
+		{
+			clearSelected();
+			activeState.dashboard.setSelected(building);
+		}
+		activeState.dashboard.addSelectedActor(building);
+		selectedBuildings.push(building);
+		building.select();
+		newLeftClick = false;
 	}
 	
 	
 	private function cameraUpdate()
 	{
+		var scrollX = FlxG.camera.scroll.x;
+		var scrollY = FlxG.camera.scroll.y;
 		if (FlxG.mouse.x - FlxG.camera.scroll.x > FlxG.camera.width - FlxG.camera.width/10)
 		{
 			FlxG.camera.scroll.x += 2;
@@ -378,6 +411,11 @@ class InputHandler
 		else if (FlxG.mouse.y - FlxG.camera.scroll.y < FlxG.camera.width/10)
 		{
 			FlxG.camera.scroll.y -= 2;
+		}
+		
+		if ((scrollX != FlxG.camera.scroll.x || scrollY != FlxG.camera.scroll.y) && FlxG.camera.scroll.y >= 0)
+		{
+			activeState.dashboard.adjustPos(FlxG.camera.scroll.x, FlxG.camera.scroll.y);
 		}
 	}
 	

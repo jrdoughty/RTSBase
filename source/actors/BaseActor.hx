@@ -33,6 +33,7 @@ enum ActorControlTypes
 	CAST;
 	BUILD;
 	HOLD;
+	PRODUCE;
 }
  
  
@@ -45,6 +46,7 @@ class BaseActor extends FlxSprite
 	public var damage:Int = 1;
 	public var controls:Array<Control> = [];
 	public var idleFrame:Int = 0;
+	public var clearedNodes:Array<Node> = [];
 	
 	private var lastTargetNode:Node;
 	private var selected:Bool = false;
@@ -55,11 +57,10 @@ class BaseActor extends FlxSprite
 	private var healthMax:Int = 8;
 	private var healthBar:FlxSprite;
 	private var healthBarFill:FlxSprite;
-	private var activeState:IGameState;
+	private var viewRange:Int = 2;
 	
-	public function new(node:Node, state:IGameState) 
+	public function new(node:Node) 
 	{
-		activeState = state;
 		super(node.x, node.y);
 		
 		delayTimer = new Timer(Math.floor(1000*Math.random()));//Keeps mass created units from updating at the exact same time. Idea from: http://answers.unity3d.com/questions/419786/a-pathfinding-multiple-enemies-MOVING-target-effic.html
@@ -69,10 +70,28 @@ class BaseActor extends FlxSprite
 		createHealthBar();
 	}
 	
+	public function killVisibility()
+	{
+		visible = false;
+		healthBar.visible = false;
+		healthBarFill.visible = false;
+	}
+	
+	public function makeVisible()
+	{
+		visible = true;
+		healthBar.visible = true;
+		healthBarFill.visible = true;
+	}
+	
 	private function setupNodes(node:Node)
 	{
-		node.occupant = this;
-		currentNodes[0] = node;
+		currentNodes = node.getAllNodes(Std.int(width / 8) - 1, Std.int(height / 8) - 1);
+		
+		for (i in 0...currentNodes.length)
+		{
+			currentNodes[i].occupant = this;
+		}
 	}
 	
 	private function setupGraphics()
@@ -85,10 +104,10 @@ class BaseActor extends FlxSprite
 		health = 1;
 		healthBar = new FlxSprite(x, y - 1);
 		healthBar.makeGraphic(Std.int(width), 1, FlxColor.BLACK);
-		activeState.add(healthBar);
+		FlxG.state.add(healthBar);
 		healthBarFill = new FlxSprite(x, y - 1);
 		healthBarFill.makeGraphic(Std.int(width), 1, FlxColor.RED);
-		activeState.add(healthBarFill);		
+		FlxG.state.add(healthBarFill);		
 	}
 	private function delayedStart()
 	{
@@ -144,9 +163,9 @@ class BaseActor extends FlxSprite
 		resetStates();
 		currentNodes[0].occupant = null;
 		actionTimer.stop();
-		activeState.remove(healthBar);
-		activeState.remove(healthBarFill);
-		activeState.remove(this);
+		FlxG.state.remove(healthBar);
+		FlxG.state.remove(healthBarFill);
+		FlxG.state.remove(this);
 		destroy();
 	}
 	
@@ -159,4 +178,28 @@ class BaseActor extends FlxSprite
 			targetEnemy = null;
 		}
 	}
+	
+	
+	public function clearFogOfWar(node:Node)
+	{
+		var n;
+		var distance:Float;
+		for (n in node.neighbors)
+		{
+			if (clearedNodes.indexOf(n) == -1)
+			{
+				distance = Math.sqrt(Math.pow(Math.abs(currentNodes[0].nodeX - n.nodeX), 2) + Math.pow(Math.abs(currentNodes[0].nodeY - n.nodeY), 2));
+				if (distance <= viewRange)
+				{
+					n.removeOverlay();
+					clearedNodes.push(n);
+					if (distance < viewRange && n.isPassible())
+					{
+						clearFogOfWar(n);
+					}
+				}
+			}
+		}
+	}
+	
 }

@@ -1,8 +1,6 @@
 package ;
 
 import actors.BaseActor;
-import actors.Devil;
-import actors.Soldier;
 import dashboard.Dashboard;
 import flixel.FlxCamera;
 import flixel.FlxG;
@@ -24,6 +22,7 @@ import world.TiledTypes;
 import openfl.Assets;
 import flixel.plugin.MouseEventManager;
 import actors.Unit;
+import openfl.geom.Point;
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -43,7 +42,10 @@ class BaseState extends FlxState implements IGameState
 	private var inputHandler:InputHandler;
 	private var activeLevel:SelfLoadingLevel = null;
 	private var levelAssetPath:String = "";
-	private var dashCam:FlxCamera;
+	private var positions:Array<Array<Int>> = [];
+	private var fogRedrawFrame:Int = 2;
+	private var frame:Int = 0;
+	//private var dashCam:FlxCamera;
 	
 	override public function create():Void
 	{
@@ -60,14 +62,15 @@ class BaseState extends FlxState implements IGameState
 	private function setupCameras()
 	{
 		var level = getLevel();
-		FlxG.camera.setBounds(0, 0, level.width * level.tiledLevel.tilewidth, level.height * level.tiledLevel.tileheight);
+		//FlxG.camera.setBounds(0, 0, level.width * level.tiledLevel.tilewidth, level.height * level.tiledLevel.tileheight);
+		/*
 		#if flash
 		dashCam = new FlxCamera(0, 684, 320, 56);
 		#else
 		dashCam = new FlxCamera(0, 370, 320, 56);
 		#end
 		dashCam.scroll.x = dashboard.background.x;
-		FlxG.cameras.add(dashCam);
+		FlxG.cameras.add(dashCam);*/
 	}
 	
 	private function setupDashboard()
@@ -134,14 +137,44 @@ class BaseState extends FlxState implements IGameState
 	{
 		super.destroy();
 	}
-
+	
 	/**
 	 * Function that is called once every frame.
 	 */
 	override public function update():Void
 	{
 		super.update();
-	
+		var newPositions:Array<Array<Int>> = [];
 		inputHandler.update();
+		for (actor in activeTeam.flxUnits.members)
+		{
+			newPositions.push([actor.currentNodes[0].nodeX, actor.currentNodes[0].nodeY]);
+		}
+		if (positions.toString() != newPositions.toString() && frame % fogRedrawFrame == 0)//this is currently a heavy load, so we are making it happen once in a few frames
+		{
+			for (node in Node.activeNodes)
+			{
+				node.addOverlay();
+			}
+			for (actor in activeTeam.flxUnits.members)
+			{
+				if (actor.alive)
+				{
+					actor.clearedNodes = [];
+					actor.clearFogOfWar(actor.currentNodes[0]);
+				}
+			}
+			for (actor in activeTeam.flxBuildings.members)
+			{
+				if (actor.alive)
+				{
+					actor.clearedNodes = [];
+					actor.clearFogOfWar(actor.currentNodes[0]);
+				}
+			}
+			getLevel().rebuildFog();
+		}
+		positions = newPositions;
+		frame++;
 	}
 }
