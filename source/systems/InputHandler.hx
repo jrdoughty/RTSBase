@@ -9,7 +9,6 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.plugin.MouseEventManager;
 import flixel.util.FlxColor;
-import haxe.Constraints.Function;
 import interfaces.IGameState;
 import flixel.FlxCamera;
 import dashboard.Control;
@@ -97,7 +96,7 @@ class InputHandler
 		{
 			if (controls[i].callbackFunction != null)
 			{
-				var func:Function = controls[i].callbackFunction;
+				var func:Dynamic = controls[i].callbackFunction;
 				MouseEventManager.add(controls[i], null, controls[i].useCallback, controls[i].hover, controls[i].out, false, true, false);
 			}
 			else if (controls[i].type == ActorControlTypes.MOVE)

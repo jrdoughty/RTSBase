@@ -57,10 +57,10 @@ class Dashboard extends FlxGroup
 		
 		for (i in 0...activeControls.length)
 		{
-			trace(i);
+			trace("Controls: "+i);
 			add(activeControls[i]);
-			activeControls[i].x = 2 + (i % 3) * 18 - background.width;
-			activeControls[i].y = Math.floor(i / 3) * 18 + 2+background.y;
+			activeControls[i].x = 2 + (i % 3) * 18;
+			activeControls[i].y = Math.floor(i / 3) * 18 + 2 + background.y;
 		}
 		inputHandler.setupClickControls(activeControls);
 	}

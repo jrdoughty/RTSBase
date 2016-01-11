@@ -2,7 +2,6 @@ package dashboard;
 
 import actors.BaseActor.ActorControlTypes;
 import flixel.FlxSprite;
-import haxe.Constraints.Function;
 import openfl.display.Sprite;
 
 /**
@@ -12,9 +11,9 @@ import openfl.display.Sprite;
 class Control extends FlxSprite
 {	
 	public var type:ActorControlTypes;
-	public var callbackFunction:Function = null;
+	public var callbackFunction:Dynamic = null;
 	
-	public function new(frame:Int=7, type:ActorControlTypes,?callback, ?spriteString:String) 
+	public function new(frame:Int=7, type:ActorControlTypes,?callback:Dynamic, ?spriteString:String) 
 	{
 		super(0, 0);
 		this.type = type;
