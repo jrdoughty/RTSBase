@@ -15,7 +15,7 @@ class Team
 	public var units:Array<Unit> = [];
 	public var buildings:Array<BaseActor> = [];
 	public var id(default, null):Int;
-	public var resources:Int = 200;
+	public var resources:Int = 400;
 
 	private static var teamIds = 0;
 	

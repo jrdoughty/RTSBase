@@ -7,6 +7,7 @@ import world.Node;
 import systems.Data;
 import actors.Unit;
 import actors.Building;
+import flixel.text.FlxText;
 
 
 /**
@@ -15,7 +16,8 @@ import actors.Building;
  */
 class DemoState extends BaseState
 {
-
+	private var resourceDisplay:FlxText;
+	
 	public function new() 
 	{
 		super();
@@ -36,7 +38,16 @@ class DemoState extends BaseState
 		Teams[1].addUnit(new Unit("LizardClaw",Node.getNodeByGridXY(23,13)));	
 		Teams[1].addUnit(new Unit("LizardSpear",Node.getNodeByGridXY(19,15)));	
 		Teams[0].addBuilding(new Building("Barracks",Node.getNodeByGridXY(2,0)));
-		Teams[0].addBuilding(new Building("Barracks",Node.getNodeByGridXY(0, 14)));
-		
+		Teams[0].addBuilding(new Building("Barracks", Node.getNodeByGridXY(0, 14)));
+		resourceDisplay = new FlxText(0, 0, 30, "");
+		add(resourceDisplay);
+	}
+	
+	override public function update():Void 
+	{
+		super.update();
+		members.remove(resourceDisplay);
+		members.push(resourceDisplay);//keep it on top
+		resourceDisplay.text = Std.string(activeTeam.resources);
 	}
 }
