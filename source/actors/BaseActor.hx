@@ -42,12 +42,16 @@ class BaseActor extends FlxSprite
 {
 
 	public var currentNodes:Array<Node> = [];
+	public var lastNodes:Array<Node> = [];
 	public var targetEnemy:BaseActor;
 	public var team:Team = null;
 	public var damage:Int = 1;
 	public var controls:Array<Control> = [];
 	public var idleFrame:Int = 0;
 	public var clearedNodes:Array<Node> = [];
+	public var viewRange:Int = 2;
+	public var oldX:Int = -1;
+	public var oldY:Int = -1;
 	
 	private var lastTargetNode:Node;
 	private var selected:Bool = false;
@@ -58,7 +62,6 @@ class BaseActor extends FlxSprite
 	private var healthMax:Int = 8;
 	private var healthBar:FlxSprite;
 	private var healthBarFill:FlxSprite;
-	private var viewRange:Int = 2;
 	
 	public function new(node:Node) 
 	{
@@ -133,11 +136,10 @@ class BaseActor extends FlxSprite
 			healthBarFill.updateHitbox();
 		}
 	}
-	
 	private function takeAction()
-	{
-
-
+	{	
+		oldX = currentNodes[0].nodeX;
+		oldY = currentNodes[0].nodeY;
 	}
 	
 	public function select():Void
@@ -179,8 +181,6 @@ class BaseActor extends FlxSprite
 			targetEnemy = null;
 		}
 	}
-	
-	
 	public function clearFogOfWar(node:Node)
 	{
 		var n;
@@ -201,6 +201,37 @@ class BaseActor extends FlxSprite
 				}
 			}
 		}
+	}
+	public function reclearFogOfWar()
+	{
+		var n;
+		var distance:Float;
+		for (n in clearedNodes)
+		{
+			n.removeOverlay();
+		}
+	}
+	
+	public function getVisibleNodes(node:Node, arrayOfNodes:Array<Node>):Array<Node>
+	{
+		var n:Node;
+		var distance:Float;
+		for (n in node.neighbors)
+		{
+			if (arrayOfNodes.indexOf(n) == -1)
+			{
+				distance = Math.sqrt(Math.pow(Math.abs(currentNodes[0].nodeX - n.nodeX), 2) + Math.pow(Math.abs(currentNodes[0].nodeY - n.nodeY), 2));
+				if (distance <= viewRange)
+				{
+					arrayOfNodes.push(n);
+					if (distance < viewRange && n.isPassible())
+					{
+						arrayOfNodes = arrayOfNodes.concat(getVisibleNodes(n, arrayOfNodes));
+					}
+				}
+			}
+		}
+		return arrayOfNodes;
 	}
 	
 }

@@ -23,6 +23,8 @@ import openfl.Assets;
 import flixel.plugin.MouseEventManager;
 import actors.Unit;
 import openfl.geom.Point;
+import openfl.geom.Rectangle;
+import openfl.display.BitmapData;
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -172,9 +174,55 @@ class BaseState extends FlxState implements IGameState
 					actor.clearFogOfWar(actor.currentNodes[0]);
 				}
 			}
-			getLevel().rebuildFog();
+			rebuildFog();
 		}
 		positions = newPositions;
 		frame++;
+	}
+	
+	public function rebuildFog()
+	{
+		
+		var sourceRect:Rectangle;
+		var destPoint:Point;
+		var btmpdta:BitmapData;
+		
+		for (actor in activeTeam.flxUnits.members)
+		{
+			if (actor.alive)
+			{
+				for (n in actor.clearedNodes)
+				{
+					sourceRect = new Rectangle(0, 0, n.width, n.height);
+					destPoint = new Point(Std.int(n.x), n.y);
+					btmpdta = n.overlay.getFlxFrameBitmapData();
+					getLevel().fog.pixels.copyPixels(btmpdta, sourceRect, destPoint, btmpdta, new Point(), false);
+				}
+				if (actor.oldX == actor.currentNodes[0].nodeX && actor.oldY == actor.currentNodes[0].nodeY)
+				{
+					for (n in actor.getVisibleNodes(Node.getNodeByGridXY(actor.oldX,actor.oldY),[]))
+					{
+						if (actor.clearedNodes.indexOf(n) == -1)
+						{
+							sourceRect = new Rectangle(0, 0, n.width, n.height);
+							destPoint = new Point(Std.int(n.x), n.y);
+							btmpdta = n.overlay.getFlxFrameBitmapData();
+							getLevel().fog.pixels.copyPixels(btmpdta, sourceRect, destPoint, btmpdta, new Point(), false);
+						}
+					}
+				}
+			}
+		}
+		/*
+		for (i in 0...Node.activeNodes.length)
+		{
+			var sourceRect:Rectangle = new Rectangle(0, 0, Node.activeNodes[i].width, Node.activeNodes[i].height);
+			var destPoint:Point = new Point(Std.int(Node.activeNodes[i].x), Node.activeNodes[i].y);
+			var btmpdta:BitmapData = Node.activeNodes[i].overlay.getFlxFrameBitmapData();
+			getLevel().fog.pixels.copyPixels(btmpdta, sourceRect, destPoint, btmpdta, new Point(0,0), false);
+			
+		}*/
+		getLevel().fog.frame.destroyBitmapDatas();
+		getLevel().fog.dirty = true;
 	}
 }
