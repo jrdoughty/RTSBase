@@ -88,6 +88,7 @@ class SelfLoadingLevel extends FlxGroup
 					background.pixels.copyPixels(Node.activeNodes[i].getFlxFrameBitmapData(), sourceRect, destPoint, null, null, true);
 					background.frame.destroyBitmapDatas();
 					background.dirty = true;
+					fog.pixels = new BitmapData(Std.int(width * tiledLevel.tilewidth), height * tiledLevel.tileheight, true, 0xFFFFFF);
 				}
 				Node.createNeighbors(width, height);
 				break;
@@ -103,14 +104,16 @@ class SelfLoadingLevel extends FlxGroup
 			}
 		}
 	}
+	
 	public function rebuildFog()
 	{
-		fog.pixels = new BitmapData(Std.int(width * tiledLevel.tilewidth), height * tiledLevel.tileheight, true, 0xFFFFFF);
 		for (i in 0...Node.activeNodes.length)
 		{
 			var sourceRect:Rectangle = new Rectangle(0, 0, Node.activeNodes[i].width, Node.activeNodes[i].height);
 			var destPoint:Point = new Point(Std.int(Node.activeNodes[i].x), Node.activeNodes[i].y);
-			fog.pixels.copyPixels(Node.activeNodes[i].overlay.getFlxFrameBitmapData(), sourceRect, destPoint, null, null, true);
+			var btmpdta:BitmapData = Node.activeNodes[i].overlay.getFlxFrameBitmapData();
+			fog.pixels.copyPixels(btmpdta, sourceRect, destPoint, btmpdta, new Point(0,0), false);
+			
 			fog.frame.destroyBitmapDatas();
 		}
 		fog.dirty = true;
