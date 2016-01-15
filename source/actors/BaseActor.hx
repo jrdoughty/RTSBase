@@ -234,4 +234,27 @@ class BaseActor extends FlxSprite
 		return arrayOfNodes;
 	}
 	
+	public function getLapsedNodes(arrayOfNodes:Array<Node>):Array<Node>
+	{
+		var node = Node.getNodeByGridXY(oldX, oldY);
+		var n:Node;
+		var distance:Float;
+		for (n in node.neighbors)
+		{
+			distance = Math.sqrt(Math.pow(Math.abs(node.nodeX- n.nodeX), 2) + Math.pow(Math.abs(node.nodeY - n.nodeY), 2));
+			if (arrayOfNodes.indexOf(n) == -1 && distance <= viewRange + 1)
+			{
+				if (clearedNodes.indexOf(n) != -1)
+				{
+					arrayOfNodes.push(n);
+				}
+				if (distance < viewRange + 1 && n.isPassible())
+				{
+					arrayOfNodes = arrayOfNodes.concat(getLapsedNodes(arrayOfNodes));
+				}
+			}
+		}
+		return arrayOfNodes;
+	}
+	
 }

@@ -29,6 +29,7 @@ class DemoState extends BaseState
 		super.createTeams();
 		Teams.push(new Team());
 		Teams[0].addUnit(new Unit("SoldierSword",Node.getNodeByGridXY(0,0)));
+		/*
 		Teams[0].addUnit(new Unit("SoldierSpear",Node.getNodeByGridXY(1,0)));
 		Teams[0].addUnit(new Unit("OrcAxe",Node.getNodeByGridXY(1,1)));			
 		Teams[0].addUnit(new Unit("Wizard",Node.getNodeByGridXY(2,2)));	
@@ -39,8 +40,10 @@ class DemoState extends BaseState
 		Teams[1].addUnit(new Unit("LizardSpear",Node.getNodeByGridXY(19,15)));	
 		Teams[0].addBuilding(new Building("Barracks",Node.getNodeByGridXY(2,0)));
 		Teams[0].addBuilding(new Building("Barracks", Node.getNodeByGridXY(0, 14)));
+		*/
 		resourceDisplay = new FlxText(0, 0, 30, "");
 		add(resourceDisplay);
+		
 	}
 	
 	override public function update():Void 

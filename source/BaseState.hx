@@ -152,8 +152,8 @@ class BaseState extends FlxState implements IGameState
 		{
 			newPositions.push([actor.currentNodes[0].nodeX, actor.currentNodes[0].nodeY]);
 		}
-		if (positions.toString() != newPositions.toString())// fast units mess this up && frame % fogRedrawFrame == 0)//this is currently a heavy load, so we are making it happen once in a few frames
-		{
+		//if (positions.toString() != newPositions.toString())// fast units mess this up && frame % fogRedrawFrame == 0)//this is currently a heavy load, so we are making it happen once in a few frames
+		//{
 			for (node in Node.activeNodes)
 			{
 				node.addOverlay();
@@ -175,7 +175,7 @@ class BaseState extends FlxState implements IGameState
 				}
 			}
 			rebuildFog();
-		}
+		//}
 		positions = newPositions;
 		frame++;
 	}
@@ -187,6 +187,7 @@ class BaseState extends FlxState implements IGameState
 		var destPoint:Point;
 		var btmpdta:BitmapData;
 		
+		
 		for (actor in activeTeam.flxUnits.members)
 		{
 			if (actor.alive)
@@ -194,34 +195,24 @@ class BaseState extends FlxState implements IGameState
 				for (n in actor.clearedNodes)
 				{
 					sourceRect = new Rectangle(0, 0, n.width, n.height);
-					destPoint = new Point(Std.int(n.x), n.y);
+					destPoint = new Point(n.x, n.y);
 					btmpdta = n.overlay.getFlxFrameBitmapData();
 					getLevel().fog.pixels.copyPixels(btmpdta, sourceRect, destPoint, btmpdta, new Point(), false);
 				}
-				if (actor.oldX == actor.currentNodes[0].nodeX && actor.oldY == actor.currentNodes[0].nodeY)
+				if ((actor.oldX != actor.currentNodes[0].nodeX || actor.oldY != actor.currentNodes[0].nodeY) && actor.oldX >= 0 && actor.oldY >= 0)
 				{
-					for (n in actor.getVisibleNodes(Node.getNodeByGridXY(actor.oldX,actor.oldY),[]))
+					var nodes = actor.getLapsedNodes([]);
+					trace(nodes.length);
+					for (n in nodes)
 					{
-						if (actor.clearedNodes.indexOf(n) == -1)
-						{
-							sourceRect = new Rectangle(0, 0, n.width, n.height);
-							destPoint = new Point(Std.int(n.x), n.y);
-							btmpdta = n.overlay.getFlxFrameBitmapData();
-							getLevel().fog.pixels.copyPixels(btmpdta, sourceRect, destPoint, btmpdta, new Point(), false);
-						}
+						sourceRect = new Rectangle(0, 0, n.width, n.height);
+						destPoint = new Point(n.x, n.y);
+						btmpdta = n.overlay.getFlxFrameBitmapData();
+						getLevel().fog.pixels.copyPixels(btmpdta, sourceRect, destPoint, btmpdta, new Point(), false);
 					}
 				}
 			}
 		}
-		/*
-		for (i in 0...Node.activeNodes.length)
-		{
-			var sourceRect:Rectangle = new Rectangle(0, 0, Node.activeNodes[i].width, Node.activeNodes[i].height);
-			var destPoint:Point = new Point(Std.int(Node.activeNodes[i].x), Node.activeNodes[i].y);
-			var btmpdta:BitmapData = Node.activeNodes[i].overlay.getFlxFrameBitmapData();
-			getLevel().fog.pixels.copyPixels(btmpdta, sourceRect, destPoint, btmpdta, new Point(0,0), false);
-			
-		}*/
 		getLevel().fog.frame.destroyBitmapDatas();
 		getLevel().fog.dirty = true;
 	}
