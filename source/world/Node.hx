@@ -29,8 +29,11 @@ class Node extends FlxSprite
 	public var nodeX:Int;
 	public var nodeY:Int;
 	public var overlay:FlxSprite;
+	public var overlayToggled:Bool = false;
 	
 	private var passable:Bool = true;
+	private var wasRemoved:Bool = false;
+	private var firstTime:Bool = true;
 	
 	public function new(asset:String, frame:Int, width:Int, height, X:Int = 0, Y:Int = 0, pass:Bool = true ) 
 	{
@@ -84,15 +87,27 @@ class Node extends FlxSprite
 	
 	public function removeOverlay()
 	{
+		overlayToggled = true;
 		overlay.alpha = 0;
 		if (occupant != null)
 		{
 			occupant.makeVisible();
 		}
+		wasRemoved = true;
 	}
 	
 	public function addOverlay()
 	{
+		if (overlay.alpha == 0)
+		{
+			wasRemoved = true;
+			overlayToggled = true;
+		}
+		else
+		{
+			wasRemoved = false;
+			overlayToggled = false;
+		}
 		overlay.alpha = .5;
 		if (occupant != null)
 		{
