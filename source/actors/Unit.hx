@@ -6,7 +6,6 @@ import interfaces.Entity;
 import world.Node;
 import interfaces.IGameState;
 import systems.AStar;
-import flixel.tweens.FlxTween;
 import dashboard.Control;
 import actors.BaseActor.ActorControlTypes;
 import actors.ActorState;
@@ -97,7 +96,6 @@ class Unit extends BaseActor implements Entity
 		}
 		components.set(name, component);
 		component.attach(this);
-		component.init();
 	}
 	
 	public function removeC(componentName:String)

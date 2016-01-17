@@ -14,8 +14,8 @@ interface Entity
 	public var currentNodes:Array<Node>;
 	public var animation:FlxAnimationController;
 	public var speed:Int;
-	public var team:Team = null;
-	public var idleFrame:Int = 0;
+	public var team:Team;
+	public var idleFrame:Int;
 	
 	public function addC(component:Component, name:String = null):Void;
 	public function removeC(componentName:String):Void;
