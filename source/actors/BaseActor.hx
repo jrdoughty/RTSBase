@@ -16,14 +16,7 @@ import systems.Team;
  * @author John Doughty
  */
 
-enum ActorState 
-{
-	MOVING;
-	ATTACKING;
-	IDLE;
-	BUSY;
-	CHASING;
-}
+
 
 enum ActorControlTypes 
 {
@@ -48,12 +41,11 @@ class BaseActor extends FlxSprite
 	public var controls:Array<Control> = [];
 	public var idleFrame:Int = 0;
 	public var clearedNodes:Array<Node> = [];
+	public var speed:Int = 250;
 	
-	private var lastTargetNode:Node;
 	private var selected:Bool = false;
 	private var actionTimer:Timer;
 	private var delayTimer:Timer;
-	private var speed:Int = 250;
 	private var state:ActorState = IDLE;
 	private var healthMax:Int = 8;
 	private var healthBar:FlxSprite;

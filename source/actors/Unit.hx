@@ -1,12 +1,15 @@
 package actors;
+import components.Component;
+import components.ControlledUnitAI;
 import haxe.Constraints.Function;
+import interfaces.Entity;
 import world.Node;
 import interfaces.IGameState;
 import systems.AStar;
 import flixel.tweens.FlxTween;
 import dashboard.Control;
 import actors.BaseActor.ActorControlTypes;
-import actors.BaseActor.ActorState;
+import actors.ActorState;
 import systems.Data;
 import openfl.Assets;
 /**
@@ -15,16 +18,13 @@ import openfl.Assets;
  */
 
  
-class Unit extends BaseActor
+class Unit extends BaseActor implements Entity
 {
 		
-	public var targetNode(default, null):Node;
 	
+	private var components:Map<String, Component> = new Map();
 	private var data:Dynamic;
 	private var unitData:Dynamic;
-	private	var path:Array<Node> = [];
-	private var failedToMove:Bool = false;
-	private var aggressive:Bool = false;
 	private var unitControlTypes: Array<ActorControlTypes> = [ActorControlTypes.ATTACK,
 		ActorControlTypes.STOP,
 		ActorControlTypes.MOVE, 
@@ -49,6 +49,7 @@ class Unit extends BaseActor
 		speed = unitData.speed;
 		damage = unitData.damage;
 		viewRange = unitData.viewRange;
+		addC(new ControlledUnitAI());
 	}
 	
 	override function setupGraphics() 
@@ -62,248 +63,75 @@ class Unit extends BaseActor
 		idleFrame = 0;
 	}
 	
+	
 	public function MoveToNode(node:Node)
 	{
-		resetStates();
-		targetNode = node;
+		for (k in components.keys())
+		{
+			if (Type.getClass(components[k]) == ControlledUnitAI)
+			{
+				cast(components[k], components.ControlledUnitAI).MoveToNode(node);
+			}
+		}
 	}
 	
 	public function AttackToNode(node:Node)
 	{
-		MoveToNode(node);
-		aggressive = true;
-	}
-	
-	private function move():Void
-	{
-		var nextMove:Node;
-		failedToMove = false;
-		state = MOVING;
 		
-		if (aggressive && isEnemyInRange())
-		{
-			targetEnemy = getEnemyInRange();
-			attack();
-			return;
-		}
-		
-		if ((targetNode != null && path.length == 0|| targetNode != lastTargetNode) && targetNode.isPassible())
-		{
-			path = AStar.newPath(currentNodes[0], targetNode);//remember path[0] is the last 
-		}
-		
-		if (path.length > 1 && path[1].occupant == null)
-		{
-			moveAlongPath();
-			
-			if (currentNodes[0] == targetNode)
-			{
-				path = [];
-				state = IDLE;//Unlike other cases, this is after the action has been carried out.
-			}
-		}
-		else if (path.length > 1 && path[1].occupant != null)
-		{
-			newPath();
-		}
-		else
-		{
-			targetNode = null;
-			state = IDLE;
-		}
-		lastTargetNode = targetNode;
-		if (failedToMove)
-		{
-			animation.pause();
-		}
-		else
-		{
-			animation.play("active");
-		}
-	}
-	
-	@:extern inline private function newPath()
-	{
-		var nextMove = path[1];
-		path = AStar.newPath(currentNodes[0], targetNode);
-		if (path.length > 1 && nextMove != path[1])//In Plain english, if the new path is indeed a new path
-		{
-			if (state == ActorState.MOVING)
-			{
-				move();//try new path	
-			} 
-			else if (state == ActorState.CHASING)
-			{
-				chase();
-			}
-		}
-		else
-		{
-			failedToMove = true;
-		}
-	}
-	
-	
-	private function chase()
-	{
-		var nextMove:Node;
-		var i:Int;
-		failedToMove = false;
-		
-		state = CHASING;
-		
-		if (targetEnemy != null && targetEnemy.alive)
+		for (k in components.keys())
 		{
 			
-			if (isEnemyInRange())
-			{
-				attack();
-			}
-			else
-			{
-				targetNode = targetEnemy.currentNodes[0];
-				
-				if (path.length == 0 || path[path.length - 1] != targetNode)
-				{
-					path = AStar.newPath(currentNodes[0], targetNode);
-				}
-				
-				
-				if (path.length > 1 && path[1].occupant == null)
-				{
-					moveAlongPath();
-				}
-				else
-				{
-					newPath();
-				}
-			}
+		}
+	}
+	
+	public function addC(component:Component, n:String = null)
+	{
+		var name:String;
+		if (n == null)
+		{
+			name = component.defaultName;
 		}
 		else
 		{
-			state = IDLE;
+			name = n;
 		}
-		if (failedToMove)
-		{
-			animation.pause();
-		}
-		else
-		{
-			animation.play("active");
-		}
+		components.set(name, component);
+		component.attach(this);
+		component.init();
 	}
 	
-	private function attack()
+	public function removeC(componentName:String)
 	{
-		var i:Int;
-		state = ATTACKING;
-		if (targetEnemy != null && targetEnemy.alive)
-		{
-			if (isEnemyInRange())
-			{
-				hit();
-			}
-			else
-			{
-				chase();
-			}
-		}
-		else
-		{
-			state = IDLE;
-		}
-		animation.play("attack");
+		components[componentName].detach();
+		components.remove(componentName);
 	}
 	
-	private function idle()
+	public function hasC(componentName:String):Bool
 	{
-		state = IDLE;
-		var i:Int;
-		
-		if (targetNode != null)
-		{
-			move();
-		}
-		else if (targetEnemy != null)
-		{
-			attack();
-		}
-		else if (isEnemyInRange())
-		{
-			targetEnemy = getEnemyInRange();
-			attack();
-		}
-		animation.frameIndex = idleFrame;
-		animation.pause();
+		return components.exists(componentName);
 	}
 	
-	override function takeAction() 
+	public function getC(componentName:String):Component
 	{
-		super.takeAction();
-		if (state == IDLE)
-		{
-			idle();
-		}
-		else if (state == MOVING)
-		{
-			move();
-		}
-		else if (state == ATTACKING)
-		{
-			attack();
-		}
-		else if (state == CHASING)
-		{
-			chase();
-		}
+		return components[componentName];
 	}
 	
-	override public function resetStates():Void 
+	public function getCList():Array<Component>
 	{
-		super.resetStates();
-		aggressive = false;
-		targetNode = null;
-	}
-	
-	@:extern inline function moveAlongPath()
-	{
-		path.splice(0,1)[0].occupant = null;
-		currentNodes[0] = path[0];
-		currentNodes[0].occupant = this;
-		FlxTween.tween(this, { x:currentNodes[0].x, y:currentNodes[0].y }, speed / 1000);
-		FlxTween.tween(healthBar, { x:currentNodes[0].x, y:currentNodes[0].y - 1}, speed / 1000);
-		FlxTween.tween(healthBarFill, { x:currentNodes[0].x, y:currentNodes[0].y - 1 }, speed / 1000);
-	}
-	
-	private function isEnemyInRange():Bool
-	{
-		var i:Int;
-		var inRange:Bool = false;
-		
-		for (i in 0...currentNodes[0].neighbors.length)
+		var result = [];
+		for (k in components.keys())
 		{
-			if (currentNodes[0].neighbors[i].occupant == targetEnemy && currentNodes[0].neighbors[i].occupant != null || //if your target is close
-			targetEnemy == null && currentNodes[0].neighbors[i].occupant != null && currentNodes[0].neighbors[i].occupant.team.id != team.id) // if you are near an enemy with no target of your own
-			{
-				inRange = true;
-				break;
-			}
+			result.push(components[k]);
 		}
-		
-		return inRange;
+		return result;
 	}
 	
-	private function getEnemyInRange():BaseActor
+	public function getCIDList():Array<String>
 	{
-		var result:BaseActor = null;
-		var i:Int;
-		for (i in 0...currentNodes[0].neighbors.length)
+		var result = [];
+		for (k in components.keys())
 		{
-			if (currentNodes[0].neighbors[i].occupant != null && currentNodes[0].neighbors[i].occupant.team.id != team.id)
-			{
-				result = currentNodes[0].neighbors[i].occupant;
-				break;
-			}
+			result.push(k);
 		}
 		return result;
 	}
