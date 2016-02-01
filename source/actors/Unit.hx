@@ -270,6 +270,14 @@ class Unit extends BaseActor
 		path.splice(0,1)[0].occupant = null;
 		currentNodes[0] = path[0];
 		currentNodes[0].occupant = this;
+		if (x > currentNodes[0].x)
+		{
+			flipX = true;
+		}
+		else if (x < currentNodes[0].x)
+		{
+			flipX = false;			
+		}
 		FlxTween.tween(this, { x:currentNodes[0].x, y:currentNodes[0].y }, speed / 1000);
 		FlxTween.tween(healthBar, { x:currentNodes[0].x, y:currentNodes[0].y - 1}, speed / 1000);
 		FlxTween.tween(healthBarFill, { x:currentNodes[0].x, y:currentNodes[0].y - 1 }, speed / 1000);
@@ -291,6 +299,42 @@ class Unit extends BaseActor
 		}
 		
 		return inRange;
+	}
+	
+	private function isEnemyInThreat():Bool
+	{
+		var i:Int;
+		var inRange:Bool = false;
+		
+		for (i in 0...threatNodes.length)
+		{
+			if (threatNodes[i].occupant == targetEnemy && threatNodes[i].occupant != null || //if your target is close
+			targetEnemy == null && threatNodes[i].occupant != null && threatNodes[i].occupant.team.id != team.id) // if you are near an enemy with no target of your own
+			{
+				inRange = true;
+				break;
+			}
+		}
+		
+		return inRange;
+	}
+	
+	private function getEnemyInThreat():BaseActor
+	{
+		var i:Int;
+		var result:BaseActor = null;
+		
+		for (i in 0...threatNodes.length)
+		{
+			if (threatNodes[i].occupant == targetEnemy && threatNodes[i].occupant != null || //if your target is close
+			targetEnemy == null && threatNodes[i].occupant != null && threatNodes[i].occupant.team.id != team.id) // if you are near an enemy with no target of your own
+			{
+				result = threatNodes[i].occupant;
+				break;
+			}
+		}
+		
+		return result;
 	}
 	
 	private function getEnemyInRange():BaseActor

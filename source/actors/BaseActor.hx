@@ -48,6 +48,8 @@ class BaseActor extends FlxSprite
 	public var controls:Array<Control> = [];
 	public var idleFrame:Int = 0;
 	public var clearedNodes:Array<Node> = [];
+	public var threatNodes:Array<Node> = [];
+	public var threatRange:Int = 2;
 	
 	private var lastTargetNode:Node;
 	private var selected:Bool = false;
@@ -198,6 +200,10 @@ class BaseActor extends FlxSprite
 					{
 						clearFogOfWar(n);
 					}
+				}
+				if (distance <= threatRange)
+				{
+					threatNodes.push(n);
 				}
 			}
 		}
