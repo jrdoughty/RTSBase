@@ -242,13 +242,13 @@ class InputHandler
 		{
 			if (inputState == SELECTING)
 			{
-					if (FlxG.overlap(selector, flxActiveTeamUnits, selectOverlapUnits) == false)
+				if (FlxG.overlap(selector, flxActiveTeamUnits, selectOverlapUnits) == false)
+				{
+					if (FlxG.overlap(selector, flxActiveTeamBuildings, selectOverlapBuildings) == false)
 					{
-						if (FlxG.overlap(selector, flxActiveTeamBuildings, selectOverlapBuildings) == false)
-						{
-							activeState.dashboard.clearDashBoard();//Select Enemies later
-						}
-					} 
+						activeState.dashboard.clearDashBoard();//Select Enemies later
+					}
+				} 
 			}
 			else if (inputState == MOVING)
 			{			
@@ -313,7 +313,6 @@ class InputHandler
 		{
 			for (i in 0...selectedUnits.length)
 			{
-				selectedUnits[i].MoveToNode(node);
 			}
 		}
 	}

@@ -6,7 +6,7 @@ import flixel.animation.FlxAnimationController;
 /**
  * @author John Doughty
  */
-interface Entity 
+interface IEntity 
 {
 	private var components:Map<String, Component>;
 	public var x(default, set):Float;
@@ -16,6 +16,7 @@ interface Entity
 	public var speed:Int;
 	public var team:Team;
 	public var idleFrame:Int;
+	public var attr:Dynamic;
 	
 	public function addC(component:Component, name:String = null):Void;
 	public function removeC(componentName:String):Void;

@@ -2,7 +2,7 @@ package actors;
 import components.Component;
 import components.ControlledUnitAI;
 import haxe.Constraints.Function;
-import interfaces.Entity;
+import interfaces.IEntity;
 import world.Node;
 import interfaces.IGameState;
 import systems.AStar;
@@ -17,7 +17,7 @@ import openfl.Assets;
  */
 
  
-class Unit extends BaseActor implements Entity
+class Unit extends BaseActor implements IEntity
 {
 		
 	

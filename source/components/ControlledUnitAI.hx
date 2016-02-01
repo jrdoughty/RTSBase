@@ -19,6 +19,7 @@ class ControlledUnitAI extends Component
 	private var failedToMove:Bool = false;
 	private var aggressive:Bool = false;
 	private var lastTargetNode:Node;
+	private var needsReset:Bool = false;
 	
 	public function new()
 	{
@@ -29,6 +30,8 @@ class ControlledUnitAI extends Component
 	override public function init() 
 	{
 		super.init();
+		entity.attr.targetNode = null;
+		entity.attr.targetEnemy = null;
 	}
 	
 	public function MoveToNode(node:Node)
@@ -209,6 +212,10 @@ class ControlledUnitAI extends Component
 	override function takeAction() 
 	{
 		super.takeAction();
+		if (needsReset)
+		{
+			resetStates();
+		}
 		if (state == IDLE)
 		{
 			idle();

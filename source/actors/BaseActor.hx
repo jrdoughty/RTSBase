@@ -41,6 +41,7 @@ class BaseActor extends FlxSprite
 	public var idleFrame:Int = 0;
 	public var clearedNodes:Array<Node> = [];
 	public var speed:Int = 250;
+	public var attr:Dynamic = new Dynamic();
 	
 	private var selected:Bool = false;
 	private var actionTimer:Timer;
@@ -50,6 +51,7 @@ class BaseActor extends FlxSprite
 	private var healthBar:FlxSprite;
 	private var healthBarFill:FlxSprite;
 	private var viewRange:Int = 2;
+	
 	
 	public function new(node:Node) 
 	{

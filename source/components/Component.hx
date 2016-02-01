@@ -1,5 +1,5 @@
 package components;
-import interfaces.Entity;
+import interfaces.IEntity;
 import haxe.Timer;
 /**
  * ...
