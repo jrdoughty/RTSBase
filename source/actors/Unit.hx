@@ -80,9 +80,9 @@ class Unit extends BaseActor
 		failedToMove = false;
 		state = MOVING;
 		
-		if (aggressive && isEnemyInRange())
+		if (aggressive && isEnemyInThreat())
 		{
-			targetEnemy = getEnemyInRange();
+			targetEnemy = getEnemyInThreat();
 			attack();
 			return;
 		}
@@ -228,9 +228,9 @@ class Unit extends BaseActor
 		{
 			attack();
 		}
-		else if (isEnemyInRange())
+		else if (isEnemyInThreat())
 		{
-			targetEnemy = getEnemyInRange();
+			targetEnemy = getEnemyInThreat();
 			attack();
 		}
 		animation.frameIndex = idleFrame;
