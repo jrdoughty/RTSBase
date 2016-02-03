@@ -49,6 +49,7 @@ class Unit extends BaseActor
 		speed = unitData.speed;
 		damage = unitData.damage;
 		viewRange = unitData.viewRange;
+		threatRange = unitData.threatDist;
 	}
 	
 	override function setupGraphics() 

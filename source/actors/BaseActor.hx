@@ -138,8 +138,7 @@ class BaseActor extends FlxSprite
 	
 	private function takeAction()
 	{
-
-
+		checkView();
 	}
 	
 	public function select():Void
@@ -183,10 +182,14 @@ class BaseActor extends FlxSprite
 	}
 	
 	
-	public function clearFogOfWar(node:Node)
+	public function clearFogOfWar(node:Node = null)
 	{
 		var n;
 		var distance:Float;
+		if (node == null)
+		{
+			node = currentNodes[0];
+		}
 		for (n in node.neighbors)
 		{
 			if (clearedNodes.indexOf(n) == -1)
@@ -201,9 +204,31 @@ class BaseActor extends FlxSprite
 						clearFogOfWar(n);
 					}
 				}
+			}
+		}
+	}
+	
+	
+	public function checkView(node:Node = null)
+	{
+		var n;
+		var distance:Float;
+		if (node == null)
+		{
+			node = currentNodes[0];
+		}
+		for (n in node.neighbors)
+		{
+			if (threatNodes.indexOf(n) == -1)
+			{
+				distance = Math.sqrt(Math.pow(Math.abs(currentNodes[0].nodeX - n.nodeX), 2) + Math.pow(Math.abs(currentNodes[0].nodeY - n.nodeY), 2));
 				if (distance <= threatRange)
 				{
 					threatNodes.push(n);
+					if (distance < viewRange && n.isPassible())
+					{
+						checkView(n);
+					}
 				}
 			}
 		}

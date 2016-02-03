@@ -38,6 +38,10 @@
 				{
 					"typeStr": "3",
 					"name": "cost"
+				},
+				{
+					"typeStr": "3",
+					"name": "threatDist"
 				}
 			],
 			"lines": [
@@ -49,7 +53,8 @@
 					"damage": 1,
 					"spriteFile": "../images/swordSoldier.png",
 					"viewRange": 4,
-					"cost": 75
+					"cost": 75,
+					"threatDist": 2
 				},
 				{
 					"id": "SoldierSpear",
@@ -59,7 +64,8 @@
 					"damage": 1,
 					"spriteFile": "../images/spearSoldier.png",
 					"viewRange": 4,
-					"cost": 50
+					"cost": 50,
+					"threatDist": 3
 				},
 				{
 					"id": "DevilWhip",
@@ -69,7 +75,8 @@
 					"health": 4,
 					"damage": 2,
 					"viewRange": 4,
-					"cost": 50
+					"cost": 50,
+					"threatDist": 2
 				},
 				{
 					"id": "DevilSpear",
@@ -79,7 +86,8 @@
 					"health": 7,
 					"damage": 1,
 					"viewRange": 4,
-					"cost": 50
+					"cost": 50,
+					"threatDist": 3
 				},
 				{
 					"id": "LizardClaw",
@@ -89,7 +97,8 @@
 					"health": 9,
 					"damage": 1,
 					"viewRange": 3,
-					"cost": 80
+					"cost": 80,
+					"threatDist": 1
 				},
 				{
 					"id": "LizardSpear",
@@ -99,7 +108,8 @@
 					"health": 9,
 					"damage": 1,
 					"viewRange": 4,
-					"cost": 60
+					"cost": 60,
+					"threatDist": 3
 				},
 				{
 					"id": "OrcClub",
@@ -109,7 +119,8 @@
 					"health": 8,
 					"damage": 2,
 					"viewRange": 3,
-					"cost": 60
+					"cost": 60,
+					"threatDist": 2
 				},
 				{
 					"id": "OrcAxe",
@@ -119,7 +130,8 @@
 					"health": 7,
 					"damage": 1,
 					"viewRange": 3,
-					"cost": 45
+					"cost": 45,
+					"threatDist": 2
 				},
 				{
 					"id": "Wizard",
@@ -129,7 +141,8 @@
 					"health": 5,
 					"damage": 3,
 					"viewRange": 4,
-					"cost": 100
+					"cost": 100,
+					"threatDist": 1
 				}
 			],
 			"separators": [],

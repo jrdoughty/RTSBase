@@ -161,7 +161,7 @@ class BaseState extends FlxState implements IGameState
 				if (actor.alive)
 				{
 					actor.clearedNodes = [];
-					actor.clearFogOfWar(actor.currentNodes[0]);
+					actor.clearFogOfWar();
 				}
 			}
 			for (actor in activeTeam.flxBuildings.members)
@@ -169,7 +169,7 @@ class BaseState extends FlxState implements IGameState
 				if (actor.alive)
 				{
 					actor.clearedNodes = [];
-					actor.clearFogOfWar(actor.currentNodes[0]);
+					actor.clearFogOfWar();
 				}
 			}
 			getLevel().rebuildFog();
