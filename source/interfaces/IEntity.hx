@@ -1,5 +1,7 @@
 package interfaces;
 import components.Component;
+import components.EventObject;
+import haxe.Constraints.Function;
 import systems.Team;
 import world.Node;
 import flixel.animation.FlxAnimationController;
@@ -17,8 +19,12 @@ interface IEntity
 	public var team:Team;
 	public var idleFrame:Int;
 	public var attr:Dynamic;
+	private var listeners:Map<String, Array<Function>>;
 	
-	public function addC(component:Component, name:String = null):Void;
+	public function addC(component:Component, name:String):Void;
+	public function addEvent(name:String, callback:Function):Void;
+	public function removeEvent(name:String, callback:Function):Void;
+	public function dispatchEvent(name:String, eventObject:EventObject):Void;
 	public function removeC(componentName:String):Void;
 	public function hasC(componentName:String):Bool;
 	public function getC(componentNAme:String):Component;

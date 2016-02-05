@@ -9,7 +9,8 @@ import world.Node;
 import flixel.util.FlxColor;
 import dashboard.Control;
 import systems.Team;
-
+import haxe.Constraints.Function;
+import components.EventObject;
 /**
  * ...
  * @author John Doughty
@@ -41,16 +42,17 @@ class BaseActor extends FlxSprite
 	public var idleFrame:Int = 0;
 	public var clearedNodes:Array<Node> = [];
 	public var speed:Int = 250;
-	public var attr:Dynamic = new Dynamic();
+	public var attr:Dynamic;
+	public var healthMax:Int = 8;
 	
 	private var selected:Bool = false;
 	private var actionTimer:Timer;
 	private var delayTimer:Timer;
 	private var state:ActorState = IDLE;
-	private var healthMax:Int = 8;
 	private var healthBar:FlxSprite;
 	private var healthBarFill:FlxSprite;
 	private var viewRange:Int = 2;
+	private var listeners:Map<String, Array<Function>> = new Map();
 	
 	
 	public function new(node:Node) 
@@ -130,7 +132,6 @@ class BaseActor extends FlxSprite
 	private function takeAction()
 	{
 
-
 	}
 	
 	public function select():Void
@@ -163,16 +164,6 @@ class BaseActor extends FlxSprite
 		destroy();
 	}
 	
-	private function hit()
-	{
-		trace(damage);
-		targetEnemy.hurt(damage / targetEnemy.healthMax);
-		if (targetEnemy.alive == false)
-		{
-			targetEnemy = null;
-		}
-	}
-	
 	
 	public function clearFogOfWar(node:Node)
 	{
@@ -192,6 +183,43 @@ class BaseActor extends FlxSprite
 						clearFogOfWar(n);
 					}
 				}
+			}
+		}
+	}
+	public function addEvent(name:String, callback:Function)
+	{
+		if (!listeners.exists(name))
+		{
+			listeners.set(name, [callback]);
+		}
+		else if (listeners[name].indexOf(callback) == -1)
+		{
+			listeners[name].push(callback);
+		}
+	}
+	public function removeEvent(name:String, callback:Function)
+	{
+		var i:Int;
+		if (listeners.exists(name) && listeners[name].indexOf(callback) != -1)
+		{
+			for (i in 0...listeners[name].length)
+			{
+				if (listeners[name][i] == callback)
+				{
+					listeners[name].splice(i, 1);
+					break;
+				}
+			}
+		}
+	}
+	
+	public function dispatchEvent(name:String, eventObject:EventObject)
+	{
+		if (listeners.exists(name))
+		{
+			for (func in listeners[name])
+			{
+				func(eventObject);
 			}
 		}
 	}

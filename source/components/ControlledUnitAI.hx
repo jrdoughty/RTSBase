@@ -10,10 +10,10 @@ import actors.BaseActor;
  * ...
  * @author John Doughty
  */
-class ControlledUnitAI extends Component
+class ControlledUnitAI extends AI
 {
-	public var targetNode(default, null):Node;
-	public var targetEnemy:BaseActor;
+	public var targetNode(default, null):Node = null;
+	public var targetEnemy:BaseActor = null;
 	private var state:ActorState = IDLE;
 	private	var path:Array<Node> = [];
 	private var failedToMove:Bool = false;
@@ -30,19 +30,26 @@ class ControlledUnitAI extends Component
 	override public function init() 
 	{
 		super.init();
-		entity.attr.targetNode = null;
-		entity.attr.targetEnemy = null;
+		entity.addEvent(AI.MOVE, MoveToNode);
+		entity.addEvent(AI.ATTACK_NODE, AttackToNode);
+		entity.addEvent(AI.ATTACK_ACTOR, AttackActor);
 	}
 	
-	public function MoveToNode(node:Node)
+	public function AttackActor(aEvent:AttackEvent)
 	{
 		resetStates();
-		targetNode = node;
+		targetEnemy = aEvent.target;
 	}
 	
-	public function AttackToNode(node:Node)
+	public function MoveToNode(moveEvent:MoveEvent)//node:Node)
 	{
-		MoveToNode(node);
+		resetStates();
+		targetNode = moveEvent.node;
+	}
+	
+	public function AttackToNode(moveEvent:MoveEvent)
+	{
+		MoveToNode(moveEvent);
 		aggressive = true;
 	}
 	
@@ -173,7 +180,7 @@ class ControlledUnitAI extends Component
 		{
 			if (isEnemyInRange())
 			{
-				//hit();
+				hit();
 			}
 			else
 			{
@@ -231,6 +238,15 @@ class ControlledUnitAI extends Component
 		else if (state == CHASING)
 		{
 			chase();
+		}
+	}
+	
+	private function hit()
+	{
+		targetEnemy.hurt(cast (entity, BaseActor).damage / targetEnemy.healthMax);
+		if (targetEnemy.alive == false)
+		{
+			targetEnemy = null;
 		}
 	}
 	

@@ -11,6 +11,7 @@ import actors.BaseActor.ActorControlTypes;
 import actors.ActorState;
 import systems.Data;
 import openfl.Assets;
+import components.MoveEvent;
 /**
  * ...
  * @author ...
@@ -20,7 +21,6 @@ import openfl.Assets;
 class Unit extends BaseActor implements IEntity
 {
 		
-	
 	private var components:Map<String, Component> = new Map();
 	private var data:Dynamic;
 	private var unitData:Dynamic;
@@ -48,7 +48,7 @@ class Unit extends BaseActor implements IEntity
 		speed = unitData.speed;
 		damage = unitData.damage;
 		viewRange = unitData.viewRange;
-		addC(new ControlledUnitAI());
+		addC(new ControlledUnitAI(), "AI");
 	}
 	
 	override function setupGraphics() 
@@ -62,28 +62,16 @@ class Unit extends BaseActor implements IEntity
 		idleFrame = 0;
 	}
 	
-	
-	public function MoveToNode(node:Node)
+	override public function kill() 
 	{
-		for (k in components.keys())
+		for (key in components.keys())
 		{
-			if (Type.getClass(components[k]) == ControlledUnitAI)
-			{
-				cast(components[k], components.ControlledUnitAI).MoveToNode(node);
-			}
+			components[key].detach();
 		}
+		super.kill();
 	}
 	
-	public function AttackToNode(node:Node)
-	{
-		
-		for (k in components.keys())
-		{
-			
-		}
-	}
-	
-	public function addC(component:Component, n:String = null)
+	public function addC(component:Component, n:String)
 	{
 		var name:String;
 		if (n == null)

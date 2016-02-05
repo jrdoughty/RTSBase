@@ -1,11 +1,10 @@
 package components;
-import interfaces.IEntity;
 
 /**
  * ...
  * @author John Doughty
  */
-class Entity //implements IEntity
+class EventObject
 {
 
 	public function new() 
