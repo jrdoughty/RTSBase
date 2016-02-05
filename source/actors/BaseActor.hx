@@ -3,6 +3,7 @@ package actors;
 import flixel.FlxSprite;
 import flixel.FlxG;
 import haxe.Timer;
+import interfaces.IEntity;
 import interfaces.IGameState;
 import systems.AStar;
 import world.Node;
@@ -11,6 +12,7 @@ import dashboard.Control;
 import systems.Team;
 import haxe.Constraints.Function;
 import components.EventObject;
+import components.Component;
 /**
  * ...
  * @author John Doughty
@@ -31,7 +33,7 @@ enum ActorControlTypes
 }
  
  
-class BaseActor extends FlxSprite
+class BaseActor extends FlxSprite implements IEntity
 {
 
 	public var currentNodes:Array<Node> = [];
@@ -45,6 +47,7 @@ class BaseActor extends FlxSprite
 	public var attr:Dynamic;
 	public var healthMax:Int = 8;
 	
+	private var components:Map<String, Component> = new Map();
 	private var selected:Bool = false;
 	private var actionTimer:Timer;
 	private var delayTimer:Timer;
@@ -224,4 +227,55 @@ class BaseActor extends FlxSprite
 		}
 	}
 	
+	
+	public function addC(component:Component, n:String)
+	{
+		var name:String;
+		if (n == null)
+		{
+			name = component.defaultName;
+		}
+		else
+		{
+			name = n;
+		}
+		components.set(name, component);
+		component.attach(this);
+	}
+	
+	public function removeC(componentName:String)
+	{
+		components[componentName].detach();
+		components.remove(componentName);
+	}
+	
+	public function hasC(componentName:String):Bool
+	{
+		return components.exists(componentName);
+	}
+	
+	public function getC(componentName:String):Component
+	{
+		return components[componentName];
+	}
+	
+	public function getCList():Array<Component>
+	{
+		var result = [];
+		for (k in components.keys())
+		{
+			result.push(components[k]);
+		}
+		return result;
+	}
+	
+	public function getCIDList():Array<String>
+	{
+		var result = [];
+		for (k in components.keys())
+		{
+			result.push(k);
+		}
+		return result;
+	}
 }

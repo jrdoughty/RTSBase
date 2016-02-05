@@ -18,10 +18,9 @@ import components.MoveEvent;
  */
 
  
-class Unit extends BaseActor implements IEntity
+class Unit extends BaseActor
 {
 		
-	private var components:Map<String, Component> = new Map();
 	private var data:Dynamic;
 	private var unitData:Dynamic;
 	private var unitControlTypes: Array<ActorControlTypes> = [ActorControlTypes.ATTACK,
@@ -69,56 +68,5 @@ class Unit extends BaseActor implements IEntity
 			components[key].detach();
 		}
 		super.kill();
-	}
-	
-	public function addC(component:Component, n:String)
-	{
-		var name:String;
-		if (n == null)
-		{
-			name = component.defaultName;
-		}
-		else
-		{
-			name = n;
-		}
-		components.set(name, component);
-		component.attach(this);
-	}
-	
-	public function removeC(componentName:String)
-	{
-		components[componentName].detach();
-		components.remove(componentName);
-	}
-	
-	public function hasC(componentName:String):Bool
-	{
-		return components.exists(componentName);
-	}
-	
-	public function getC(componentName:String):Component
-	{
-		return components[componentName];
-	}
-	
-	public function getCList():Array<Component>
-	{
-		var result = [];
-		for (k in components.keys())
-		{
-			result.push(components[k]);
-		}
-		return result;
-	}
-	
-	public function getCIDList():Array<String>
-	{
-		var result = [];
-		for (k in components.keys())
-		{
-			result.push(k);
-		}
-		return result;
 	}
 }

@@ -1,6 +1,5 @@
 package components;
 import actors.BaseActor;
-import actors.Unit;
 import interfaces.IEntity;
 import haxe.Timer;
 /**
@@ -10,7 +9,7 @@ import haxe.Timer;
 class Component
 {
 	public var defaultName:String;
-	public var entity:Unit;
+	public var entity:BaseActor;
 	
 	private var actionTimer:Timer;
 	private var delayTimer:Timer;
@@ -32,7 +31,7 @@ class Component
 		actionTimer.run = takeAction;
 	}
 	
-	public function attach(e:Unit)
+	public function attach(e:BaseActor)
 	{
 		entity = e;
 		init();
