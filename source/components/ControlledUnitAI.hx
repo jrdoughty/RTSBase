@@ -243,7 +243,7 @@ class ControlledUnitAI extends AI
 	
 	private function hit()
 	{
-		targetEnemy.hurt(cast (entity, BaseActor).damage / targetEnemy.healthMax);
+		targetEnemy.hurt(entity.damage / targetEnemy.healthMax);
 		if (targetEnemy.alive == false)
 		{
 			targetEnemy = null;
@@ -262,7 +262,7 @@ class ControlledUnitAI extends AI
 	{
 		path.splice(0,1)[0].occupant = null;
 		entity.currentNodes[0] = path[0];
-		entity.currentNodes[0].occupant = cast(entity, BaseActor);
+		entity.currentNodes[0].occupant = entity;
 		FlxTween.tween(entity, { x:entity.currentNodes[0].x, y:entity.currentNodes[0].y }, entity.speed / 1000);
 		//FlxTween.tween(healthBar, { x:entity.currentNodes[0].x, y:entity.currentNodes[0].y - 1}, entity.speed / 1000);
 		//FlxTween.tween(healthBarFill, { x:entity.currentNodes[0].x, y:entity.currentNodes[0].y - 1 }, entity.speed / 1000);
