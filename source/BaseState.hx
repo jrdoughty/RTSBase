@@ -115,13 +115,13 @@ class BaseState extends FlxState implements IGameState
 		
 		for (i in 0...Teams.length)
 		{
-			for (j in 0...Teams[i].units.length)
+			for (j in 0...Teams[i].flxUnits.members.length)
 			{
-				result.push(Teams[i].units[j]);
+				result.push(Teams[i].flxUnits.members[j]);
 			}
-			for (j in 0...Teams[i].buildings.length)
+			for (j in 0...Teams[i].flxBuildings.members.length)
 			{
-				result.push(Teams[i].buildings[j]);
+				result.push(Teams[i].flxBuildings.members[j]);
 			}
 		}
 		
@@ -161,7 +161,7 @@ class BaseState extends FlxState implements IGameState
 				if (actor.alive)
 				{
 					actor.clearedNodes = [];
-					actor.clearFogOfWar(actor.currentNodes[0]);
+					actor.clearFogOfWar();
 				}
 			}
 			for (actor in activeTeam.flxBuildings.members)
@@ -169,7 +169,7 @@ class BaseState extends FlxState implements IGameState
 				if (actor.alive)
 				{
 					actor.clearedNodes = [];
-					actor.clearFogOfWar(actor.currentNodes[0]);
+					actor.clearFogOfWar();
 				}
 			}
 			getLevel().rebuildFog();

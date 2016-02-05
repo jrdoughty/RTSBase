@@ -48,6 +48,7 @@ class Unit extends BaseActor
 		damage = unitData.damage;
 		viewRange = unitData.viewRange;
 		addC(new ControlledUnitAI(), "AI");
+		threatRange = unitData.threatDist;
 	}
 	
 	override function setupGraphics() 

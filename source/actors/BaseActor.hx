@@ -46,6 +46,8 @@ class BaseActor extends FlxSprite implements IEntity
 	public var speed:Int = 250;
 	public var attr:Dynamic;
 	public var healthMax:Int = 8;
+	public var threatNodes:Array<Node> = [];
+	public var threatRange:Int = 2;
 	
 	private var components:Map<String, Component> = new Map();
 	private var selected:Bool = false;
@@ -134,7 +136,7 @@ class BaseActor extends FlxSprite implements IEntity
 	
 	private function takeAction()
 	{
-
+		checkView();
 	}
 	
 	public function select():Void
@@ -168,10 +170,14 @@ class BaseActor extends FlxSprite implements IEntity
 	}
 	
 	
-	public function clearFogOfWar(node:Node)
+	public function clearFogOfWar(node:Node = null)
 	{
 		var n;
 		var distance:Float;
+		if (node == null)
+		{
+			node = currentNodes[0];
+		}
 		for (n in node.neighbors)
 		{
 			if (clearedNodes.indexOf(n) == -1)
@@ -277,5 +283,30 @@ class BaseActor extends FlxSprite implements IEntity
 			result.push(k);
 		}
 		return result;
+	}
+	
+	public function checkView(node:Node = null)
+	{
+		var n;
+		var distance:Float;
+		if (node == null)
+		{
+			node = currentNodes[0];
+		}
+		for (n in node.neighbors)
+		{
+			if (threatNodes.indexOf(n) == -1)
+			{
+				distance = Math.sqrt(Math.pow(Math.abs(currentNodes[0].nodeX - n.nodeX), 2) + Math.pow(Math.abs(currentNodes[0].nodeY - n.nodeY), 2));
+				if (distance <= threatRange)
+				{
+					threatNodes.push(n);
+					if (distance < viewRange && n.isPassible())
+					{
+						checkView(n);
+					}
+				}
+			}
+		}
 	}
 }

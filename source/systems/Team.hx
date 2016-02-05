@@ -12,8 +12,8 @@ class Team
 {
 	public var flxUnits:FlxTypedGroup<Unit> = new FlxTypedGroup<Unit>();//to use flixel overlap
 	public var flxBuildings:FlxTypedGroup<BaseActor> = new FlxTypedGroup<BaseActor>();//to use flixel overlap
-	public var units:Array<Unit> = [];
-	public var buildings:Array<BaseActor> = [];
+	//public var units:Array<Unit> = [];
+	//public var buildings:Array<BaseActor> = [];
 	public var id(default, null):Int;
 	public var resources:Int = 400;
 
@@ -26,14 +26,14 @@ class Team
 	
 	public function addUnit(unit:Unit):Void
 	{
-		units.push(unit);
+		//units.push(unit);
 		flxUnits.add(unit);
 		unit.team = this;
 	}
 	
 	public function addBuilding(building:BaseActor):Void
 	{
-		buildings.push(building);
+		//buildings.push(building);
 		flxBuildings.add(building);
 		building.team = this;
 	}
