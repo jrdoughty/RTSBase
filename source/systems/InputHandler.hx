@@ -300,7 +300,7 @@ class InputHandler
 		var i:Int;
 		for (i in 0...selectedUnits.length)
 		{
-			selectedUnits[i].resetStates();
+			selectedUnits[i].dispatchEvent(AI.STOP);
 		}
 		resetInputState();
 	}
@@ -346,7 +346,7 @@ class InputHandler
 		var i:Int;
 		for (i in 0...selectedUnits.length)
 		{
-			selectedUnits[i].targetEnemy = unit;
+			selectedUnits[i].dispatchEvent(AI.ATTACK_ACTOR, new AttackEvent(unit));
 		}
 	}
 	

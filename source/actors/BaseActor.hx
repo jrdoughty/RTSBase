@@ -37,27 +37,25 @@ class BaseActor extends FlxSprite implements IEntity
 {
 
 	public var currentNodes:Array<Node> = [];
-	public var targetEnemy:BaseActor;
-	public var team:Team = null;
-	public var damage:Int = 1;
+	public var team:Team = null;//shouldgetremoved
 	public var controls:Array<Control> = [];
+	public var damage:Int = 1;
 	public var idleFrame:Int = 0;
-	public var clearedNodes:Array<Node> = [];
 	public var speed:Int = 250;
-	public var attr:Dynamic;
 	public var healthMax:Int = 8;
-	public var threatNodes:Array<Node> = [];
+	public var attr:Dynamic;
 	public var threatRange:Int = 2;
+	public var threatNodes:Array<Node> = [];
+	public var clearedNodes:Array<Node> = [];
 	
 	private var components:Map<String, Component> = new Map();
+	private var listeners:Map<String, Array<Function>> = new Map();
 	private var selected:Bool = false;
 	private var actionTimer:Timer;
 	private var delayTimer:Timer;
-	private var state:ActorState = IDLE;
 	private var healthBar:FlxSprite;
 	private var healthBarFill:FlxSprite;
 	private var viewRange:Int = 2;
-	private var listeners:Map<String, Array<Function>> = new Map();
 	
 	
 	public function new(node:Node) 
@@ -151,16 +149,9 @@ class BaseActor extends FlxSprite implements IEntity
 		color = 0xffffff;
 	}
 	
-	public function resetStates():Void
-	{
-		state = IDLE;
-		targetEnemy = null;
-	}
-	
 	override public function kill()
 	{
 		super.kill();
-		resetStates();
 		currentNodes[0].occupant = null;
 		actionTimer.stop();
 		FlxG.state.remove(healthBar);
@@ -195,6 +186,7 @@ class BaseActor extends FlxSprite implements IEntity
 			}
 		}
 	}
+	
 	public function addEvent(name:String, callback:Function)
 	{
 		if (!listeners.exists(name))
@@ -222,8 +214,12 @@ class BaseActor extends FlxSprite implements IEntity
 		}
 	}
 	
-	public function dispatchEvent(name:String, eventObject:EventObject)
+	public function dispatchEvent(name:String, eventObject:EventObject = null)
 	{
+		if (eventObject == null)
+		{
+			eventObject = new EventObject();
+		}
 		if (listeners.exists(name))
 		{
 			for (func in listeners[name])

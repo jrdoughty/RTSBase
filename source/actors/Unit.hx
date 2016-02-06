@@ -2,7 +2,6 @@ package actors;
 import components.Component;
 import components.ControlledUnitAI;
 import haxe.Constraints.Function;
-import interfaces.IEntity;
 import world.Node;
 import interfaces.IGameState;
 import systems.AStar;

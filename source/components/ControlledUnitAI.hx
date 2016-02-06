@@ -33,6 +33,7 @@ class ControlledUnitAI extends AI
 		entity.addEvent(AI.MOVE, MoveToNode);
 		entity.addEvent(AI.ATTACK_NODE, AttackToNode);
 		entity.addEvent(AI.ATTACK_ACTOR, AttackActor);
+		entity.addEvent(AI.STOP, resetStates);
 	}
 	
 	public function AttackActor(aEvent:AttackEvent)
@@ -250,7 +251,7 @@ class ControlledUnitAI extends AI
 		}
 	}
 	
-	public function resetStates():Void 
+	public function resetStates(eO:EventObject = null):Void 
 	{
 		state = IDLE;
 		targetEnemy = null;
