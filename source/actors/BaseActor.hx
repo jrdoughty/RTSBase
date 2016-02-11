@@ -11,7 +11,7 @@ import flixel.util.FlxColor;
 import dashboard.Control;
 import systems.Team;
 import haxe.Constraints.Function;
-import components.EventObject;
+import events.EventObject;
 import components.Component;
 /**
  * ...

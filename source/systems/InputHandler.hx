@@ -2,9 +2,9 @@ package systems;
 import actors.BaseActor;
 import actors.Unit;
 import actors.Building;
-import components.AttackEvent;
-import components.EventObject;
-import components.MoveEvent;
+import events.AttackEvent;
+import events.EventObject;
+import events.MoveEvent;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
@@ -17,6 +17,7 @@ import flixel.FlxCamera;
 import dashboard.Control;
 import world.Node;
 import components.AI;
+import events.StopEvent;
 
 /**
  * ...
@@ -300,7 +301,7 @@ class InputHandler
 		var i:Int;
 		for (i in 0...selectedUnits.length)
 		{
-			selectedUnits[i].dispatchEvent(AI.STOP);
+			selectedUnits[i].dispatchEvent(StopEvent.STOP);
 		}
 		resetInputState();
 	}
@@ -317,7 +318,7 @@ class InputHandler
 		{
 			for (i in 0...selectedUnits.length)
 			{
-				selectedUnits[i].dispatchEvent(AI.MOVE, new MoveEvent(node));
+				selectedUnits[i].dispatchEvent(MoveEvent.MOVE, new MoveEvent(node));
 			}
 		}
 	}
@@ -329,14 +330,14 @@ class InputHandler
 		{
 			for (i in 0...selectedUnits.length)
 			{
-				selectedUnits[i].dispatchEvent(AI.ATTACK_NODE, new MoveEvent(node));
+				selectedUnits[i].dispatchEvent(MoveEvent.MOVE, new MoveEvent(node, true));
 			}
 		}
 		else if (node.occupant != null && node.occupant.team.id != activeState.activeTeam.id)
 		{
 			for (i in 0...selectedUnits.length)
 			{
-				selectedUnits[i].dispatchEvent(AI.ATTACK_ACTOR, new AttackEvent(node.occupant));
+				selectedUnits[i].dispatchEvent(AttackEvent.ATTACK_ACTOR, new AttackEvent(node.occupant));
 			}
 		}
 	}
@@ -346,7 +347,7 @@ class InputHandler
 		var i:Int;
 		for (i in 0...selectedUnits.length)
 		{
-			selectedUnits[i].dispatchEvent(AI.ATTACK_ACTOR, new AttackEvent(unit));
+			selectedUnits[i].dispatchEvent(AttackEvent.ATTACK_ACTOR, new AttackEvent(unit));
 		}
 	}
 	

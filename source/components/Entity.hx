@@ -1,4 +1,5 @@
 package components;
+import events.EventObject;
 import interfaces.IEntity;
 import haxe.Constraints.Function;
 /**

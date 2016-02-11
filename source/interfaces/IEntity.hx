@@ -1,6 +1,6 @@
 package interfaces;
 import components.Component;
-import components.EventObject;
+import events.EventObject;
 import haxe.Constraints.Function;
 import systems.Team;
 import world.Node;

@@ -1,11 +1,14 @@
 package components;
+import events.AttackEvent;
+import events.EventObject;
+import events.MoveEvent;
 import world.Node;
 import actors.Unit;
 import systems.AStar;
 import actors.ActorState;
 import flixel.tweens.FlxTween;
 import actors.BaseActor;
-
+import events.StopEvent;
 /**
  * ...
  * @author John Doughty
@@ -30,10 +33,9 @@ class ControlledUnitAI extends AI
 	override public function init() 
 	{
 		super.init();
-		entity.addEvent(AI.MOVE, MoveToNode);
-		entity.addEvent(AI.ATTACK_NODE, AttackToNode);
-		entity.addEvent(AI.ATTACK_ACTOR, AttackActor);
-		entity.addEvent(AI.STOP, resetStates);
+		entity.addEvent(MoveEvent.MOVE, MoveToNode);
+		entity.addEvent(AttackEvent.ATTACK_ACTOR, AttackActor);
+		entity.addEvent(StopEvent.STOP, resetStates);
 	}
 	
 	public function AttackActor(aEvent:AttackEvent)
@@ -46,12 +48,7 @@ class ControlledUnitAI extends AI
 	{
 		resetStates();
 		targetNode = moveEvent.node;
-	}
-	
-	public function AttackToNode(moveEvent:MoveEvent)
-	{
-		MoveToNode(moveEvent);
-		aggressive = true;
+		aggressive = moveEvent.aggressive;
 	}
 	
 	private function move():Void

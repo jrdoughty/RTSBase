@@ -10,7 +10,7 @@ import actors.BaseActor.ActorControlTypes;
 import actors.ActorState;
 import systems.Data;
 import openfl.Assets;
-import components.MoveEvent;
+import events.MoveEvent;
 /**
  * ...
  * @author ...
