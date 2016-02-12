@@ -44,7 +44,7 @@ class ControlledUnitAI extends AI
 		targetEnemy = aEvent.target;
 	}
 	
-	public function MoveToNode(moveEvent:MoveEvent)//node:Node)
+	public function MoveToNode(moveEvent:MoveEvent)
 	{
 		resetStates();
 		targetNode = moveEvent.node;
@@ -262,8 +262,6 @@ class ControlledUnitAI extends AI
 		entity.currentNodes[0] = path[0];
 		entity.currentNodes[0].occupant = entity;
 		FlxTween.tween(entity, { x:entity.currentNodes[0].x, y:entity.currentNodes[0].y }, entity.speed / 1000);
-		//FlxTween.tween(healthBar, { x:entity.currentNodes[0].x, y:entity.currentNodes[0].y - 1}, entity.speed / 1000);
-		//FlxTween.tween(healthBarFill, { x:entity.currentNodes[0].x, y:entity.currentNodes[0].y - 1 }, entity.speed / 1000);
 	}
 	
 	private function isEnemyInRange():Bool
@@ -274,7 +272,7 @@ class ControlledUnitAI extends AI
 		for (i in 0...entity.currentNodes[0].neighbors.length)
 		{
 			if (entity.currentNodes[0].neighbors[i].occupant == targetEnemy && entity.currentNodes[0].neighbors[i].occupant != null || //if your target is close
-			targetEnemy == null && entity.currentNodes[0].neighbors[i].occupant != null && entity.currentNodes[0].neighbors[i].occupant.team.id != entity.team.id) // if you are near an enemy with no target of your own
+			targetEnemy == null && entity.currentNodes[0].neighbors[i].occupant != null && entity.team.isThreat(entity.currentNodes[0].neighbors[i].occupant.team.id)) // if you are near an enemy with no target of your own
 			{
 				inRange = true;
 				break;
@@ -290,7 +288,7 @@ class ControlledUnitAI extends AI
 		var i:Int;
 		for (i in 0...entity.currentNodes[0].neighbors.length)
 		{
-			if (entity.currentNodes[0].neighbors[i].occupant != null && entity.currentNodes[0].neighbors[i].occupant.team.id != entity.team.id)
+			if (entity.currentNodes[0].neighbors[i].occupant != null && entity.team.isThreat(entity.currentNodes[0].neighbors[i].occupant.team.id))
 			{
 				result = entity.currentNodes[0].neighbors[i].occupant;
 				break;

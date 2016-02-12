@@ -30,7 +30,14 @@ class Unit extends BaseActor
 		ActorControlTypes.BUILD, 
 		ActorControlTypes.HOLD];
 	
-	
+	/**
+	 * Creates Unit Actor from the Unit Sheet of CastleDB
+	 * Stores unitData and sets speed, damage, viewRange, and threatRange.
+	 * Currently attaches the ControlledUnitAI with the "AI" string. This will become based on CastleDB
+	 * 
+	 * @param	unitID string used to retrieve unitData
+	 * @param	node top left most node actor is placed in
+	 */
 	public function new(unitID:String, node:Node) 
 	{
 		var i:Int;

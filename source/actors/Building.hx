@@ -21,6 +21,12 @@ class Building extends BaseActor
 	private var callbacks:Array<Dynamic> = [];
 	private var hw:Int;
 
+	/**
+	 * Creates a Building Actor from the Building Sheet of CastleDB
+	 * Sets the buildings healthMax and ViewRange, and stores the buildingData, including producable units
+	 * @param	uniqueID	string id used to grab data from sheet
+	 * @param	node		top left node used for placement of actor
+	 */
 	public function new(uniqueID:String, node:Node) 
 	{
 		var i:Int;
@@ -40,6 +46,10 @@ class Building extends BaseActor
 		}
 	}
 	
+	/**
+	 * Spawns Unit next to the building
+	 * @param	i 	iterator in the buildings units Array
+	 */
 	private function createUnit(i:Int)
 	{
 		var x = 0;
@@ -71,6 +81,9 @@ class Building extends BaseActor
 		}
 	}
 	
+	/**
+	 * grabs sprite using building data
+	 */
 	override function setupGraphics() 
 	{
 		var assetPath:String = "assets" + buildingData.spriteFile.substr(2);

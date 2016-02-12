@@ -1,5 +1,4 @@
 package;
-import actors.Barraks;
 import haxe.Resource;
 import openfl.Assets;
 import systems.Team;
@@ -28,11 +27,12 @@ class DemoState extends BaseState
 	{
 		super.createTeams();
 		Teams.push(new Team());
-		
+		Teams.push(new Team());
+		Teams[0].addAlly(Teams[2]);
 		Teams[0].addUnit(new Unit("SoldierSword",Node.getNodeByGridXY(0,0)));
 		Teams[0].addUnit(new Unit("SoldierSpear",Node.getNodeByGridXY(1,0)));
 		Teams[0].addUnit(new Unit("OrcAxe",Node.getNodeByGridXY(1,1)));		
-		Teams[0].addUnit(new Unit("Wizard",Node.getNodeByGridXY(2,2)));	
+		Teams[2].addUnit(new Unit("Wizard",Node.getNodeByGridXY(2,5)));	
 		Teams[0].addUnit(new Unit("OrcClub",Node.getNodeByGridXY(0,1)));
 		Teams[1].addUnit(new Unit("DevilSpear",Node.activeNodes[616]));
 		Teams[1].addUnit(new Unit("DevilWhip",Node.activeNodes[499]));	
