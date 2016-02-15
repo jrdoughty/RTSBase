@@ -21,6 +21,14 @@ class Unit extends BaseActor
 {
 		
 	private var data:Dynamic;
+	/**
+	 *  Contains:
+	 *  health;
+	 *	speed;
+	 *	damage;
+	 *	viewRange;
+	 *	threatDist;
+	 */
 	private var unitData:Dynamic;
 	private var unitControlTypes: Array<ActorControlTypes> = [ActorControlTypes.ATTACK,
 		ActorControlTypes.STOP,
@@ -53,10 +61,14 @@ class Unit extends BaseActor
 		speed = unitData.speed;
 		damage = unitData.damage;
 		viewRange = unitData.viewRange;
-		addC(new ControlledUnitAI(), "AI");
-		threatRange = unitData.threatDist;
+		addC(new ControlledUnitAI(unitData.threatDist), "AI");
 	}
 	
+	/**
+	 * Lets up graphics based on unitData
+	 * Adds animations 'active' and 'attack'
+	 * idle currently is set to the first frame (0)
+	 */
 	override function setupGraphics() 
 	{
 		var assetPath:String = "assets" + unitData.spriteFile.substr(2);
@@ -66,14 +78,5 @@ class Unit extends BaseActor
 		animation.add("active", [0, 1], 5, true);
 		animation.add("attack", [0, 2], 5, true);
 		idleFrame = 0;
-	}
-	
-	override public function kill() 
-	{
-		for (key in components.keys())
-		{
-			components[key].detach();
-		}
-		super.kill();
 	}
 }

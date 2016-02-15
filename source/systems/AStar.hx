@@ -9,24 +9,32 @@ import world.SelfLoadingLevel;
  */
 class AStar
 {
+	/**
+	 * Array of Nodes in order beginning to end
+	 */
 	private static var path:Array<Node> = [];
+	/**
+	 * possible nodes to move to
+	 */
 	private static var openList:Array<Node> = [];
+	/**
+	 * Nodes that have been looked into and calculated
+	 */
 	private static var closedList:Array<Node> = [];
+	/**
+	 * Path estimate
+	 */
 	private static var pathHeiristic:Int;
-	private static var costToMove:Int;
-	//private static var levelWidth:Int;
-	//private static var levelHeight:Int;
+	/**
+	 * targetNode to path to
+	 */
 	private static var end:Node;
-	//private static var diagonal:Bool = false;
-	/*
-	private static var activeLevel:SelfLoadingLevel;
-	
-	public static function setActiveLevel(level:SelfLoadingLevel)
-	{
-		activeLevel = level;
-		levelWidth = activeLevel.width;
-	}
-	*/
+	/**
+	 * Fetches Array of Nodes that make up the route beginning to end to the endNode from the start Node
+	 * @param	start 		Path origin
+	 * @param	endNode		Desired End of Path
+	 * @return				Array of Nodes from start to endNode
+	 */
 	public static function newPath(start:Node, endNode:Node):Array<Node>
 	{
 		cleanParentNodes();//ensure everying this ready
@@ -51,7 +59,9 @@ class AStar
 		cleanParentNodes();
 		return path;
 	}
-	
+	/**
+	 * resets Node Parents before a new calculation can start
+	 */
 	private static function cleanParentNodes()
 	{
 		var i:Int;
@@ -61,6 +71,9 @@ class AStar
 		}
 	}
 	
+	/**
+	 * cleans up vars for new calculation
+	 */
 	private static function cleanUp()
 	{
 		var i:Int;
@@ -73,6 +86,12 @@ class AStar
 		closedList = [];
 		openList = [];
 	}
+	
+	/**
+	 * Recursive function that populates path by going back from the end to the end,
+	 * stopping at the start which has no parent
+	 * @param	node	Node to add to path
+	 */
 	private static function createPath(node:Node)
 	{
 		if (node.parentNode != null)
@@ -81,21 +100,12 @@ class AStar
 			createPath(node.parentNode);
 		}
 	}
-	
-	public static function getNext():Node
-	{
-		if(path.length > 1)
-			return path[path.length - 2];
-		else
-			return path[0];
-	}
 
-	public static function getHeiristic():Int
-	{
-		return pathHeiristic;
-	}
-	
-	private static function calculate()
+	/**
+	 * calculates out the path recursively. returns true if it finds path
+	 * if unable to come up with a path it returns false
+	 */
+	private static function calculate():Bool
 	{
 		var i:Int = 0;
         var closestIndex:Int = -1;
@@ -132,6 +142,13 @@ class AStar
 		}
 	}
 	
+	/**
+	 * heiristic calculation, uses Manhattin Method based on:http://homepages.abdn.ac.uk/f.guerin/pages/teaching/CS1013/practicals/aStarTutorial.htm
+	 * @param	startX		Node's X Position on the Grid
+	 * @param	startY		Node's Y Position on the Grid
+	 * @param	endX		End Node's X Position on the Grid
+	 * @param	endY		End Node's Y Position on the Grid
+	 */
 	@:extern private static inline function calculateHeiristic (startX:Int, startY:Int, endX:Int, endY:Int) 
 	{
         var h = Std.int(10 * Math.abs(startX - endX) + 10 * Math.abs(startY - endY));
@@ -139,7 +156,13 @@ class AStar
     }
 	
 	
-
+	/**
+	 * Sets up the Parent Node after applying the actual effort required to get to the node (g). 
+	 * If the node fails it is added to closedList so the next open can be checked
+	 * @param	childNode node to be checked
+	 * @param	parentNode to be added to the child if a better parent doesn't exist
+	 * @return	whether or not it is the end
+	 */
     private static function SetupChildNode(childNode:Node, parentNode:Node):Bool 
 	{
         var prospectiveG:Int;

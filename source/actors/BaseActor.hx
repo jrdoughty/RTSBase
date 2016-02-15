@@ -36,26 +36,89 @@ enum ActorControlTypes
 class BaseActor extends FlxSprite implements IEntity
 {
 
+	/**
+	 * Nodes Taken up by BaseActor
+	 */
 	public var currentNodes:Array<Node> = [];
-	public var team:Team = null;//shouldgetremoved
+
+	/**
+	 * Team BaseActor belongs to
+	 */
+	public var team:Team = null;
+
+	/**
+	 * Controls to be placed in the dashboard
+	 */
 	public var controls:Array<Control> = [];
+
+	/**
+	 * damage dealt when attacking
+	 */
 	public var damage:Int = 1;
+
+	/**
+	 * frame used when actor is told to stop or idle
+	 */
 	public var idleFrame:Int = 0;
+
+	/**
+	 * milliseconds between takeAction cycles
+	 */
 	public var speed:Int = 250;
+
+	/**
+	 * Int used to decide health using health as a percent of healthMax total
+	 */
 	public var healthMax:Int = 8;
-	public var attr:Dynamic;
-	public var threatRange:Int = 2;
-	public var threatNodes:Array<Node> = [];
+
+	/**
+	 * How many nodes over can the BaseActor's view clear the Fog of War
+	 */
+	public var viewRange:Int = 2;
+
+	/**
+	 * Nodes scanned to clear fog of war
+	 */
 	public var clearedNodes:Array<Node> = [];
 	
+
+	/**
+	 * components coupled to this
+	 */
 	private var components:Map<String, Component> = new Map();
+
+	/**
+	 * map of Function arrays, and the Event Constant Strings used to trigger them
+	 */
 	private var listeners:Map<String, Array<Function>> = new Map();
+
+	/**
+	 * selected state bool
+	 */
 	private var selected:Bool = false;
-	private var actionTimer:Timer;
-	private var delayTimer:Timer;
+
+	/**
+	 * simple health bar sprite
+	 */
 	private var healthBar:FlxSprite;
+
+
+	/**
+	 * timer whose frequency is set by speed
+	 */
+	private var actionTimer:Timer;
+
+	/**
+	 * offset delay timer that starts the action timer. Used to keep AI from starting at the same time. Set to 0 - 1 sec
+	 */
+	private var delayTimer:Timer;
+	
+	
+	
+	/**
+	 * simple health bar fill sprite
+	 */
 	private var healthBarFill:FlxSprite;
-	private var viewRange:Int = 2;
 	
 	/**
 	 * Base RTS Sprite/Entity Class. Creates an Actor in a node. Provides the FlxSprite Base Class the Node's x and y cords.
@@ -69,7 +132,6 @@ class BaseActor extends FlxSprite implements IEntity
 	public function new(node:Node) 
 	{
 		super(node.x, node.y);
-		
 		delayTimer = new Timer(Math.floor(1000*Math.random()));//Keeps mass created units from updating at the exact same time. Idea from: http://answers.unity3d.com/questions/419786/a-pathfinding-multiple-enemies-MOVING-target-effic.html
 		delayTimer.run = delayedStart;
 		setupGraphics();
@@ -85,6 +147,29 @@ class BaseActor extends FlxSprite implements IEntity
 		visible = false;
 		healthBar.visible = false;
 		healthBarFill.visible = false;
+	}
+	
+	/**
+	* end of delay timer that starts the takeAction cycle. 
+	* This prevents too many AI scripts firing at once
+	*/
+	private function delayedStart()
+    {
+	   delayTimer.stop();
+	   actionTimer = new Timer(speed);
+	   actionTimer.run = takeAction;
+    }
+	
+	/**
+	 * main action function run ever <speed> milliseconds
+	 */
+	private function takeAction()
+	{
+		var i;
+		for (i in components.keys())
+		{
+			components[i].takeAction();
+		}
 	}
 	
 	/**
@@ -134,16 +219,7 @@ class BaseActor extends FlxSprite implements IEntity
 		FlxG.state.add(healthBarFill);		
 	}
 	
-	/**
-	 * end of delay timer that starts the takeAction cycle. 
-	 * This prevents too many AI scripts firing at once
-	 */
-	private function delayedStart()
-	{
-		delayTimer.stop();
-		actionTimer = new Timer(speed);
-		actionTimer.run = takeAction;
-	}
+
 	/**
 	 * keeps up the position of the health bar, and maintains the fill
 	 */
@@ -171,13 +247,6 @@ class BaseActor extends FlxSprite implements IEntity
 		}
 	}
 	
-	/**
-	 * the main action function where the BaseActor displays its behavior
-	 */
-	private function takeAction()
-	{
-		checkView();
-	}
 	
 	/**
 	 * sets selected state
@@ -200,15 +269,20 @@ class BaseActor extends FlxSprite implements IEntity
 	
 	/**
 	 * ensures the BaseActor's actions are removed and that the BaseActor is no longer on the field
+	 * also detatches components
 	 */
 	override public function kill()
 	{
 		super.kill();
 		currentNodes[0].occupant = null;
-		actionTimer.stop();
 		FlxG.state.remove(healthBar);
 		FlxG.state.remove(healthBarFill);
 		FlxG.state.remove(this);
+		for (key in components.keys())
+		{
+			components[key].detach();
+		}
+		actionTimer.stop();
 		destroy();
 	}
 	
@@ -238,35 +312,6 @@ class BaseActor extends FlxSprite implements IEntity
 					if (distance < viewRange && n.isPassible())
 					{
 						clearFogOfWar(n);
-					}
-				}
-			}
-		}
-	}
-	/**
-	 * Recursively checks neighboring nodes for nodes in threat range
-	 * Expensive if threatRange is too great or too many BaseActors on the field
-	 * @param	node 			new Node to check. If not provided, defaults to the currentNode of the Base Actor
-	 */
-	public function checkView(node:Node = null)
-	{
-		var n;
-		var distance:Float;
-		if (node == null)
-		{
-			node = currentNodes[0];
-		}
-		for (n in node.neighbors)
-		{
-			if (threatNodes.indexOf(n) == -1)
-			{
-				distance = Math.sqrt(Math.pow(Math.abs(currentNodes[0].nodeX - n.nodeX), 2) + Math.pow(Math.abs(currentNodes[0].nodeY - n.nodeY), 2));
-				if (distance <= threatRange)
-				{
-					threatNodes.push(n);
-					if (distance < viewRange && n.isPassible())
-					{
-						checkView(n);
 					}
 				}
 			}
@@ -411,4 +456,5 @@ class BaseActor extends FlxSprite implements IEntity
 		}
 		return result;
 	}
+	
 }
