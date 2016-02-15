@@ -156,7 +156,10 @@ class ControlledUnitAI extends AI
 		}
 	}
 	
-	
+	/**
+	 * similar to move function except more complicated, as it needs to determine if the 
+	 * targetEnemy has moved and adjust if it has. May merge with Move Eventually
+	 */
 	private function chase()
 	{
 		var nextMove:Node;
@@ -205,7 +208,10 @@ class ControlledUnitAI extends AI
 			entity.animation.play("active");
 		}
 	}
-	
+	/**
+	 * if the enemy is close enough to hit, the attack occurs
+	 * if the enemy is too far, the Unit will chase it
+	 */
 	private function attack()
 	{
 		var i:Int;
@@ -227,7 +233,10 @@ class ControlledUnitAI extends AI
 		}
 		entity.animation.play("attack");
 	}
-	
+	/**
+	 * the neutral state that checks to see if something has happened since the last cycle that didn't change the state
+	 * pauses all animations in the neutral position, may need to allow for neutral animations eventually
+	 */
 	private function idle()
 	{
 		state = IDLE;
@@ -249,7 +258,9 @@ class ControlledUnitAI extends AI
 			attack();
 		}
 	}
-	
+	/**
+	 * drives actions based on state
+	 */
 	override function takeAction() 
 	{
 		super.takeAction();
@@ -278,6 +289,9 @@ class ControlledUnitAI extends AI
 		}
 	}
 	
+	/**
+	 * damages enemy base on entity.damage and targetEnemy.healthMax
+	 */
 	private function hit()
 	{
 		targetEnemy.hurt(entity.damage / targetEnemy.healthMax);
@@ -287,6 +301,11 @@ class ControlledUnitAI extends AI
 		}
 	}
 	
+	/**
+	 * resets all the decision making vars to null or false
+	 * 
+	 * @param	eO		EventObject is required for listenerCallbacks
+	 */
 	public function resetStates(eO:EventObject = null):Void 
 	{
 		state = IDLE;
@@ -295,6 +314,9 @@ class ControlledUnitAI extends AI
 		targetNode = null;
 	}
 	
+	/**
+	 * triggers the tweening of the movement from on node to the next and sets currentNodes and its occupant
+	 */
 	@:extern inline function moveAlongPath()
 	{
 		path.splice(0,1)[0].occupant = null;
@@ -303,6 +325,10 @@ class ControlledUnitAI extends AI
 		FlxTween.tween(entity, { x:entity.currentNodes[0].x, y:entity.currentNodes[0].y }, entity.speed / 1000);
 	}
 	
+	/**
+	 * checks to see if the enemy is next to the Unit, will need changed for reach
+	 * @return whether the enemy is above, below, or to the side
+	 */
 	private function isEnemyInRange():Bool
 	{
 		var i:Int;
@@ -321,6 +347,10 @@ class ControlledUnitAI extends AI
 		return inRange;
 	}
 	
+	/**
+	 * checks to see which enemy is next to the Unit, will need changed for reach
+	 * @return the enemy that is above, below, or to the side
+	 */
 	private function getEnemyInRange():BaseActor
 	{
 		var result:BaseActor = null;
@@ -336,6 +366,10 @@ class ControlledUnitAI extends AI
 		return result;
 	}
 	
+	/**
+	 * checks to see if an enemy is in the threat range of the Unit
+	 * @return		is an enemy in the threat range
+	 */
 	private function isEnemyInThreat():Bool
 	{
 		var i:Int;
@@ -354,6 +388,11 @@ class ControlledUnitAI extends AI
 		return inRange;
 	}
 	
+	/**
+	 * gets first enemy found in threat range
+	 * 
+	 * @return first enemy found in threat range
+	 */
 	private function getEnemyInThreat():BaseActor
 	{
 		var result:BaseActor = null;
