@@ -11,13 +11,7 @@ class Component
 	public var defaultName:String;
 	public var entity:BaseActor;
 
-	/**
-	 * main periodical function that gets run every <entity.speed> milliseconds
-	 */
-	public function takeAction()
-	{
-		
-	}
+
 	/**
 	* base class for all components
 	*/

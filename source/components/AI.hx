@@ -1,5 +1,5 @@
 package components;
-
+import events.ActionEvent;
 /**
  * ...
  * @author John Doughty
@@ -14,4 +14,8 @@ class AI extends Component
 		super();
 	}
 	
+	public function takeAction() 
+	{
+		entity.dispatchEvent(ActionEvent.TAKE_ACTION, new ActionEvent());
+	}
 }

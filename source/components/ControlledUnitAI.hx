@@ -9,6 +9,8 @@ import actors.ActorState;
 import flixel.tweens.FlxTween;
 import actors.BaseActor;
 import events.StopEvent;
+import events.ActionEvent;
+import haxe.Timer;
 /**
  * ...
  * @author John Doughty
@@ -27,6 +29,17 @@ class ControlledUnitAI extends AI
 	 * How many nodes over can the BaseActor Detect and opponent
 	 */
 	public var threatRange:Int = 2;
+
+
+	/**
+	 * timer whose frequency is set by speed
+	 */
+	private var actionTimer:Timer;
+
+	/**
+	 * offset delay timer that starts the action timer. Used to keep AI from starting at the same time. Set to 0 - 1 sec
+	 */
+	private var delayTimer:Timer;
 	
 	private var state:ActorState = IDLE;
 	private	var path:Array<Node> = [];
@@ -44,7 +57,9 @@ class ControlledUnitAI extends AI
 	{
 		super();
 		this.threatRange = threatRange;
-		defaultName = "AI";
+		defaultName = "ControlledUnitAI";
+		delayTimer = new Timer(Math.floor(1000*Math.random()));//Keeps mass created units from updating at the exact same time. Idea from: http://answers.unity3d.com/questions/419786/a-pathfinding-multiple-enemies-MOVING-target-effic.html
+		delayTimer.run = delayedStart;
 	}
 	/**
 	 * adds eventlisteners for Move, Atack, and stop
@@ -258,6 +273,17 @@ class ControlledUnitAI extends AI
 			attack();
 		}
 	}
+	
+	/**
+	* end of delay timer that starts the takeAction cycle. 
+	* This prevents too many AI scripts firing at once
+	*/
+	private function delayedStart()
+    {
+	   delayTimer.stop();
+	   actionTimer = new Timer(entity.speed);
+	   actionTimer.run = takeAction;
+    }
 	/**
 	 * drives actions based on state
 	 */
@@ -436,5 +462,13 @@ class ControlledUnitAI extends AI
 				}
 			}
 		}
+	}
+	/**
+	 * detatches component and stops the UnitAI's action Timer
+	 */
+	override public function detach() 
+	{
+		actionTimer.stop();
+		super.detach();
 	}
 }
