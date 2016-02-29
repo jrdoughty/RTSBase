@@ -1,5 +1,7 @@
 package actors;
 
+import events.HideEvent;
+import events.RevealEvent;
 import flixel.FlxSprite;
 import flixel.FlxG;
 import haxe.Timer;
@@ -51,42 +53,17 @@ class BaseActor extends FlxSprite implements IEntity
 	 */
 	public var controls:Array<Control> = [];
 
-	/**
-	 * damage dealt when attacking
-	 */
-	public var damage:Int = 1;
 
 	/**
 	 * frame used when actor is told to stop or idle
 	 */
 	public var idleFrame:Int = 0;
 
-	/**
-	 * milliseconds between takeAction cycles
-	 */
-	public var speed:Int = 250;
-
-	/**
-	 * Int used to decide health using health as a percent of healthMax total
-	 */
-	public var healthMax:Int = 8;
 
 	/**
 	 * DataHolder for Entity
 	 */
 	public var eData:Dynamic = {};
-	
-
-	/**
-	 * simple health bar sprite
-	 */
-	private var healthBar:FlxSprite;
-	
-	
-	/**
-	 * simple health bar fill sprite
-	 */
-	private var healthBarFill:FlxSprite;
 	
 	/**
 	 * components coupled to this
@@ -115,27 +92,8 @@ class BaseActor extends FlxSprite implements IEntity
 	public function new(node:Node) 
 	{
 		super(node.x, node.y);
-	}
-	
-	/**
-	 * sets itself and the health bars to no longer be visible
-	 */
-	public function killVisibility()
-	{
-		visible = false;
-		healthBar.visible = false;
-		healthBarFill.visible = false;
-	}
-
-	
-	/**
-	 * Sets itself and the health bars to be visible
-	 */
-	public function makeVisible()
-	{
-		visible = true;
-		healthBar.visible = true;
-		healthBarFill.visible = true;
+		addEvent(HideEvent.HIDE, hide);
+		addEvent(RevealEvent.REVEAL, reveal);
 	}
 	
 	/**
@@ -161,48 +119,15 @@ class BaseActor extends FlxSprite implements IEntity
 		
 	}
 	
-	/**
-	 * health is a 0-1 base system and the bar sits with a fill on top of it
-	 */
-	private function createHealthBar()
+	private function hide(e:HideEvent)
 	{
-		health = 1;
-		healthBar = new FlxSprite(x, y - 1);
-		healthBar.makeGraphic(Std.int(width), 1, FlxColor.BLACK);
-		FlxG.state.add(healthBar);
-		healthBarFill = new FlxSprite(x, y - 1);
-		healthBarFill.makeGraphic(Std.int(width), 1, FlxColor.RED);
-		FlxG.state.add(healthBarFill);		
+		visible = false;
 	}
 	
-
-	/**
-	 * keeps up the position of the health bar, and maintains the fill
-	 */
-	override public function update()
+	private function reveal(e:RevealEvent)
 	{
-		super.update();
-		if (healthBarFill != null)
-		{
-			if (health > 0)
-			{
-				healthBarFill.scale.set(health, 1);
-			}
-			else
-			{
-				healthBarFill.scale.set(0, 1);
-			}
-			healthBarFill.updateHitbox();
-			healthBarFill.x = x;
-			healthBarFill.y = y - 1;
-		}
-		if (healthBar != null)
-		{
-			healthBar.x = x;
-			healthBar.y = y - 1;
-		}
+		visible = true;
 	}
-	
 	
 	/**
 	 * sets selected state
@@ -229,8 +154,6 @@ class BaseActor extends FlxSprite implements IEntity
 	{
 		super.kill();
 		currentNodes[0].occupant = null;
-		FlxG.state.remove(healthBar);
-		FlxG.state.remove(healthBarFill);
 		FlxG.state.remove(this);
 		for (key in components.keys())
 		{

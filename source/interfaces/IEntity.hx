@@ -10,7 +10,6 @@ import world.Node;
 interface IEntity 
 {
 	public var currentNodes:Array<Node>;
-	public var speed:Int;
 	public var team:Team;
 	private var listeners:Map<String, Array<Function>>;
 	private var components:Map<String, Component>;

@@ -9,6 +9,7 @@ import flixel.FlxSprite;
 import actors.Unit;
 import flixel.FlxG;
 import components.View;
+import components.Health;
 
 /**
  * ...
@@ -38,13 +39,11 @@ class Building extends BaseActor
 		eData = data.Buildings.get(uniqueID);//supposedly Buildings doesn't have get
 		
 		setupGraphics();
-		createHealthBar();
 		setupNodes(node);
 		
 		hw = Math.floor(Math.sqrt(currentNodes.length));
 		addC(new View(eData.viewRange), "View");
-		
-		healthMax = eData.health;
+		addC(new Health(eData.healthMax), "Health");
 		for (i in 0...eData.units.length)
 		{
 			unitsToProduce.push(eData.units[i].unit);

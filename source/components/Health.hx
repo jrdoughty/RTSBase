@@ -1,9 +1,13 @@
 package components;
 import events.EventObject;
+import events.UpdateEvent;
 import flixel.FlxSprite;
 import events.RevealEvent;
 import events.HideEvent;
 import events.KillEvent;
+import events.HurtEvent;
+import flixel.util.FlxColor;
+import flixel.FlxG;
 /**
  * ...
  * @author ...
@@ -12,37 +16,49 @@ class Health extends Component
 {
 
 
+
+	/**
+	 * Int used to decide health using health as a percent of healthMax total
+	 */
+	public var healthMax:Int = 8;
 	/**
 	 * simple health bar sprite
 	 */
 	private var healthBar:FlxSprite;
-	
 	
 	/**
 	 * simple health bar fill sprite
 	 */
 	private var healthBarFill:FlxSprite;
 	
-	private var health = 1;
+	private var health:Float = 1;
 	
-	public function new() 
+	public function new(h:Int) 
 	{
 		super();
+		healthMax = h;
 	}
 	
 	override public function init() 
 	{
 		super.init();
-		healthBar = new FlxSprite(x, y - 1);
-		healthBar.makeGraphic(Std.int(width), 1, FlxColor.BLACK);
+		healthBar = new FlxSprite(entity.x, entity.y - 1);
+		healthBar.makeGraphic(Std.int(entity.width), 1, FlxColor.BLACK);
 		FlxG.state.add(healthBar);
-		healthBarFill = new FlxSprite(x, y - 1);
-		healthBarFill.makeGraphic(Std.int(width), 1, FlxColor.RED);
+		healthBarFill = new FlxSprite(entity.x, entity.y - 1);
+		healthBarFill.makeGraphic(Std.int(entity.width), 1, FlxColor.RED);
 		FlxG.state.add(healthBarFill);	
 		
 		
 		entity.addEvent(RevealEvent.REVEAL, makeVisible);
 		entity.addEvent(HideEvent.HIDE, killVisibility);
+		entity.addEvent(HurtEvent.HURT, hurt);
+		entity.addEvent(UpdateEvent.UPDATE, update);
+	}
+	
+	public function hurt(e:HurtEvent)
+	{
+		health -= e.damage / healthMax;
 	}
 	
 	/**
@@ -67,7 +83,7 @@ class Health extends Component
 	/**
 	 * keeps up the position of the health bar, and maintains the fill
 	 */
-	public function update(e:EventObject = null)
+	public function update(e:UpdateEvent = null)
 	{
 		if (healthBarFill != null)
 		{
@@ -80,13 +96,13 @@ class Health extends Component
 				healthBarFill.scale.set(0, 1);
 			}
 			healthBarFill.updateHitbox();
-			healthBarFill.x = x;
-			healthBarFill.y = y - 1;
+			healthBarFill.x = entity.x;
+			healthBarFill.y = entity.y - 1;
 		}
 		if (healthBar != null)
 		{
-			healthBar.x = x;
-			healthBar.y = y - 1;
+			healthBar.x = entity.x;
+			healthBar.y = entity.y - 1;
 		}
 		if (health <= 0)
 		{
@@ -100,5 +116,6 @@ class Health extends Component
 		FlxG.state.remove(healthBar);
 		FlxG.state.remove(healthBarFill);
 		entity.dispatchEvent(KillEvent.KILL, new KillEvent());
+		entity.kill();
 	}
 }

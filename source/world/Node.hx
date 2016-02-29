@@ -1,6 +1,8 @@
 package world;
 import actors.BaseActor;
 import flixel.FlxSprite;
+import events.RevealEvent;
+import events.HideEvent;
 
 /**
  * ...
@@ -87,7 +89,7 @@ class Node extends FlxSprite
 		overlay.alpha = 0;
 		if (occupant != null)
 		{
-			occupant.makeVisible();
+			occupant.dispatchEvent(RevealEvent.REVEAL, new RevealEvent());
 		}
 	}
 	
@@ -96,7 +98,7 @@ class Node extends FlxSprite
 		overlay.alpha = .5;
 		if (occupant != null)
 		{
-			occupant.killVisibility();
+			occupant.dispatchEvent(HideEvent.HIDE, new HideEvent());
 		}
 	}
 	

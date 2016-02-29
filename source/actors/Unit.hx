@@ -1,6 +1,7 @@
 package actors;
 import components.Component;
 import components.ControlledUnitAI;
+import components.Health;
 import components.View;
 import haxe.Constraints.Function;
 import world.Node;
@@ -12,6 +13,7 @@ import actors.ActorState;
 import systems.Data;
 import openfl.Assets;
 import events.MoveEvent;
+import events.UpdateEvent;
 /**
  * ...
  * @author ...
@@ -53,18 +55,21 @@ class Unit extends BaseActor
 		data = systems.Data;//hack
 		eData = data.Actors.get(unitID);//supposedly Actors doesn't have get
 		setupGraphics();
-		createHealthBar();
 		setupNodes(node);
 		for (i in 0...3)
 		{
 			controls.push(new Control(i, unitControlTypes[i]));
 		}
 		
-		healthMax = eData.health;
-		speed = eData.speed;
-		damage = eData.damage;
-		addC(new ControlledUnitAI(eData.threatDist), "AI");
+		addC(new Health(eData.health), "Health");
+		addC(new ControlledUnitAI(eData.threatDist, eData.speed, eData.damage), "AI");
 		addC(new View(eData.viewRange), "View");
+	}
+	
+	override public function update():Void 
+	{
+		super.update();
+		dispatchEvent(UpdateEvent.UPDATE, new UpdateEvent());
 	}
 	
 	/**

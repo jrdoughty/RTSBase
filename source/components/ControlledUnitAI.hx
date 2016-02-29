@@ -11,6 +11,7 @@ import actors.BaseActor;
 import events.StopEvent;
 import events.ActionEvent;
 import haxe.Timer;
+import events.HurtEvent;
 /**
  * ...
  * @author John Doughty
@@ -29,6 +30,16 @@ class ControlledUnitAI extends AI
 	 * How many nodes over can the BaseActor Detect and opponent
 	 */
 	public var threatRange:Int = 2;
+
+	/**
+	 * damage dealt when attacking
+	 */
+	public var damage:Int = 1;
+	
+	/**
+	 * milliseconds between takeAction cycles
+	 */
+	public var speed:Int = 250;
 
 
 	/**
@@ -53,9 +64,11 @@ class ControlledUnitAI extends AI
 	 * sets defaultName to 'AI'
 	 * @param	threatRange
 	 */
-	public function new(threatRange:Int)
+	public function new(threatRange:Int, speed:Int, damage:Int)
 	{
 		super();
+		this.speed = speed;
+		this.damage = damage;
 		this.threatRange = threatRange;
 		defaultName = "ControlledUnitAI";
 		delayTimer = new Timer(Math.floor(1000*Math.random()));//Keeps mass created units from updating at the exact same time. Idea from: http://answers.unity3d.com/questions/419786/a-pathfinding-multiple-enemies-MOVING-target-effic.html
@@ -281,7 +294,7 @@ class ControlledUnitAI extends AI
 	private function delayedStart()
     {
 	   delayTimer.stop();
-	   actionTimer = new Timer(entity.speed);
+	   actionTimer = new Timer(speed);
 	   actionTimer.run = takeAction;
     }
 	/**
@@ -320,7 +333,7 @@ class ControlledUnitAI extends AI
 	 */
 	private function hit()
 	{
-		targetEnemy.hurt(entity.damage / targetEnemy.healthMax);
+		targetEnemy.dispatchEvent(HurtEvent.HURT, new HurtEvent(damage));
 		if (targetEnemy.alive == false)
 		{
 			targetEnemy = null;
@@ -348,7 +361,7 @@ class ControlledUnitAI extends AI
 		path.splice(0,1)[0].occupant = null;
 		entity.currentNodes[0] = path[0];
 		entity.currentNodes[0].occupant = entity;
-		FlxTween.tween(entity, { x:entity.currentNodes[0].x, y:entity.currentNodes[0].y }, entity.speed / 1000);
+		FlxTween.tween(entity, { x:entity.currentNodes[0].x, y:entity.currentNodes[0].y }, speed / 1000);
 	}
 	
 	/**
