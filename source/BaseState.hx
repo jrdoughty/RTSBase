@@ -23,6 +23,7 @@ import openfl.Assets;
 import flixel.plugin.MouseEventManager;
 import actors.Unit;
 import openfl.geom.Point;
+import events.ClearFogEvent;
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -160,16 +161,14 @@ class BaseState extends FlxState implements IGameState
 			{
 				if (actor.alive)
 				{
-					actor.clearedNodes = [];
-					actor.clearFogOfWar();
+					actor.dispatchEvent(ClearFogEvent.CLEAR, new ClearFogEvent());
 				}
 			}
 			for (actor in activeTeam.flxBuildings.members)
 			{
 				if (actor.alive)
 				{
-					actor.clearedNodes = [];
-					actor.clearFogOfWar();
+					actor.dispatchEvent(ClearFogEvent.CLEAR, new ClearFogEvent());
 				}
 			}
 			getLevel().rebuildFog();

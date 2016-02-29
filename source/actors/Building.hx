@@ -8,6 +8,7 @@ import actors.BaseActor;
 import flixel.FlxSprite;
 import actors.Unit;
 import flixel.FlxG;
+import components.View;
 
 /**
  * ...
@@ -41,7 +42,7 @@ class Building extends BaseActor
 		setupNodes(node);
 		
 		hw = Math.floor(Math.sqrt(currentNodes.length));
-		viewRange = eData.viewRange;
+		addC(new View(eData.viewRange), "View");
 		
 		healthMax = eData.health;
 		for (i in 0...eData.units.length)

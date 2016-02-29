@@ -1,6 +1,7 @@
 package actors;
 import components.Component;
 import components.ControlledUnitAI;
+import components.View;
 import haxe.Constraints.Function;
 import world.Node;
 import interfaces.IGameState;
@@ -62,8 +63,8 @@ class Unit extends BaseActor
 		healthMax = eData.health;
 		speed = eData.speed;
 		damage = eData.damage;
-		viewRange = eData.viewRange;
 		addC(new ControlledUnitAI(eData.threatDist), "AI");
+		addC(new View(eData.viewRange), "View");
 	}
 	
 	/**
