@@ -15,21 +15,25 @@
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
-    <class path="C:\HaxeToolkit\haxe\lib\flixel\3,3,12" />
-    <class path="C:\HaxeToolkit\haxe\lib\openfl\3,5,3" />
-    <class path="C:\HaxeToolkit\haxe\lib\lime\2,8,2" />
+    <class path="C:\HaxeToolkit\haxe\lib\flixel\4,0,0" />
+    <class path="C:\HaxeToolkit\haxe\lib\openfl\3,6,0" />
+    <class path="C:\HaxeToolkit\haxe\lib\lime\2,9,0" />
+    <class path="C:\HaxeToolkit\haxe\lib\hscript\2,0,5" />
     <class path="C:\HaxeToolkit\haxe\lib\castle\1,5,0" />
+    <class path="C:\HaxeToolkit\haxe\lib\mphx\0,2,1" />
+    <class path="C:\HaxeToolkit\haxe\lib\msgpack-haxe\1,15,1" />
     <class path="source" />
+    <class path="C:\HaxeToolkit\haxe\lib\openfl\3,6,0\extern" />
     <class path="export\flash\haxe" />
   </classpaths>
   <!-- Build options -->
   <build>
-    <option directives="flixel=3.3.12&#xA;openfl=3.5.3&#xA;lime=2.8.2&#xA;castle=1.5.0&#xA;openfl-next&#xA;tools=2.8.2&#xA;no-compilation&#xA;openfl-flash&#xA;FLX_RENDER_BLIT&#xA;web&#xA;display" />
+    <option directives="flixel=4.0.0&#xA;openfl=3.6.0&#xA;lime=2.9.0&#xA;hscript=2.0.5&#xA;castle=1.5.0&#xA;mphx=0.2.1&#xA;msgpack-haxe=1.15.1&#xA;openfl-next&#xA;tools=2.9.0&#xA;no-compilation&#xA;openfl-flash&#xA;web&#xA;display" />
     <option flashStrict="False" />
     <option noInlineOnDebug="False" />
     <option mainClass="ApplicationMain" />
     <option enabledebug="False" />
-    <option additional="--macro openfl.Lib.includeExterns()&#xA;-swf-version 11.8&#xA;-debug " />
+    <option additional="--macro flixel.system.macros.FlxDefines.run()&#xA;-swf-version 11.8&#xA;-debug " />
   </build>
   <!-- haxelib libraries -->
   <haxelib>

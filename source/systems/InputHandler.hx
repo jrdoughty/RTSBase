@@ -10,7 +10,7 @@ import flixel.FlxState;
 import flixel.group.FlxGroup;
 import flixel.FlxObject;
 import flixel.FlxSprite;
-import flixel.plugin.MouseEventManager;
+import flixel.input.mouse.FlxMouseEventManager;
 import flixel.util.FlxColor;
 import interfaces.IGameState;
 import flixel.FlxCamera;
@@ -60,7 +60,7 @@ class InputHandler
 		for (i in 0...Node.activeNodes.length)
 		{
 			flxNodes.add(Node.activeNodes[i]);
-			MouseEventManager.add(Node.activeNodes[i], null, null, onOver);
+			FlxMouseEventManager.add(Node.activeNodes[i], null, null, onOver);
 		}
 		for (i in 0...activeState.Teams.length)
 		{
@@ -102,19 +102,19 @@ class InputHandler
 			if (controls[i].callbackFunction != null)
 			{
 				var func:Dynamic = controls[i].callbackFunction;
-				MouseEventManager.add(controls[i], null, controls[i].useCallback, controls[i].hover, controls[i].out, false, true, false);
+				FlxMouseEventManager.add(controls[i], null, controls[i].useCallback, controls[i].hover, controls[i].out, false, true, false);
 			}
 			else if (controls[i].type == ActorControlTypes.MOVE)
 			{
-				MouseEventManager.add(controls[i], null, move, controls[i].hover, controls[i].out, false, true, false);
+				FlxMouseEventManager.add(controls[i], null, move, controls[i].hover, controls[i].out, false, true, false);
 			}
 			else if (controls[i].type == ActorControlTypes.ATTACK)
 			{
-				MouseEventManager.add(controls[i], null, attack, controls[i].hover, controls[i].out, false, true, false);
+				FlxMouseEventManager.add(controls[i], null, attack, controls[i].hover, controls[i].out, false, true, false);
 			}
 			else if (controls[i].type == ActorControlTypes.STOP)
 			{
-				MouseEventManager.add(controls[i], null, stop, controls[i].hover, controls[i].out, false, true, false);
+				FlxMouseEventManager.add(controls[i], null, stop, controls[i].hover, controls[i].out, false, true, false);
 			}
 			
 		}

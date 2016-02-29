@@ -66,9 +66,9 @@ class Unit extends BaseActor
 		addC(new View(eData.viewRange), "View");
 	}
 	
-	override public function update():Void 
+	override public function update(elapsed:Float):Void 
 	{
-		super.update();
+		super.update(elapsed);
 		dispatchEvent(UpdateEvent.UPDATE, new UpdateEvent());
 	}
 	

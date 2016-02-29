@@ -2,7 +2,7 @@ package systems;
 
 import actors.BaseActor;
 import actors.Unit;
-import flixel.group.FlxTypedGroup;
+import flixel.group.FlxGroup;
 
 /**
  * ...

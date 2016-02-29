@@ -249,6 +249,7 @@ class ControlledUnitAI extends AI
 			if (isEnemyInRange())
 			{
 				hit();
+				entity.animation.play("attack");
 			}
 			else
 			{
@@ -259,7 +260,6 @@ class ControlledUnitAI extends AI
 		{
 			state = IDLE;
 		}
-		entity.animation.play("attack");
 	}
 	/**
 	 * the neutral state that checks to see if something has happened since the last cycle that didn't change the state

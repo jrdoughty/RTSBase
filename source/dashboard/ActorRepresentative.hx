@@ -39,9 +39,9 @@ class ActorRepresentative extends FlxSprite
 		healthBarFill.y = y;
 	}
 	
-	override public function update():Void
+	override public function update(elapsed:Float):Void
 	{
-		super.update();
+		super.update(elapsed);
 		alive = baseActor.alive;
 		healthBarFill.scale.set(baseActor.health, 1);
 		healthBarFill.updateHitbox();

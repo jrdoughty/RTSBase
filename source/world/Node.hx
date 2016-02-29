@@ -40,15 +40,18 @@ class Node extends FlxSprite
 		overlay = new FlxSprite(X * width, Y * height);
 		nodeX = X;
 		nodeY = Y;
-		loadGraphic(asset, false, width, height);
-		overlay.loadGraphic(asset, false, width, height);
+		loadGraphic(asset, true, width, height);
+		overlay.loadGraphic(asset, true, width, height);
 		overlay.animation.frameIndex = 6;
 		overlay.alpha = .5;
-		
-		animation.add("main",[frame],0,false);
-		animation.add("clicked",[9],0,false);
-		animation.play("main");
-		
+		if (frame == 7)
+		{
+			true;
+		}
+		animation.add("main",[frame,frame],0,false);
+		animation.add("clicked",[9,9],0,false);
+		animation.play("main", true);
+		animation.frameIndex = frame;
 		passable = pass;
 	}
 	

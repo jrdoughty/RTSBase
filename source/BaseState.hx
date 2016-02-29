@@ -11,7 +11,7 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
-import flixel.util.FlxMath;
+import flixel.math.FlxMath;
 import interfaces.IGameState;
 import systems.AStar;
 import systems.InputHandler;
@@ -20,7 +20,7 @@ import world.Node;
 import world.SelfLoadingLevel;
 import world.TiledTypes;
 import openfl.Assets;
-import flixel.plugin.MouseEventManager;
+import flixel.input.mouse.FlxMouseEventManager;
 import actors.Unit;
 import openfl.geom.Point;
 import events.ClearFogEvent;
@@ -142,9 +142,9 @@ class BaseState extends FlxState implements IGameState
 	/**
 	 * Function that is called once every frame.
 	 */
-	override public function update():Void
+	override public function update(elapsed:Float):Void
 	{
-		super.update();
+		super.update(elapsed);
 		var newPositions:Array<Array<Int>> = [];
 		inputHandler.update();
 		for (actor in activeTeam.flxUnits.members)

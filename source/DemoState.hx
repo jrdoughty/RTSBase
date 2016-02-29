@@ -46,9 +46,9 @@ class DemoState extends BaseState
 		add(resourceDisplay);
 	}
 	
-	override public function update():Void 
+	override public function update(elapsed:Float):Void 
 	{
-		super.update();
+		super.update(elapsed);
 		members.remove(resourceDisplay);
 		members.push(resourceDisplay);//keep it on top
 		resourceDisplay.text = Std.string(activeTeam.resources);

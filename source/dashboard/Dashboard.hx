@@ -110,19 +110,15 @@ class Dashboard extends FlxGroup
 		}
 	}
 	
-	override public function update():Void
+	override public function update(elapsed:Float):Void
 	{
 		var i:Int = 0;
 				
-		super.update();
+		super.update(elapsed);
 		
 		while(i < representatives.length)//because the length gets stored ahead in haxe for loops, the changing length breaks this loop
 		{
-			if (representatives[i].alive)
-			{
-				representatives[i].update();
-			}
-			else
+			if (!representatives[i].alive)
 			{
 				activeUnits.splice(activeUnits.indexOf(representatives[i].baseActor), 1);
 				remove(representatives[i]);
