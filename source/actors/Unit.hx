@@ -29,7 +29,6 @@ class Unit extends BaseActor
 	 *	viewRange;
 	 *	threatDist;
 	 */
-	private var unitData:Dynamic;
 	private var unitControlTypes: Array<ActorControlTypes> = [ActorControlTypes.ATTACK,
 		ActorControlTypes.STOP,
 		ActorControlTypes.MOVE, 
@@ -49,19 +48,22 @@ class Unit extends BaseActor
 	public function new(unitID:String, node:Node) 
 	{
 		var i:Int;
-		data = systems.Data;//hack
-		unitData = data.Actors.get(unitID);//supposedly Actors doesn't have get
 		super(node);
+		data = systems.Data;//hack
+		eData = data.Actors.get(unitID);//supposedly Actors doesn't have get
+		setupGraphics();
+		createHealthBar();
+		setupNodes(node);
 		for (i in 0...3)
 		{
 			controls.push(new Control(i, unitControlTypes[i]));
 		}
 		
-		healthMax = unitData.health;
-		speed = unitData.speed;
-		damage = unitData.damage;
-		viewRange = unitData.viewRange;
-		addC(new ControlledUnitAI(unitData.threatDist), "AI");
+		healthMax = eData.health;
+		speed = eData.speed;
+		damage = eData.damage;
+		viewRange = eData.viewRange;
+		addC(new ControlledUnitAI(eData.threatDist), "AI");
 	}
 	
 	/**
@@ -71,7 +73,7 @@ class Unit extends BaseActor
 	 */
 	override function setupGraphics() 
 	{
-		var assetPath:String = "assets" + unitData.spriteFile.substr(2);
+		var assetPath:String = "assets" + eData.spriteFile.substr(2);
 		super.setupGraphics();
 		
 		loadGraphic(assetPath, true, 8, 8);

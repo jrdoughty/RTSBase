@@ -80,8 +80,24 @@ class BaseActor extends FlxSprite implements IEntity
 	 * Nodes scanned to clear fog of war
 	 */
 	public var clearedNodes:Array<Node> = [];
+
+	/**
+	 * DataHolder for Entity
+	 */
+	public var eData:Dynamic = {};
 	
 
+	/**
+	 * simple health bar sprite
+	 */
+	private var healthBar:FlxSprite;
+	
+	
+	/**
+	 * simple health bar fill sprite
+	 */
+	private var healthBarFill:FlxSprite;
+	
 	/**
 	 * components coupled to this
 	 */
@@ -96,29 +112,6 @@ class BaseActor extends FlxSprite implements IEntity
 	 * selected state bool
 	 */
 	private var selected:Bool = false;
-
-	/**
-	 * simple health bar sprite
-	 */
-	private var healthBar:FlxSprite;
-
-
-	/**
-	 * timer whose frequency is set by speed
-	 */
-	private var actionTimer:Timer;
-
-	/**
-	 * offset delay timer that starts the action timer. Used to keep AI from starting at the same time. Set to 0 - 1 sec
-	 */
-	private var delayTimer:Timer;
-	
-	
-	
-	/**
-	 * simple health bar fill sprite
-	 */
-	private var healthBarFill:FlxSprite;
 	
 	/**
 	 * Base RTS Sprite/Entity Class. Creates an Actor in a node. Provides the FlxSprite Base Class the Node's x and y cords.
@@ -132,11 +125,6 @@ class BaseActor extends FlxSprite implements IEntity
 	public function new(node:Node) 
 	{
 		super(node.x, node.y);
-		delayTimer = new Timer(Math.floor(1000*Math.random()));//Keeps mass created units from updating at the exact same time. Idea from: http://answers.unity3d.com/questions/419786/a-pathfinding-multiple-enemies-MOVING-target-effic.html
-		delayTimer.run = delayedStart;
-		setupGraphics();
-		setupNodes(node);
-		createHealthBar();
 	}
 	
 	/**
@@ -148,29 +136,7 @@ class BaseActor extends FlxSprite implements IEntity
 		healthBar.visible = false;
 		healthBarFill.visible = false;
 	}
-	
-	/**
-	* end of delay timer that starts the takeAction cycle. 
-	* This prevents too many AI scripts firing at once
-	*/
-	private function delayedStart()
-    {
-	   delayTimer.stop();
-	   actionTimer = new Timer(speed);
-	   actionTimer.run = takeAction;
-    }
-	
-	/**
-	 * main action function run ever <speed> milliseconds
-	 */
-	private function takeAction()
-	{
-		var i;
-		for (i in components.keys())
-		{
-			components[i].takeAction();
-		}
-	}
+
 	
 	/**
 	 * Sets itself and the health bars to be visible
@@ -250,21 +216,19 @@ class BaseActor extends FlxSprite implements IEntity
 	
 	/**
 	 * sets selected state
-	 * has a debugging color change commented out
+	 * 
 	 */
 	public function select():Void
 	{
-		//color = 0x99ff66;
 		selected = true;
 	}
 	
 	/**
-	 * resets selected to false and resets the base color
+	 * resets selected to false
 	 */
 	public function resetSelect():Void
 	{
 		selected = false;
-		color = 0xffffff;
 	}
 	
 	/**
@@ -282,7 +246,6 @@ class BaseActor extends FlxSprite implements IEntity
 		{
 			components[key].detach();
 		}
-		actionTimer.stop();
 		destroy();
 	}
 	

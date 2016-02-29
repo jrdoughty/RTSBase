@@ -16,7 +16,6 @@ import flixel.FlxG;
 class Building extends BaseActor
 {
 	private var data:Dynamic;
-	private var buildingData:Dynamic;
 	private var unitsToProduce:Array<String> = [];
 	private var callbacks:Array<Dynamic> = [];
 	private var hw:Int;
@@ -31,17 +30,23 @@ class Building extends BaseActor
 	{
 		var i:Int;
 		var spriteFile:String;
-		data = systems.Data;//hack
-		buildingData = data.Buildings.get(uniqueID);//supposedly Actors doesn't have get
-		
+
 		super(node);
-		hw = Math.floor(Math.sqrt(currentNodes.length));
-		viewRange = buildingData.viewRange;
 		
-		healthMax = buildingData.health;
-		for (i in 0...buildingData.units.length)
+		data = systems.Data;//hack
+		eData = data.Buildings.get(uniqueID);//supposedly Buildings doesn't have get
+		
+		setupGraphics();
+		createHealthBar();
+		setupNodes(node);
+		
+		hw = Math.floor(Math.sqrt(currentNodes.length));
+		viewRange = eData.viewRange;
+		
+		healthMax = eData.health;
+		for (i in 0...eData.units.length)
 		{
-			unitsToProduce.push(buildingData.units[i].unit);
+			unitsToProduce.push(eData.units[i].unit);
 			controls.push(new UnitControl(0, ActorControlTypes.PRODUCE, function() { createUnit(i); }, "assets" + data.Actors.get(unitsToProduce[i]).spriteFile.substr(2), data.Actors.get(unitsToProduce[i]).id));
 		}
 	}
@@ -86,7 +91,7 @@ class Building extends BaseActor
 	 */
 	override function setupGraphics() 
 	{
-		var assetPath:String = "assets" + buildingData.spriteFile.substr(2);
+		var assetPath:String = "assets" + eData.spriteFile.substr(2);
 		
 		loadGraphic(assetPath);
 	}
