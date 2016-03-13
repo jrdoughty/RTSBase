@@ -58,7 +58,7 @@ class Unit extends BaseActor
 		setupNodes(node);
 		for (i in 0...3)
 		{
-			controls.push(new Control(i, unitControlTypes[i]));
+			controls.push(new Control(i, unitControlTypes[i],null,"assets/images/controls.png"));
 		}
 		
 		addC(new Health(eData.health), "Health");

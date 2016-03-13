@@ -3,7 +3,7 @@ package dashboard;
 import actors.BaseActor;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
-import systems.InputHandler;
+import systems.InputSystem;
 import dashboard.Control;
 import flixel.FlxG;
 
@@ -17,13 +17,13 @@ class Dashboard extends FlxGroup
 	public var activeControls:Array<Control> = [];
 	
 	private var controls:FlxSprite;
-	private var inputHandler:InputHandler;
+	private var inputHandler:InputSystem;
 	private var selected:FlxSprite;
 	private var activeUnits:Array<BaseActor> = [];
 	private var representatives:Array<ActorRepresentative> = [];
 	private var baseX:Float;
 	
-	public function new(inputH:InputHandler):Void
+	public function new(inputH:InputSystem):Void
 	{
 		super();
 		

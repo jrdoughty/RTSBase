@@ -13,18 +13,11 @@ class Control extends FlxSprite
 	public var type:ActorControlTypes;
 	public var callbackFunction:Dynamic = null;
 	
-	public function new(frame:Int=7, type:ActorControlTypes,?callback:Dynamic, ?spriteString:String) 
+	public function new(frame:Int=7, type:ActorControlTypes, callback:Dynamic, spriteString:String) 
 	{
 		super(0, 0);
 		this.type = type;
-		if (spriteString == null)
-		{
-			loadGraphic("assets/images/controls.png", false, 8, 8);
-		}
-		else
-		{
-			loadGraphic(spriteString, false, 8, 8);
-		}
+		loadGraphic(spriteString, true, 8, 8);
 		
 		if (callback != null)
 		{

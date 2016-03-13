@@ -14,7 +14,7 @@ import flixel.ui.FlxButton;
 import flixel.math.FlxMath;
 import interfaces.IGameState;
 import systems.AStar;
-import systems.InputHandler;
+import systems.InputSystem;
 import systems.Team;
 import world.Node;
 import world.SelfLoadingLevel;
@@ -40,7 +40,7 @@ class BaseState extends FlxState implements IGameState
 	public var Teams(default,null):Array<Team> = [];
 	public var activeTeam(default,null):Team;
 	
-	private var inputHandler:InputHandler;
+	private var inputHandler:InputSystem;
 	private var activeLevel:SelfLoadingLevel = null;
 	private var levelAssetPath:String = "";
 	private var positions:Array<Array<Int>> = [];
@@ -55,7 +55,7 @@ class BaseState extends FlxState implements IGameState
 		add(activeLevel.highlight);
 		createTeams();
 		setupUnitsInPlay();
-		inputHandler = new InputHandler(this);
+		inputHandler = new InputSystem(this);
 		setupDashboard();
 		setupCameras();
 	}

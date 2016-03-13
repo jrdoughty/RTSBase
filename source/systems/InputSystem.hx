@@ -32,7 +32,7 @@ enum InputState
 	CASTING;
 }
  
-class InputHandler
+class InputSystem
 {
 	private var inputState:InputState = InputState.SELECTING;
 	private var activeState:IGameState;
