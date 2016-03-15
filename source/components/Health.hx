@@ -33,15 +33,15 @@ class Health extends Component
 	
 	private var health:Float = 1;
 	
-	public function new(h:Int) 
+	public function new(name:String) 
 	{
-		super();
-		healthMax = h;
+		super(name);
 	}
 	
 	override public function init() 
 	{
 		super.init();
+		healthMax = entity.eData.health;
 		healthBar = new FlxSprite(entity.x, entity.y - 1);
 		healthBar.makeGraphic(Std.int(entity.width), 1, FlxColor.BLACK);
 		FlxG.state.add(healthBar);

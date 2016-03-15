@@ -174,7 +174,7 @@ class Entity extends FlxSprite implements IEntity
 		var name:String;
 		if (n == null)
 		{
-			name = component.defaultName;
+			name = component.name;
 		}
 		else
 		{

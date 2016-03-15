@@ -1,5 +1,6 @@
 package components;
 import actors.BaseActor;
+import haxe.ds.StringMap;
 import interfaces.IEntity;
 import haxe.Timer;
 /**
@@ -8,16 +9,14 @@ import haxe.Timer;
  */
 class Component
 {
-	public var defaultName:String;
+	public var name:String;
 	public var entity:BaseActor;
-
-
 	/**
 	* base class for all components
 	*/
-	public function new() 
+	public function new(name:String) 
 	{
-	   
+		this.name = name;
 	}
    
    

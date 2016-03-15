@@ -42,6 +42,10 @@
 				{
 					"typeStr": "3",
 					"name": "threatDist"
+				},
+				{
+					"typeStr": "8",
+					"name": "components"
 				}
 			],
 			"lines": [
@@ -54,7 +58,8 @@
 					"spriteFile": "../images/swordSoldier.png",
 					"viewRange": 4,
 					"cost": 75,
-					"threatDist": 2
+					"threatDist": 2,
+					"components": []
 				},
 				{
 					"id": "SoldierSpear",
@@ -65,7 +70,8 @@
 					"spriteFile": "../images/spearSoldier.png",
 					"viewRange": 4,
 					"cost": 50,
-					"threatDist": 3
+					"threatDist": 3,
+					"components": []
 				},
 				{
 					"id": "DevilWhip",
@@ -76,7 +82,8 @@
 					"damage": 2,
 					"viewRange": 4,
 					"cost": 50,
-					"threatDist": 2
+					"threatDist": 2,
+					"components": []
 				},
 				{
 					"id": "DevilSpear",
@@ -87,7 +94,8 @@
 					"damage": 1,
 					"viewRange": 4,
 					"cost": 50,
-					"threatDist": 3
+					"threatDist": 3,
+					"components": []
 				},
 				{
 					"id": "LizardClaw",
@@ -98,7 +106,8 @@
 					"damage": 1,
 					"viewRange": 3,
 					"cost": 80,
-					"threatDist": 1
+					"threatDist": 1,
+					"components": []
 				},
 				{
 					"id": "LizardSpear",
@@ -109,7 +118,8 @@
 					"damage": 1,
 					"viewRange": 4,
 					"cost": 60,
-					"threatDist": 3
+					"threatDist": 3,
+					"components": []
 				},
 				{
 					"id": "OrcClub",
@@ -120,7 +130,8 @@
 					"damage": 2,
 					"viewRange": 3,
 					"cost": 60,
-					"threatDist": 2
+					"threatDist": 2,
+					"components": []
 				},
 				{
 					"id": "OrcAxe",
@@ -131,7 +142,8 @@
 					"damage": 1,
 					"viewRange": 3,
 					"cost": 45,
-					"threatDist": 2
+					"threatDist": 2,
+					"components": []
 				},
 				{
 					"id": "Wizard",
@@ -142,7 +154,8 @@
 					"damage": 3,
 					"viewRange": 4,
 					"cost": 100,
-					"threatDist": 1
+					"threatDist": 1,
+					"components": []
 				}
 			],
 			"separators": [],
@@ -241,6 +254,15 @@
 					"name": "unit"
 				}
 			]
+		},
+		{
+			"name": "Actors@components",
+			"props": {
+				"hide": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": []
 		}
 	],
 	"customTypes": [],

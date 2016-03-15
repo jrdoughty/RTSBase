@@ -20,16 +20,15 @@ class View extends Component
 	public var clearedNodes:Array<Node> = [];
 	
 	
-	public function new(range:Int) 
+	public function new(name:String) 
 	{
-		super();
-		viewRange = range;
+		super(name);
 	}
 	
 	override public function init() 
 	{
 		super.init();
-		
+		viewRange = entity.eData.viewRange;
 		entity.addEvent(ClearFogEvent.CLEAR, clearNodes);
 	}
 	

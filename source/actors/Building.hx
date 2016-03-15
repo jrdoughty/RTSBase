@@ -42,8 +42,8 @@ class Building extends BaseActor
 		setupNodes(node);
 		
 		hw = Math.floor(Math.sqrt(currentNodes.length));
-		addC(new View(eData.viewRange), "View");
-		addC(new Health(eData.healthMax), "Health");
+		addC("View");
+		addC("Health");
 		for (i in 0...eData.units.length)
 		{
 			unitsToProduce.push(eData.units[i].unit);

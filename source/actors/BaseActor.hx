@@ -15,6 +15,7 @@ import systems.Team;
 import haxe.Constraints.Function;
 import events.EventObject;
 import components.Component;
+import components.ComponentSystem;
 /**
  * ...
  * @author John Doughty
@@ -228,18 +229,10 @@ class BaseActor extends FlxSprite implements IEntity
 	 * @param	component		Component to add
 	 * @param	n				String to refer back to the component
 	 */
-	public function addC(component:Component, n:String)
+	public function addC(n:String)
 	{
-		var name:String;
-		if (n == null)
-		{
-			name = component.defaultName;
-		}
-		else
-		{
-			name = n;
-		}
-		components.set(name, component);
+		var component = ComponentSystem.getInstance().getC(n);
+		components.set(n, component);
 		component.attach(this);
 	}
 	

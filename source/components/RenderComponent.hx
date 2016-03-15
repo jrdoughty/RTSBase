@@ -7,9 +7,9 @@ package components;
 class RenderComponent extends Component
 {
 
-	public function new() 
+	public function new(name:String) 
 	{
-		
+		super(name);
 	}
 	
 }

@@ -64,15 +64,9 @@ class ControlledUnitAI extends AI
 	 * sets defaultName to 'AI'
 	 * @param	threatRange
 	 */
-	public function new(threatRange:Int, speed:Int, damage:Int)
+	public function new(name:String)
 	{
-		super();
-		this.speed = speed;
-		this.damage = damage;
-		this.threatRange = threatRange;
-		defaultName = "ControlledUnitAI";
-		delayTimer = new Timer(Math.floor(1000*Math.random()));//Keeps mass created units from updating at the exact same time. Idea from: http://answers.unity3d.com/questions/419786/a-pathfinding-multiple-enemies-MOVING-target-effic.html
-		delayTimer.run = delayedStart;
+		super(name);
 	}
 	/**
 	 * adds eventlisteners for Move, Atack, and stop
@@ -80,9 +74,14 @@ class ControlledUnitAI extends AI
 	override public function init() 
 	{
 		super.init();
+		this.speed = entity.eData.speed;
+		this.damage = entity.eData.damage;
+		this.threatRange = entity.eData.threatRange;
 		entity.addEvent(MoveEvent.MOVE, MoveToNode);
 		entity.addEvent(AttackEvent.ATTACK_ACTOR, AttackActor);
 		entity.addEvent(StopEvent.STOP, resetStates);
+		delayTimer = new Timer(Math.floor(1000*Math.random()));//Keeps mass created units from updating at the exact same time. Idea from: http://answers.unity3d.com/questions/419786/a-pathfinding-multiple-enemies-MOVING-target-effic.html
+		delayTimer.run = delayedStart;
 	}
 	
 	/**

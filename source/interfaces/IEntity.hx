@@ -14,7 +14,7 @@ interface IEntity
 	private var listeners:Map<String, Array<Function>>;
 	private var components:Map<String, Component>;
 	
-	public function addC(component:Component, name:String):Void;
+	public function addC(name:String):Void;
 	public function addEvent(name:String, callback:Function):Void;
 	public function removeEvent(name:String, callback:Function):Void;
 	public function dispatchEvent(name:String, eventObject:EventObject = null):Void;

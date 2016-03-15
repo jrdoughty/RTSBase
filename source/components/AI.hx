@@ -9,9 +9,9 @@ class AI extends Component
 	/**
 	 * future class to hold common properties
 	 */
-	public function new() 
+	public function new(name:String) 
 	{
-		super();
+		super(name);
 	}
 	
 	public function takeAction() 

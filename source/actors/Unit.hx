@@ -14,6 +14,7 @@ import systems.Data;
 import openfl.Assets;
 import events.MoveEvent;
 import events.UpdateEvent;
+import components.ComponentSystem;
 /**
  * ...
  * @author ...
@@ -61,9 +62,9 @@ class Unit extends BaseActor
 			controls.push(new Control(i, unitControlTypes[i],null,"assets/images/controls.png"));
 		}
 		
-		addC(new Health(eData.health), "Health");
-		addC(new ControlledUnitAI(eData.threatDist, eData.speed, eData.damage), "AI");
-		addC(new View(eData.viewRange), "View");
+		addC("Health");
+		addC("ControlledUnitAI");
+		addC("View");
 	}
 	
 	override public function update(elapsed:Float):Void 
