@@ -1,7 +1,7 @@
 package systems;
 
 import actors.BaseActor;
-import actors.Unit;
+import actors.DBActor;
 import flixel.group.FlxGroup;
 
 /**
@@ -10,7 +10,7 @@ import flixel.group.FlxGroup;
  */
 class Team
 {
-	public var flxUnits:FlxTypedGroup<Unit> = new FlxTypedGroup<Unit>();//to use flixel overlap
+	public var flxUnits:FlxTypedGroup<DBActor> = new FlxTypedGroup<DBActor>();//to use flixel overlap
 	public var flxBuildings:FlxTypedGroup<BaseActor> = new FlxTypedGroup<BaseActor>();//to use flixel overlap
 	public var allies:Array<Int> = [];
 	public var id(default, null):Int;
@@ -31,7 +31,7 @@ class Team
 	 * Adds unit to flxUnits and sets unit's team
 	 * @param	unit	Unit to be added to Team
 	 */
-	public function addUnit(unit:Unit):Void
+	public function addUnit(unit:DBActor):Void
 	{
 		flxUnits.add(unit);
 		unit.team = this;

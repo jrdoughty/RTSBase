@@ -1,6 +1,6 @@
 package systems;
 import actors.BaseActor;
-import actors.Unit;
+import actors.DBActor;
 import actors.Building;
 import events.TargetEvent;
 import events.EventObject;
@@ -40,7 +40,7 @@ class InputSystem
 	private var flxTeamUnits:FlxGroup = new FlxGroup();
 	private var flxActiveTeamUnits:FlxGroup = new FlxGroup();
 	private var flxActiveTeamBuildings:FlxGroup = new FlxGroup();
-	private var selectedUnits:Array<Unit> = [];
+	private var selectedUnits:Array<DBActor> = [];
 	private var selectedBuildings:Array<Building> = [];
 	private var flxNodes:FlxGroup = new FlxGroup();
 	private var nodes:Array<Node>;
@@ -367,7 +367,7 @@ class InputSystem
 		activeState.dashboard.clearDashBoard();
 	}
 	
-	private function selectOverlapUnits(selector:FlxObject, unit:Unit):Void
+	private function selectOverlapUnits(selector:FlxObject, unit:DBActor):Void
 	{
 		if (newLeftClick)
 		{

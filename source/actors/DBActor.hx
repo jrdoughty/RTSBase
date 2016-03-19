@@ -21,18 +21,11 @@ import components.ComponentSystem;
  */
 
  
-class Unit extends BaseActor
+class DBActor extends BaseActor
 {
 		
 	private var data:Dynamic;
-	/**
-	 *  Contains:
-	 *  health;
-	 *	speed;
-	 *	damage;
-	 *	viewRange;
-	 *	threatDist;
-	 */
+
 	private var unitControlTypes: Array<ActorControlTypes> = [ActorControlTypes.ATTACK,
 		ActorControlTypes.STOP,
 		ActorControlTypes.MOVE, 

@@ -2,6 +2,7 @@ package actors;
 
 import events.HideEvent;
 import events.RevealEvent;
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxG;
 import haxe.Timer;
@@ -36,7 +37,7 @@ enum ActorControlTypes
 }
  
  
-class BaseActor extends FlxSprite implements IEntity
+class BaseActor extends FlxObject implements IEntity
 {
 
 	/**

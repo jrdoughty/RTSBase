@@ -3,7 +3,7 @@ import events.TargetEvent;
 import events.EventObject;
 import events.MoveEvent;
 import world.Node;
-import actors.Unit;
+import actors.DBActor;
 import systems.AStar;
 import actors.ActorState;
 import flixel.tweens.FlxTween;
@@ -79,12 +79,12 @@ class ControlledUnitAI extends AI
 	override public function init() 
 	{
 		super.init();
-		if (Reflect.hasField(entity.eData, "speed") && Reflect.hasField(entity.eData, "threatDist") && Reflect.hasField(entity.eData, "damage"))
+		if (Reflect.hasField(entity.eData, "speed") && Reflect.hasField(entity.eData, "threatRange") && Reflect.hasField(entity.eData, "damage"))
 		{
 			this.speed = entity.eData.speed;
 			this.damage = entity.eData.damage;
 			this.threatRange = entity.eData.threatRange;
-			
+
 			entity.addEvent(MoveEvent.MOVE, MoveToNode);
 			entity.addEvent(TargetEvent.ATTACK_ACTOR, AttackActor);
 			entity.addEvent(StopEvent.STOP, resetStates);

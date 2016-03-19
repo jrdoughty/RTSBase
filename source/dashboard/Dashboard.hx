@@ -46,12 +46,12 @@ class Dashboard extends FlxGroup
 	public function setSelected(baseA:BaseActor):Void
 	{
 		var i:Int;
-		
+		/*
 		selected.loadGraphicFromSprite(baseA);
 		selected.setGraphicSize(48, 48);
 		selected.updateHitbox();
 		selected.animation.frameIndex = baseA.animation.frameIndex;
-		selected.animation.pause();
+		selected.animation.pause();*/
 		add(selected);
 		activeControls = baseA.controls;
 		

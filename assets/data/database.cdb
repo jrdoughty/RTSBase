@@ -41,7 +41,7 @@
 				},
 				{
 					"typeStr": "3",
-					"name": "threatDist"
+					"name": "threatRange"
 				},
 				{
 					"typeStr": "8",
@@ -58,7 +58,6 @@
 					"spriteFile": "../images/swordSoldier.png",
 					"viewRange": 4,
 					"cost": 75,
-					"threatDist": 2,
 					"components": [
 						{
 							"name": "Health"
@@ -72,8 +71,8 @@
 						{
 							"name": "SpriteC"
 						}
-
-					]
+					],
+					"threatRange": 2
 				},
 				{
 					"id": "SoldierSpear",
@@ -84,7 +83,6 @@
 					"spriteFile": "../images/spearSoldier.png",
 					"viewRange": 4,
 					"cost": 50,
-					"threatDist": 3,
 					"components": [
 						{
 							"name": "Health"
@@ -98,8 +96,8 @@
 						{
 							"name": "SpriteC"
 						}
-
-					]
+					],
+					"threatRange": 3
 				},
 				{
 					"id": "DevilWhip",
@@ -110,13 +108,12 @@
 					"damage": 2,
 					"viewRange": 4,
 					"cost": 50,
-					"threatDist": 2,
 					"components": [
 						{
 							"name": "Health"
 						},
 						{
-							"name": "ControlledUnitAI"
+							"name": "RandomAI"
 						},
 						{
 							"name": "View"
@@ -124,8 +121,8 @@
 						{
 							"name": "SpriteC"
 						}
-
-					]
+					],
+					"threatRange": 2
 				},
 				{
 					"id": "DevilSpear",
@@ -136,13 +133,12 @@
 					"damage": 1,
 					"viewRange": 4,
 					"cost": 50,
-					"threatDist": 3,
 					"components": [
 						{
 							"name": "Health"
 						},
 						{
-							"name": "ControlledUnitAI"
+							"name": "RandomAI"
 						},
 						{
 							"name": "View"
@@ -150,8 +146,8 @@
 						{
 							"name": "SpriteC"
 						}
-
-					]
+					],
+					"threatRange": 3
 				},
 				{
 					"id": "LizardClaw",
@@ -162,13 +158,12 @@
 					"damage": 1,
 					"viewRange": 3,
 					"cost": 80,
-					"threatDist": 1,
 					"components": [
 						{
 							"name": "Health"
 						},
 						{
-							"name": "ControlledUnitAI"
+							"name": "RandomAI"
 						},
 						{
 							"name": "View"
@@ -176,8 +171,8 @@
 						{
 							"name": "SpriteC"
 						}
-
-					]
+					],
+					"threatRange": 1
 				},
 				{
 					"id": "LizardSpear",
@@ -188,13 +183,12 @@
 					"damage": 1,
 					"viewRange": 4,
 					"cost": 60,
-					"threatDist": 3,
 					"components": [
 						{
 							"name": "Health"
 						},
 						{
-							"name": "ControlledUnitAI"
+							"name": "RandomAI"
 						},
 						{
 							"name": "View"
@@ -202,8 +196,8 @@
 						{
 							"name": "SpriteC"
 						}
-
-					]
+					],
+					"threatRange": 3
 				},
 				{
 					"id": "OrcClub",
@@ -214,7 +208,6 @@
 					"damage": 2,
 					"viewRange": 3,
 					"cost": 60,
-					"threatDist": 2,
 					"components": [
 						{
 							"name": "Health"
@@ -228,8 +221,8 @@
 						{
 							"name": "SpriteC"
 						}
-
-					]
+					],
+					"threatRange": 2
 				},
 				{
 					"id": "OrcAxe",
@@ -238,9 +231,8 @@
 					"spriteFile": "../images/orcaxe.png",
 					"health": 7,
 					"damage": 1,
-					"viewRange": 3,
+					"viewRange": 12,
 					"cost": 45,
-					"threatDist": 2,
 					"components": [
 						{
 							"name": "Health"
@@ -254,8 +246,8 @@
 						{
 							"name": "SpriteC"
 						}
-
-					]
+					],
+					"threatRange": 2
 				},
 				{
 					"id": "Wizard",
@@ -266,13 +258,12 @@
 					"damage": 3,
 					"viewRange": 4,
 					"cost": 100,
-					"threatDist": 1,
 					"components": [
 						{
 							"name": "Health"
 						},
 						{
-							"name": "ControlledUnitAI"
+							"name": "RandomAI"
 						},
 						{
 							"name": "View"
@@ -280,8 +271,8 @@
 						{
 							"name": "SpriteC"
 						}
-
-					]
+					],
+					"threatRange": 1
 				}
 			],
 			"separators": [],

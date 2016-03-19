@@ -46,6 +46,8 @@ class SpriteC extends Component
 			entity.addEvent(AnimateAttackEvent.ATTACK, attackAnim);
 			entity.addEvent(MoveAnimEvent.MOVE, activeAnim);
 			entity.addEvent(MoveToEvent.MOVE, moveTo);
+			entity.width = sprite.width;
+			entity.height = sprite.height;
 			
 			FlxG.state.add(sprite);
 		}

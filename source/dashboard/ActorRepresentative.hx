@@ -17,9 +17,9 @@ class ActorRepresentative extends FlxSprite
 	{
 		super(0, 0);
 		baseActor = base;
-		loadGraphicFromSprite(base);
-		setGraphicSize(width, height);
-		updateHitbox();
+		//loadGraphicFromSprite(base);
+		//setGraphicSize(width, height);
+		//updateHitbox();
 		x = X;
 		y = Y;
 		healthBar = new FlxSprite(x, y);

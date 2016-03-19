@@ -6,7 +6,7 @@ import dashboard.Control;
 import world.Node;
 import actors.BaseActor;
 import flixel.FlxSprite;
-import actors.Unit;
+import actors.DBActor;
 import flixel.FlxG;
 import components.View;
 import components.Health;
@@ -58,7 +58,7 @@ class Building extends BaseActor
 	{
 		var x = 0;
 		var y = 0;
-		var newUnit:Unit = null;
+		var newUnit:DBActor = null;
 		var inverseI = currentNodes.length;
 		var j;
 		if (data.Actors.get(unitsToProduce[i]).cost <= team.resources)
@@ -70,7 +70,7 @@ class Building extends BaseActor
 				{
 					if (currentNodes.indexOf(neighbor) == -1 && neighbor.occupant == null)
 					{
-						newUnit= new Unit(data.Actors.get(unitsToProduce[i]).id, neighbor);
+						newUnit= new DBActor(data.Actors.get(unitsToProduce[i]).id, neighbor);
 						team.addUnit(newUnit);
 						FlxG.state.add(newUnit);
 						team.resources -= Std.int(data.Actors.get(unitsToProduce[i]).cost);

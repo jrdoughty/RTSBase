@@ -21,7 +21,7 @@ import world.SelfLoadingLevel;
 import world.TiledTypes;
 import openfl.Assets;
 import flixel.input.mouse.FlxMouseEventManager;
-import actors.Unit;
+import actors.DBActor;
 import openfl.geom.Point;
 import events.ClearFogEvent;
 

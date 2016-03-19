@@ -12,7 +12,7 @@ class ComponentSystem
 		SpriteC,
 		View,
 		AI,
-		SpriteC];
+		RandomAI];
 	private var componentMap:Map<String, Class<Component>> = new Map();
 	
 	public function new() 
