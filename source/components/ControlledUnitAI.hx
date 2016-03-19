@@ -1,5 +1,5 @@
 package components;
-import events.AttackEvent;
+import events.TargetEvent;
 import events.EventObject;
 import events.MoveEvent;
 import world.Node;
@@ -12,6 +12,10 @@ import events.StopEvent;
 import events.ActionEvent;
 import haxe.Timer;
 import events.HurtEvent;
+import events.AnimateAttackEvent;
+import events.MoveAnimEvent;
+import events.IdleAnimationEvent;
+import events.MoveToEvent;
 /**
  * ...
  * @author John Doughty
@@ -40,7 +44,8 @@ class ControlledUnitAI extends AI
 	 * milliseconds between takeAction cycles
 	 */
 	public var speed:Int = 250;
-
+	
+	public var lastState:ActorState;
 
 	/**
 	 * timer whose frequency is set by speed
@@ -74,21 +79,29 @@ class ControlledUnitAI extends AI
 	override public function init() 
 	{
 		super.init();
-		this.speed = entity.eData.speed;
-		this.damage = entity.eData.damage;
-		this.threatRange = entity.eData.threatRange;
-		entity.addEvent(MoveEvent.MOVE, MoveToNode);
-		entity.addEvent(AttackEvent.ATTACK_ACTOR, AttackActor);
-		entity.addEvent(StopEvent.STOP, resetStates);
-		delayTimer = new Timer(Math.floor(1000*Math.random()));//Keeps mass created units from updating at the exact same time. Idea from: http://answers.unity3d.com/questions/419786/a-pathfinding-multiple-enemies-MOVING-target-effic.html
-		delayTimer.run = delayedStart;
+		if (Reflect.hasField(entity.eData, "speed") && Reflect.hasField(entity.eData, "threatDist") && Reflect.hasField(entity.eData, "damage"))
+		{
+			this.speed = entity.eData.speed;
+			this.damage = entity.eData.damage;
+			this.threatRange = entity.eData.threatRange;
+			
+			entity.addEvent(MoveEvent.MOVE, MoveToNode);
+			entity.addEvent(TargetEvent.ATTACK_ACTOR, AttackActor);
+			entity.addEvent(StopEvent.STOP, resetStates);
+			delayTimer = new Timer(Math.floor(1000*Math.random()));//Keeps mass created units from updating at the exact same time. Idea from: http://answers.unity3d.com/questions/419786/a-pathfinding-multiple-enemies-MOVING-target-effic.html
+			delayTimer.run = delayedStart;
+		}
+		else
+		{
+			entity.removeC(name);
+		}
 	}
 	
 	/**
 	 * sets target to start either attack or chase sequence
 	 * @param	aEvent 	holds target BaseActor, may need qualifier eventually
 	 */
-	public function AttackActor(aEvent:AttackEvent)
+	public function AttackActor(aEvent:TargetEvent)
 	{
 		resetStates();
 		targetEnemy = aEvent.target;
@@ -149,11 +162,11 @@ class ControlledUnitAI extends AI
 		lastTargetNode = targetNode;
 		if (failedToMove)
 		{
-			entity.animation.pause();
+			entity.dispatchEvent(IdleAnimationEvent.IDLE, new IdleAnimationEvent());
 		}
 		else
 		{
-			entity.animation.play("active");
+			entity.dispatchEvent(MoveAnimEvent.MOVE, new MoveAnimEvent());
 		}
 	}
 	
@@ -228,11 +241,11 @@ class ControlledUnitAI extends AI
 		}
 		if (failedToMove)
 		{
-			entity.animation.pause();
+			entity.dispatchEvent(IdleAnimationEvent.IDLE, new IdleAnimationEvent());
 		}
 		else
 		{
-			entity.animation.play("active");
+			entity.dispatchEvent(MoveAnimEvent.MOVE, new MoveAnimEvent());
 		}
 	}
 	/**
@@ -248,7 +261,7 @@ class ControlledUnitAI extends AI
 			if (isEnemyInRange())
 			{
 				hit();
-				entity.animation.play("attack");
+				entity.dispatchEvent(AnimateAttackEvent.ATTACK, new AnimateAttackEvent());
 			}
 			else
 			{
@@ -268,8 +281,8 @@ class ControlledUnitAI extends AI
 	{
 		state = IDLE;
 		var i:Int;
-		entity.animation.frameIndex = entity.idleFrame;
-		entity.animation.pause();
+		
+		entity.dispatchEvent(IdleAnimationEvent.IDLE, new IdleAnimationEvent());
 		
 		if (targetNode != null)
 		{
@@ -302,7 +315,7 @@ class ControlledUnitAI extends AI
 	override function takeAction() 
 	{
 		super.takeAction();
-		
+		lastState = state;
 		checkView();
 		
 		if (needsReset)
@@ -360,7 +373,7 @@ class ControlledUnitAI extends AI
 		path.splice(0,1)[0].occupant = null;
 		entity.currentNodes[0] = path[0];
 		entity.currentNodes[0].occupant = entity;
-		FlxTween.tween(entity, { x:entity.currentNodes[0].x, y:entity.currentNodes[0].y }, speed / 1000);
+		entity.dispatchEvent(MoveToEvent.MOVE, new MoveToEvent(entity.currentNodes[0].x,entity.currentNodes[0].y));
 	}
 	
 	/**
@@ -480,7 +493,10 @@ class ControlledUnitAI extends AI
 	 */
 	override public function detach() 
 	{
-		actionTimer.stop();
+		if (actionTimer != null)
+		{
+			actionTimer.stop();
+		}
 		super.detach();
 	}
 }

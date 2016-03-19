@@ -28,7 +28,16 @@ class View extends Component
 	override public function init() 
 	{
 		super.init();
-		viewRange = entity.eData.viewRange;
+		
+		if (Reflect.hasField(entity.eData, "viewRange"))
+		{
+			this.viewRange = entity.eData.viewRange;
+		}
+		else
+		{
+			entity.removeC(name);
+		}
+		
 		entity.addEvent(ClearFogEvent.CLEAR, clearNodes);
 	}
 	

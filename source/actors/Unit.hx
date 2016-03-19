@@ -53,39 +53,25 @@ class Unit extends BaseActor
 	{
 		var i:Int;
 		super(node);
+		
 		data = systems.Data;//hack
 		eData = data.Actors.get(unitID);//supposedly Actors doesn't have get
-		setupGraphics();
 		setupNodes(node);
+		
 		for (i in 0...3)
 		{
 			controls.push(new Control(i, unitControlTypes[i],null,"assets/images/controls.png"));
 		}
-		
-		addC("Health");
-		addC("ControlledUnitAI");
-		addC("View");
+
+		for (i in 0...eData.components.length)
+		{
+			addC(eData.components[i].name);			
+		}
 	}
 	
 	override public function update(elapsed:Float):Void 
 	{
 		super.update(elapsed);
 		dispatchEvent(UpdateEvent.UPDATE, new UpdateEvent());
-	}
-	
-	/**
-	 * Lets up graphics based on unitData
-	 * Adds animations 'active' and 'attack'
-	 * idle currently is set to the first frame (0)
-	 */
-	override function setupGraphics() 
-	{
-		var assetPath:String = "assets" + eData.spriteFile.substr(2);
-		super.setupGraphics();
-		
-		loadGraphic(assetPath, true, 8, 8);
-		animation.add("active", [0, 1], 5, true);
-		animation.add("attack", [0, 2], 5, true);
-		idleFrame = 0;
 	}
 }

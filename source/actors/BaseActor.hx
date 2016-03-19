@@ -93,8 +93,7 @@ class BaseActor extends FlxSprite implements IEntity
 	public function new(node:Node) 
 	{
 		super(node.x, node.y);
-		addEvent(HideEvent.HIDE, hide);
-		addEvent(RevealEvent.REVEAL, reveal);
+		visible = false;
 	}
 	
 	/**
@@ -110,24 +109,6 @@ class BaseActor extends FlxSprite implements IEntity
 		{
 			currentNodes[i].occupant = this;
 		}
-	}
-	/**
-	 * abstract function. Not literally because i want BaseActor to be Useable as is. 
-	 * Graphics therefore can be supplied after
-	 */
-	private function setupGraphics()
-	{
-		
-	}
-	
-	private function hide(e:HideEvent)
-	{
-		visible = false;
-	}
-	
-	private function reveal(e:RevealEvent)
-	{
-		visible = true;
 	}
 	
 	/**

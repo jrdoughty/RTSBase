@@ -2,7 +2,7 @@ package systems;
 import actors.BaseActor;
 import actors.Unit;
 import actors.Building;
-import events.AttackEvent;
+import events.TargetEvent;
 import events.EventObject;
 import events.MoveEvent;
 import flixel.FlxG;
@@ -337,7 +337,7 @@ class InputSystem
 		{
 			for (i in 0...selectedUnits.length)
 			{
-				selectedUnits[i].dispatchEvent(AttackEvent.ATTACK_ACTOR, new AttackEvent(node.occupant));
+				selectedUnits[i].dispatchEvent(TargetEvent.ATTACK_ACTOR, new TargetEvent(node.occupant));
 			}
 		}
 	}
@@ -347,7 +347,7 @@ class InputSystem
 		var i:Int;
 		for (i in 0...selectedUnits.length)
 		{
-			selectedUnits[i].dispatchEvent(AttackEvent.ATTACK_ACTOR, new AttackEvent(unit));
+			selectedUnits[i].dispatchEvent(TargetEvent.ATTACK_ACTOR, new TargetEvent(unit));
 		}
 	}
 	

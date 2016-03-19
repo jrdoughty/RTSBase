@@ -38,7 +38,6 @@ class Building extends BaseActor
 		data = systems.Data;//hack
 		eData = data.Buildings.get(uniqueID);//supposedly Buildings doesn't have get
 		
-		setupGraphics();
 		setupNodes(node);
 		
 		hw = Math.floor(Math.sqrt(currentNodes.length));
@@ -85,16 +84,7 @@ class Building extends BaseActor
 			}
 		}
 	}
-	
-	/**
-	 * grabs sprite using building data
-	 */
-	override function setupGraphics() 
-	{
-		var assetPath:String = "assets" + eData.spriteFile.substr(2);
-		
-		loadGraphic(assetPath);
-	}
+
 	
 	
 	

@@ -9,9 +9,10 @@ class ComponentSystem
 	private static var instance:ComponentSystem;
 	public static var components(default, null):Array<Class<Component>> = [ControlledUnitAI,
 		Health,
-		RenderComponent,
+		SpriteC,
 		View,
-		AI];
+		AI,
+		SpriteC];
 	private var componentMap:Map<String, Class<Component>> = new Map();
 	
 	public function new() 

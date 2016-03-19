@@ -41,12 +41,20 @@ class Health extends Component
 	override public function init() 
 	{
 		super.init();
-		healthMax = entity.eData.health;
+		
+		if (Reflect.hasField(entity.eData, "health"))
+		{
+			this.healthMax = entity.eData.health;
+		}
+		else
+		{
+			entity.removeC(name);
+		}
 		healthBar = new FlxSprite(entity.x, entity.y - 1);
-		healthBar.makeGraphic(Std.int(entity.width), 1, FlxColor.BLACK);
+		healthBar.makeGraphic(Std.int(Math.sqrt(entity.currentNodes.length) * 8), 1, FlxColor.BLACK);
 		FlxG.state.add(healthBar);
 		healthBarFill = new FlxSprite(entity.x, entity.y - 1);
-		healthBarFill.makeGraphic(Std.int(entity.width), 1, FlxColor.RED);
+		healthBarFill.makeGraphic(Std.int(Math.sqrt(entity.currentNodes.length) * 8), 1, FlxColor.RED);
 		FlxG.state.add(healthBarFill);	
 		
 		
