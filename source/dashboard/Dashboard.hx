@@ -6,6 +6,7 @@ import flixel.group.FlxGroup;
 import systems.InputSystem;
 import dashboard.Control;
 import flixel.FlxG;
+import events.GetSpriteEvent;
 
 /**
  * ...
@@ -46,12 +47,9 @@ class Dashboard extends FlxGroup
 	public function setSelected(baseA:BaseActor):Void
 	{
 		var i:Int;
-		/*
-		selected.loadGraphicFromSprite(baseA);
-		selected.setGraphicSize(48, 48);
-		selected.updateHitbox();
-		selected.animation.frameIndex = baseA.animation.frameIndex;
-		selected.animation.pause();*/
+		
+		baseA.dispatchEvent(GetSpriteEvent.GET, new GetSpriteEvent(setGraphics));
+		
 		add(selected);
 		activeControls = baseA.controls;
 		
@@ -63,6 +61,15 @@ class Dashboard extends FlxGroup
 			activeControls[i].y = Math.floor(i / 3) * 18 + 2 + background.y;
 		}
 		inputHandler.setupClickControls(activeControls);
+	}
+	
+	public function setGraphics(s:FlxSprite)
+	{
+		selected.loadGraphicFromSprite(s);
+		selected.setGraphicSize(48, 48);
+		selected.updateHitbox();
+		selected.animation.frameIndex = s.animation.frameIndex;
+		selected.animation.pause();
 	}
 	
 	public function clearDashBoard():Void

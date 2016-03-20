@@ -1,4 +1,5 @@
 package components;
+import events.GetSpriteEvent;
 import events.MoveToEvent;
 import flixel.FlxSprite;
 import events.AnimateAttackEvent;
@@ -46,6 +47,7 @@ class SpriteC extends Component
 			entity.addEvent(AnimateAttackEvent.ATTACK, attackAnim);
 			entity.addEvent(MoveAnimEvent.MOVE, activeAnim);
 			entity.addEvent(MoveToEvent.MOVE, moveTo);
+			entity.addEvent(GetSpriteEvent.GET, getSprite);
 			entity.width = sprite.width;
 			entity.height = sprite.height;
 			
@@ -97,5 +99,13 @@ class SpriteC extends Component
 	{
 		FlxTween.tween(sprite, { x:e.x, y:e.y }, entity.eData.speed / 1000);
 		FlxTween.tween(entity, { x:e.x, y:e.y }, entity.eData.speed / 1000);
+	}
+	
+	public function getSprite(e:GetSpriteEvent)
+	{
+		if (sprite != null)
+		{
+			e.callBackFunction(sprite);
+		}
 	}
 }
