@@ -72,7 +72,6 @@ class Building extends BaseActor
 					{
 						newUnit= new DBActor(data.Actors.get(unitsToProduce[i]).id, neighbor);
 						team.addUnit(newUnit);
-						FlxG.state.add(newUnit);
 						team.resources -= Std.int(data.Actors.get(unitsToProduce[i]).cost);
 						break;
 					}

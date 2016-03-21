@@ -54,7 +54,6 @@ class BaseState extends FlxState implements IGameState
 		add(getLevel());
 		add(activeLevel.highlight);
 		createTeams();
-		setupUnitsInPlay();
 		inputHandler = new InputSystem(this);
 		setupDashboard();
 		setupCameras();
@@ -86,17 +85,6 @@ class BaseState extends FlxState implements IGameState
 		Teams.push(activeTeam);
 	}
 	
-	private function setupUnitsInPlay():Void
-	{
-		var i:Int;
-		var actorsInPlay:Array<BaseActor>;
-		actorsInPlay = getUnitsInPlay();
-		for (i in 0...actorsInPlay.length)
-		{
-			add(actorsInPlay[i]);
-		}
-	}
-	
 	public function getLevel():SelfLoadingLevel
 	{
 		if (activeLevel == null)
@@ -105,28 +93,6 @@ class BaseState extends FlxState implements IGameState
 		}
 		
 		return activeLevel;
-	}
-	
-	
-	private function getUnitsInPlay():Array<BaseActor>
-	{
-		var i:Int;
-		var j:Int;
-		var result:Array<BaseActor> = [];
-		
-		for (i in 0...Teams.length)
-		{
-			for (j in 0...Teams[i].flxUnits.members.length)
-			{
-				result.push(Teams[i].flxUnits.members[j]);
-			}
-			for (j in 0...Teams[i].flxBuildings.members.length)
-			{
-				result.push(Teams[i].flxBuildings.members[j]);
-			}
-		}
-		
-		return result;
 	}
 	
 	
@@ -148,7 +114,7 @@ class BaseState extends FlxState implements IGameState
 		var newPositions:Array<Array<Int>> = [];
 		inputHandler.update();
 		
-		for (actor in activeTeam.flxUnits.members)
+		for (actor in activeTeam.units)
 		{
 			newPositions.push([actor.currentNodes[0].nodeX, actor.currentNodes[0].nodeY]);
 		}
@@ -159,14 +125,14 @@ class BaseState extends FlxState implements IGameState
 			{
 				node.addOverlay();
 			}
-			for (actor in activeTeam.flxUnits.members)
+			for (actor in activeTeam.units)
 			{
 				if (actor.alive)
 				{
 					actor.dispatchEvent(ClearFogEvent.CLEAR, new ClearFogEvent());
 				}
 			}
-			for (actor in activeTeam.flxBuildings.members)
+			for (actor in activeTeam.buildings)
 			{
 				if (actor.alive)
 				{

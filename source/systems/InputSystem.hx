@@ -37,9 +37,6 @@ class InputSystem
 	private var inputState:InputState = InputState.SELECTING;
 	private var activeState:IGameState;
 	
-	private var flxTeamUnits:FlxGroup = new FlxGroup();
-	private var flxActiveTeamUnits:FlxGroup = new FlxGroup();
-	private var flxActiveTeamBuildings:FlxGroup = new FlxGroup();
 	private var selectedUnits:Array<DBActor> = [];
 	private var selectedBuildings:Array<Building> = [];
 	private var flxNodes:FlxGroup = new FlxGroup();
@@ -62,12 +59,6 @@ class InputSystem
 			flxNodes.add(Node.activeNodes[i]);
 			FlxMouseEventManager.add(Node.activeNodes[i], null, null, onOver);
 		}
-		for (i in 0...activeState.Teams.length)
-		{
-			flxTeamUnits.add(activeState.Teams[i].flxUnits);
-		}
-		flxActiveTeamUnits.add(activeState.activeTeam.flxUnits);
-		flxActiveTeamBuildings.add(activeState.activeTeam.flxBuildings);
 	}
 	
 	private function onOver(sprite:Node):Void
@@ -367,7 +358,7 @@ class InputSystem
 		activeState.dashboard.clearDashBoard();
 	}
 	
-	private function selectOverlapUnits(selector:FlxObject, unit:DBActor):Void
+	private function selectOverlapUnits(selector:TwoD, unit:DBActor):Void
 	{
 		if (newLeftClick)
 		{

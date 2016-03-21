@@ -62,9 +62,8 @@ class DBActor extends BaseActor
 		}
 	}
 	
-	override public function update(elapsed:Float):Void 
+	public function update(elapsed:Float):Void 
 	{
-		super.update(elapsed);
 		dispatchEvent(UpdateEvent.UPDATE, new UpdateEvent());
 	}
 }

@@ -10,8 +10,8 @@ import flixel.group.FlxGroup;
  */
 class Team
 {
-	public var flxUnits:FlxTypedGroup<DBActor> = new FlxTypedGroup<DBActor>();//to use flixel overlap
-	public var flxBuildings:FlxTypedGroup<BaseActor> = new FlxTypedGroup<BaseActor>();//to use flixel overlap
+	public var units:Array<DBActor> = [];
+	public var buildings:Array<BaseActor> = [];
 	public var allies:Array<Int> = [];
 	public var id(default, null):Int;
 	public var resources:Int = 400;
@@ -33,7 +33,7 @@ class Team
 	 */
 	public function addUnit(unit:DBActor):Void
 	{
-		flxUnits.add(unit);
+		units.push(unit);
 		unit.team = this;
 	}
 	/**
@@ -43,7 +43,7 @@ class Team
 	 */
 	public function addBuilding(building:BaseActor):Void
 	{
-		flxBuildings.add(building);
+		buildings.push(building);
 		building.team = this;
 	}
 	

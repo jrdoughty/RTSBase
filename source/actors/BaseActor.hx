@@ -5,6 +5,7 @@ import events.RevealEvent;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxG;
+import haxe.Constraints.FlatEnum;
 import haxe.Timer;
 import interfaces.IEntity;
 import interfaces.IGameState;
@@ -37,7 +38,7 @@ enum ActorControlTypes
 }
  
  
-class BaseActor extends FlxObject implements IEntity
+class BaseActor  implements IEntity
 {
 
 	/**
@@ -67,6 +68,8 @@ class BaseActor extends FlxObject implements IEntity
 	 */
 	public var eData:Dynamic = {};
 	
+	public var alive:Bool;
+	
 	/**
 	 * components coupled to this
 	 */
@@ -91,20 +94,27 @@ class BaseActor extends FlxObject implements IEntity
 	 * @param	node			the node the actor is placed in 
 	 * 
 	 */
+	public var x:Float;
+	public var y:Float;
+	public var width:Float;
+	public var height:Float;
+	
 	public function new(node:Node) 
 	{
-		super(node.x, node.y);
-		visible = false;
+		x = node.x;
+		y = node.y;
+		//visible = false;
 	}
 	
 	/**
 	 * sets all the nodes it graphically covers (and the provided node) to be occupied by this BaseActor
+	 * Needs refactored so that it uses node width
 	 * 
 	 * @param	node				the top left most Node the BaseActor takes up
 	 */
 	private function setupNodes(node:Node)
 	{
-		currentNodes = node.getAllNodes(Std.int(width / 8) - 1, Std.int(height / 8) - 1);
+		currentNodes = node.getAllNodes(Std.int(width / node.width) - 1, Std.int(height / node.height) - 1);
 		
 		for (i in 0...currentNodes.length)
 		{
@@ -133,16 +143,16 @@ class BaseActor extends FlxObject implements IEntity
 	 * ensures the BaseActor's actions are removed and that the BaseActor is no longer on the field
 	 * also detatches components
 	 */
-	override public function kill()
+	public function kill()
 	{
-		super.kill();
+		alive = false;
 		currentNodes[0].occupant = null;
-		FlxG.state.remove(this);
+		//FlxG.state.remove(this);
 		for (key in components.keys())
 		{
 			components[key].detach();
 		}
-		destroy();
+		//destroy();
 	}
 	
 	/**

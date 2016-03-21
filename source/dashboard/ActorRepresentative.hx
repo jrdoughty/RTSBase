@@ -14,6 +14,7 @@ class ActorRepresentative extends FlxSprite
 	public var healthBar:FlxSprite;
 	public var healthBarFill:FlxSprite;
 	public var baseActor:BaseActor;
+	
 	private var overrideWidth:Int;
 	private var overrideHeight:Int;
 	
@@ -54,7 +55,7 @@ class ActorRepresentative extends FlxSprite
 	{
 		super.update(elapsed);
 		alive = baseActor.alive;
-		healthBarFill.scale.set(baseActor.health, 1);
+		//healthBarFill.scale.set(baseActor.health, 1);
 		healthBarFill.updateHitbox();
 	}
 }

@@ -86,7 +86,7 @@ class ControlledUnitAI extends AI
 			this.threatRange = entity.eData.threatRange;
 
 			entity.addEvent(MoveEvent.MOVE, MoveToNode);
-			entity.addEvent(TargetEvent.ATTACK_ACTOR, AttackActor);
+			entity.addEvent(TargetEvent.ATTACK_ACTOR, TargetActor);
 			entity.addEvent(StopEvent.STOP, resetStates);
 			delayTimer = new Timer(Math.floor(1000*Math.random()));//Keeps mass created units from updating at the exact same time. Idea from: http://answers.unity3d.com/questions/419786/a-pathfinding-multiple-enemies-MOVING-target-effic.html
 			delayTimer.run = delayedStart;
@@ -101,7 +101,7 @@ class ControlledUnitAI extends AI
 	 * sets target to start either attack or chase sequence
 	 * @param	aEvent 	holds target BaseActor, may need qualifier eventually
 	 */
-	public function AttackActor(aEvent:TargetEvent)
+	public function TargetActor(aEvent:TargetEvent)
 	{
 		resetStates();
 		targetEnemy = aEvent.target;
@@ -261,7 +261,6 @@ class ControlledUnitAI extends AI
 			if (isEnemyInRange())
 			{
 				hit();
-				entity.dispatchEvent(AnimateAttackEvent.ATTACK, new AnimateAttackEvent());
 			}
 			else
 			{
@@ -346,6 +345,7 @@ class ControlledUnitAI extends AI
 	private function hit()
 	{
 		targetEnemy.dispatchEvent(HurtEvent.HURT, new HurtEvent(damage));
+		entity.dispatchEvent(AnimateAttackEvent.ATTACK, new AnimateAttackEvent());
 		if (targetEnemy.alive == false)
 		{
 			targetEnemy = null;
