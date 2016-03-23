@@ -18,6 +18,7 @@ import dashboard.Control;
 import world.Node;
 import components.AI;
 import events.StopEvent;
+import Util;
 
 /**
  * ...
@@ -234,13 +235,13 @@ class InputSystem
 	private function click():Void
 	{
 		newLeftClick = true;
-		if (FlxG.overlap(selector, activeState.dashboard) == false)
+		if (Util.emulateFlxGOverlap([selector], [activeState.dashboard.background]) == false)
 		{
 			if (inputState == SELECTING)
 			{
-				if (FlxG.overlap(selector, flxActiveTeamUnits, selectOverlapUnits) == false)
+				if (Util.emulateFlxGOverlap([selector], flxActiveTeamUnits, selectOverlapUnits) == false)
 				{
-					if (FlxG.overlap(selector, flxActiveTeamBuildings, selectOverlapBuildings) == false)
+					if (Util.emulateFlxGOverlap([selector], flxActiveTeamBuildings, selectOverlapBuildings) == false)
 					{
 						activeState.dashboard.clearDashBoard();//Select Enemies later
 					}
@@ -250,14 +251,14 @@ class InputSystem
 			{			
 				if (selector.width < activeState.getLevel().tiledLevel.tilewidth && selector.height < activeState.getLevel().tiledLevel.tileheight)
 				{
-					FlxG.overlap(selector, flxNodes, moveToNode);
+					Util.emulateFlxGOverlap(selector, flxNodes, moveToNode);
 				}
 			}
 			else if (inputState == ATTACKING)
 			{			
 				if (selector.width < activeState.getLevel().tiledLevel.tilewidth && selector.height < activeState.getLevel().tiledLevel.tileheight)
 				{
-					FlxG.overlap(selector, flxNodes, attackClick);
+					Util.emulateFlxGOverlap(selector, flxNodes, attackClick);
 				}
 			}
 			resetInputState();
@@ -276,11 +277,11 @@ class InputSystem
 			activeState.add(selector);
 		}
 		selector.alpha = 0;
-		if (FlxG.overlap(selector, activeState.dashboard) == false)
+		if (Util.emulateFlxGOverlap(selector, activeState.dashboard) == false)
 		{
 			if (selector.width < activeState.getLevel().tiledLevel.tilewidth && selector.height < activeState.getLevel().tiledLevel.tileheight)
 			{
-				FlxG.overlap(selector, flxNodes, attackClick);
+				Util.emulateFlxGOverlap(selector, flxNodes, attackClick);
 			}
 		}
 		activeState.remove(selector);

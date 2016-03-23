@@ -1,16 +1,22 @@
 package;
-
+import haxe.Constraints.Function;
 /**
  * ...
  * @author John Doughty
  */
-typedef TwoD = {
-	x:Float;
-	y:Float;
-	width:Float;
-	height:Float;
+interface TwoD 
+{
+	public var x:Float;
+	public var y:Float;
+	public var width:Float;
+	public var height:Float;
 }
- 
+
+typedef OverlappingObjects = {
+	group1:Array<Dynamic>,
+	group2:Array<Dynamic>
+}
+
 class Util
 {
 
@@ -19,29 +25,61 @@ class Util
 		
 	}
 	
-	public static inline function overlap(object1:TwoD, object2:TwoD, callback):Bool
+	public static function doesOverlap(object1:TwoD, object2:TwoD):Bool
 	{
-		bool doOverlap(Point l1, Point r1, Point l2, Point r2)
-		{
-			// If one rectangle is on left side of other
-			if (l1.x > r2.x || l2.x > r1.x)
+		var topLeftX1:Float = object1.x
+		var topLeftY1:Float = object1.y
+		var bottomRightX1:Float = object1.x + object1.width;
+		var bottomRightY1:Float = object1.y + object1.height;
+		
+		var topLeftX2:Float = object2.x
+		var topLeftY2:Float = object2.y
+		var bottomRightX2:Float = object2.x + object2.width;
+		var bottomRightY2:Float = object2.y + object2.height;
+		
+		if (topLeftX1 > bottomRightX2 || topLeftX2 > bottomRightX1)
 				return false;
 		 
-			// If one rectangle is above other
-			if (l1.y < r2.y || l2.y < r1.y)
-				return false;
-		 
-			return true;
-		}
+		if (topLeftY1 < bottomRightY2 || topLeftY2 < bottomRightY1)
+			return false;
+		
+		return true;
 	}
-	int main()
+	
+	public static function groupOverlap(objects1:Array<TwoD>, objects2:Array<TwoD>):OverlappingObjects
 	{
-		Point l1 = {0, 10}, r1 = {10, 0};
-		Point l2 = {5, 5}, r2 = {15, 0};
-		if (doOverlap(l1, r1, l2, r2))
-			printf("Rectangles Overlap");
-		else
-			printf("Rectangles Don't Overlap");
-		return 0;
+		var result:OverlappingObjects = new OverlappingObjects();
+		result.group1 = [];
+		result.group2 = [];
+		var i:Int;
+		var j:Int;
+		
+		for (i in 0...objects1.length)
+		{
+			for (j in 0...objects2.length)
+			{
+				if (doesOverlap(objects1[i], objects2[j])
+				{
+						result.group1.push(objects1[i]);
+						result.group2.push(objects2[j]);
+					
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	public static function emulateFlxGOverlap(objects1:Array<TwoD>, objects2:Array<TwoD>, callback:Function):Bool
+	{
+		var i:Int;
+		var result = false;
+		var overlappingObjects:OverlappingObjects = groupOverlap(objects1, objects2);
+		for (i in 0...overlappingObjects.group1.length)
+		{
+			callback(overlappingObjects.group1[i], overlappingObjects.group2[i]);
+			result = true;
+		}
+		return result;
 	}
 }
