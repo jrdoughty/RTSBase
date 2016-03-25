@@ -18,6 +18,7 @@ import dashboard.Control;
 import world.Node;
 import components.AI;
 import events.StopEvent;
+import events.GetSpriteEvent;
 import Util;
 
 /**
@@ -40,7 +41,7 @@ class InputSystem
 	
 	private var selectedUnits:Array<DBActor> = [];
 	private var selectedBuildings:Array<Building> = [];
-	private var flxNodes:FlxGroup = new FlxGroup();
+	private var activeNodes:Array<TwoD> = [];
 	private var nodes:Array<Node>;
 	private var selector:FlxSprite;
 	
@@ -51,13 +52,15 @@ class InputSystem
 	private var wasRightMouseDown:Bool = false;
 	private var wasLeftMouseDown:Bool = false;
 	
+	private var clickSprites: Array<TwoD> = [];
+	
 	
 	public function new(state:IGameState) 
 	{
 		activeState = state;
 		for (i in 0...Node.activeNodes.length)
 		{
-			flxNodes.add(Node.activeNodes[i]);
+			activeNodes.push(Node.activeNodes[i]);
 			FlxMouseEventManager.add(Node.activeNodes[i], null, null, onOver);
 		}
 	}
@@ -232,16 +235,34 @@ class InputSystem
 		selector.updateHitbox();
 	}
 	
+	private function addDBActorSprite(s:TwoD)
+	{
+		clickSprites.push(s);
+	}
+	
+	
 	private function click():Void
 	{
 		newLeftClick = true;
-		if (Util.emulateFlxGOverlap([selector], [activeState.dashboard.background]) == false)
+		if (Util.groupOverlap([selector], [activeState.dashboard.background]).group1.length < 1)
 		{
 			if (inputState == SELECTING)
 			{
-				if (Util.emulateFlxGOverlap([selector], flxActiveTeamUnits, selectOverlapUnits) == false)
+				clickSprites = [];
+				
+				for (unit in activeState.activeTeam.units )
 				{
-					if (Util.emulateFlxGOverlap([selector], flxActiveTeamBuildings, selectOverlapBuildings) == false)
+					unit.dispatchEvent(GetSpriteEvent.GET, new GetSpriteEvent(addDBActorSprite));
+				}
+				if (Util.emulateFlxGOverlap([selector], clickSprites, selectOverlapUnits) == false)
+				{
+					clickSprites = [];
+					
+					for (building in activeState.activeTeam.buildings )
+					{
+						building.dispatchEvent(GetSpriteEvent.GET, new GetSpriteEvent(addDBActorSprite));
+					}
+					if (Util.emulateFlxGOverlap([selector], clickSprites, selectOverlapBuildings) == false)
 					{
 						activeState.dashboard.clearDashBoard();//Select Enemies later
 					}
@@ -251,14 +272,14 @@ class InputSystem
 			{			
 				if (selector.width < activeState.getLevel().tiledLevel.tilewidth && selector.height < activeState.getLevel().tiledLevel.tileheight)
 				{
-					Util.emulateFlxGOverlap(selector, flxNodes, moveToNode);
+					Util.emulateFlxGOverlap([selector], activeNodes, moveToNode);
 				}
 			}
 			else if (inputState == ATTACKING)
 			{			
 				if (selector.width < activeState.getLevel().tiledLevel.tilewidth && selector.height < activeState.getLevel().tiledLevel.tileheight)
 				{
-					Util.emulateFlxGOverlap(selector, flxNodes, attackClick);
+					Util.emulateFlxGOverlap([selector], activeNodes, attackClick);
 				}
 			}
 			resetInputState();
@@ -277,11 +298,11 @@ class InputSystem
 			activeState.add(selector);
 		}
 		selector.alpha = 0;
-		if (Util.emulateFlxGOverlap(selector, activeState.dashboard) == false)
+		if (Util.groupOverlap([selector], [activeState.dashboard.background]).group1.length < 1)
 		{
 			if (selector.width < activeState.getLevel().tiledLevel.tilewidth && selector.height < activeState.getLevel().tiledLevel.tileheight)
 			{
-				Util.emulateFlxGOverlap(selector, flxNodes, attackClick);
+				Util.emulateFlxGOverlap([selector], activeNodes, attackClick);
 			}
 		}
 		activeState.remove(selector);
