@@ -244,7 +244,7 @@ class InputSystem
 	private function click():Void
 	{
 		newLeftClick = true;
-		if (Util.groupOverlap([selector], [activeState.dashboard.background]).group1.length < 1)
+		if (Util.groupOverlap([selector], [activeState.dashboard.background]).group1.length == 0)
 		{
 			if (inputState == SELECTING)
 			{
@@ -298,7 +298,7 @@ class InputSystem
 			activeState.add(selector);
 		}
 		selector.alpha = 0;
-		if (Util.groupOverlap([selector], [activeState.dashboard.background]).group1.length < 1)
+		if (Util.groupOverlap([selector], [activeState.dashboard.background]).group1.length == 0)
 		{
 			if (selector.width < activeState.getLevel().tiledLevel.tilewidth && selector.height < activeState.getLevel().tiledLevel.tileheight)
 			{

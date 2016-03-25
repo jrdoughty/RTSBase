@@ -40,7 +40,7 @@ class Util
 		if (topLeftX1 > bottomRightX2 || topLeftX2 > bottomRightX1)
 				return false;
 		 
-		if (topLeftY1 < bottomRightY2 || topLeftY2 < bottomRightY1)
+		if (topLeftY1 > bottomRightY2 || topLeftY2 > bottomRightY1)
 			return false;
 		
 		return true;

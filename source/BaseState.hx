@@ -127,17 +127,17 @@ class BaseState extends FlxState implements IGameState
 			}
 			for (actor in activeTeam.units)
 			{
-				if (actor.alive)
-				{
+				//if (actor.alive)
+				//{
 					actor.dispatchEvent(ClearFogEvent.CLEAR, new ClearFogEvent());
-				}
+				//}
 			}
 			for (actor in activeTeam.buildings)
 			{
-				if (actor.alive)
-				{
+				//if (actor.alive)
+				//{
 					actor.dispatchEvent(ClearFogEvent.CLEAR, new ClearFogEvent());
-				}
+				//}
 			}
 			getLevel().rebuildFog();
 		}
