@@ -243,6 +243,8 @@ class InputSystem
 	
 	private function click():Void
 	{
+		var overlaps:OverlappingObjects;
+		
 		newLeftClick = true;
 		if (Util.groupOverlap([selector], [activeState.dashboard.background]).group1.length == 0)
 		{
@@ -254,7 +256,10 @@ class InputSystem
 				{
 					unit.dispatchEvent(GetSpriteEvent.GET, new GetSpriteEvent(addDBActorSprite));
 				}
-				if (Util.emulateFlxGOverlap([selector], clickSprites, selectOverlapUnits) == false)
+				
+				overlaps = Util.groupOverlap([selector], clickSprites, selectOverlapUnits);
+				
+				if (overlaps.group1.length == 0)
 				{
 					clickSprites = [];
 					
@@ -262,11 +267,28 @@ class InputSystem
 					{
 						building.dispatchEvent(GetSpriteEvent.GET, new GetSpriteEvent(addDBActorSprite));
 					}
-					if (Util.emulateFlxGOverlap([selector], clickSprites, selectOverlapBuildings) == false)
+					
+					overlaps = Util.groupOverlap([selector], clickSprites);
+					
+					if (overlaps.group1.length == 0)
 					{
 						activeState.dashboard.clearDashBoard();//Select Enemies later
 					}
-				} 
+					else
+					{
+						for (i in 0...overlaps.group1.length)
+						{
+							selectOverlapBuildings(overlaps.group2[i]);
+						}
+					}
+				}
+				else
+				{
+					for (i in 0...overlaps.group1.length)
+					{
+						selectOverlapUnits(overlaps.group2[i]);
+					}
+				}
 			}
 			else if (inputState == MOVING)
 			{			
@@ -380,7 +402,7 @@ class InputSystem
 		activeState.dashboard.clearDashBoard();
 	}
 	
-	private function selectOverlapUnits(selector:TwoD, unit:DBActor):Void
+	private function selectOverlapUnits(unit:DBActor):Void
 	{
 		if (newLeftClick)
 		{
