@@ -1,7 +1,7 @@
 package components;
 import world.Node;
 import dashboard.Control;
-import flixel.FlxSprite;
+import Util;
 /**
  * ...
  * @author John Doughty
@@ -64,13 +64,13 @@ class LeftOver extends Component
 	/**
 	 * simple health bar sprite
 	 */
-	private var healthBar:FlxSprite;
+	private var healthBar:TwoDSprite;
 	
 	
 	/**
 	 * simple health bar fill sprite
 	 */
-	private var healthBarFill:FlxSprite;
+	private var healthBarFill:TwoDSprite;
 	
 	
 	public function new() 
@@ -128,10 +128,10 @@ class LeftOver extends Component
 	private function createHealthBar()
 	{
 		health = 1;
-		healthBar = new FlxSprite(x, y - 1);
+		healthBar = new TwoDSprite(x, y - 1);
 		healthBar.makeGraphic(Std.int(width), 1, FlxColor.BLACK);
 		FlxG.state.add(healthBar);
-		healthBarFill = new FlxSprite(x, y - 1);
+		healthBarFill = new TwoDSprite(x, y - 1);
 		healthBarFill.makeGraphic(Std.int(width), 1, FlxColor.RED);
 		FlxG.state.add(healthBarFill);		
 	}

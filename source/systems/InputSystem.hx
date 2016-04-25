@@ -9,7 +9,6 @@ import flixel.FlxG;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
 import flixel.FlxObject;
-import flixel.FlxSprite;
 import flixel.input.mouse.FlxMouseEventManager;
 import flixel.util.FlxColor;
 import interfaces.IGameState;
@@ -41,9 +40,9 @@ class InputSystem
 	
 	private var selectedUnits:Array<DBActor> = [];
 	private var selectedBuildings:Array<Building> = [];
-	private var activeNodes:Array<TwoD> = [];
+	private var activeNodes:Array<ITwoD> = [];
 	private var nodes:Array<Node>;
-	private var selector:FlxSprite;
+	private var selector:TwoDSprite;
 	
 	private var selectorStartX:Float;
 	private var selectorStartY:Float;
@@ -52,7 +51,7 @@ class InputSystem
 	private var wasRightMouseDown:Bool = false;
 	private var wasLeftMouseDown:Bool = false;
 	
-	private var clickSprites: Array<TwoD> = [];
+	private var clickSprites: Array<ITwoD> = [];
 	
 	
 	public function new(state:IGameState) 
@@ -115,12 +114,12 @@ class InputSystem
 		}
 	}
 	
-	private function move(sprite:FlxSprite = null)
+	private function move(sprite:TwoDSprite = null)
 	{
 		inputState = MOVING;
 	}
 	
-	private function attack(sprite:FlxSprite = null)
+	private function attack(sprite:TwoDSprite = null)
 	{
 		inputState = ATTACKING;
 	}
@@ -148,7 +147,7 @@ class InputSystem
 		}
 		else if (FlxG.mouse.pressed && wasLeftMouseDown == false)
 		{
-			selector = new FlxSprite(-1,-1);
+			selector = new TwoDSprite(-1,-1);
 			selector.makeGraphic(1, 1, FlxColor.WHITE);
 			activeState.add(selector);
 			if (inputState == SELECTING)
@@ -235,7 +234,7 @@ class InputSystem
 		selector.updateHitbox();
 	}
 	
-	private function addDBActorSprite(s:TwoD)
+	private function addDBActorSprite(s:ITwoD)
 	{
 		clickSprites.push(s);
 	}
@@ -256,10 +255,10 @@ class InputSystem
 				{
 					unit.dispatchEvent(GetSpriteEvent.GET, new GetSpriteEvent(addDBActorSprite));
 				}
+				overlaps = null;
+				//overlaps = Util.groupOverlap([selector], clickSprites, selectOverlapUnits);
 				
-				overlaps = Util.groupOverlap([selector], clickSprites, selectOverlapUnits);
-				
-				if (overlaps.group1.length == 0)
+				if (overlaps != null && overlaps.group1.length == 0)
 				{
 					clickSprites = [];
 					
@@ -278,7 +277,7 @@ class InputSystem
 					{
 						for (i in 0...overlaps.group1.length)
 						{
-							selectOverlapBuildings(overlaps.group2[i]);
+							//selectOverlapBuildings(overlaps.group2[i]);
 						}
 					}
 				}
@@ -315,7 +314,7 @@ class InputSystem
 	{
 		if (selector == null)
 		{
-			selector = new FlxSprite(FlxG.mouse.x, FlxG.mouse.y);
+			selector = new TwoDSprite(FlxG.mouse.x, FlxG.mouse.y);
 			selector.makeGraphic(1, 1, FlxColor.WHITE);
 			activeState.add(selector);
 		}
@@ -331,7 +330,7 @@ class InputSystem
 		selector = null;
 	}
 	
-	private function stop(sprite:FlxSprite = null)
+	private function stop(sprite:TwoDSprite = null)
 	{
 		var i:Int;
 		for (i in 0...selectedUnits.length)

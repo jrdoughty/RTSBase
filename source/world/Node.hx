@@ -1,14 +1,14 @@
 package world;
 import actors.BaseActor;
-import flixel.FlxSprite;
 import events.RevealEvent;
 import events.HideEvent;
+import Util;
 
 /**
  * ...
  * @author John Doughty
  */
-class Node extends FlxSprite
+class Node extends TwoDSprite
 {
 	public static var activeNodes = [];
 	private static var levelWidth;
@@ -30,14 +30,14 @@ class Node extends FlxSprite
 	public var heiristic:Int = -1;
 	public var nodeX:Int;
 	public var nodeY:Int;
-	public var overlay:FlxSprite;
+	public var overlay:TwoDSprite;
 	
 	private var passable:Bool = true;
 	
 	public function new(asset:String, frame:Int, width:Int, height, X:Int = 0, Y:Int = 0, pass:Bool = true ) 
 	{
 		super(X * width, Y * height);
-		overlay = new FlxSprite(X * width, Y * height);
+		overlay = new TwoDSprite(X * width, Y * height);
 		nodeX = X;
 		nodeY = Y;
 		loadGraphic(asset, true, width, height);

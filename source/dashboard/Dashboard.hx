@@ -1,12 +1,12 @@
 package dashboard;
 
 import actors.BaseActor;
-import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import systems.InputSystem;
 import dashboard.Control;
 import flixel.FlxG;
 import events.GetSpriteEvent;
+import Util;
 
 /**
  * ...
@@ -14,12 +14,12 @@ import events.GetSpriteEvent;
  */
 class Dashboard extends FlxGroup
 {
-	public var background:FlxSprite;
+	public var background:TwoDSprite;
 	public var activeControls:Array<Control> = [];
 	
-	private var controls:FlxSprite;
+	private var controls:TwoDSprite;
 	private var inputHandler:InputSystem;
-	private var selected:FlxSprite;
+	private var selected:TwoDSprite;
 	private var activeUnits:Array<BaseActor> = [];
 	private var representatives:Array<ActorRepresentative> = [];
 	private var baseX:Float;
@@ -29,13 +29,14 @@ class Dashboard extends FlxGroup
 		super();
 		
 		inputHandler = inputH;
-		background = new FlxSprite();
+		background = new TwoDSprite();
 		background.loadGraphic("assets/images/dashBG.png");
 		background.x = 0;
 		background.y = 184;
-		controls = new FlxSprite(background.x,background.y).loadGraphic("assets/images/controlsBG.png");
+		controls = new TwoDSprite(background.x, background.y);
+		controls.loadGraphic("assets/images/controlsBG.png");
 		
-		selected = new FlxSprite();
+		selected = new TwoDSprite();
 		selected.x = background.x + controls.width + 4;
 		selected.y = 4 + background.y;
 		
@@ -63,7 +64,7 @@ class Dashboard extends FlxGroup
 		inputHandler.setupClickControls(activeControls);
 	}
 	
-	public function setGraphics(s:FlxSprite)
+	public function setGraphics(s:TwoDSprite)
 	{
 		selected.loadGraphicFromSprite(s);
 		selected.setGraphicSize(48, 48);

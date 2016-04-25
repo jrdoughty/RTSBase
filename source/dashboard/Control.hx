@@ -1,14 +1,14 @@
 package dashboard;
 
 import actors.BaseActor.ActorControlTypes;
-import flixel.FlxSprite;
 import openfl.display.Sprite;
+import Util;
 
 /**
  * ...
  * @author ...
  */
-class Control extends FlxSprite
+class Control extends TwoDSprite
 {	
 	public var type:ActorControlTypes;
 	public var callbackFunction:Dynamic = null;

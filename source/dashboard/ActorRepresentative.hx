@@ -2,17 +2,17 @@ package dashboard;
 
 import actors.BaseActor;
 import events.EventObject;
-import flixel.FlxSprite;
 import flixel.util.FlxColor;
 import events.GetSpriteEvent;
+import Util;
 /**
  * ...
  * @author ...
  */
-class ActorRepresentative extends FlxSprite
+class ActorRepresentative extends TwoDSprite
 {
-	public var healthBar:FlxSprite;
-	public var healthBarFill:FlxSprite;
+	public var healthBar:TwoDSprite;
+	public var healthBarFill:TwoDSprite;
 	public var baseActor:BaseActor;
 	
 	private var overrideWidth:Int;
@@ -27,14 +27,14 @@ class ActorRepresentative extends FlxSprite
 		overrideWidth = width;
 		overrideHeight = height;
 		baseActor.dispatchEvent(GetSpriteEvent.GET, new GetSpriteEvent(setGraphics));
-		healthBar = new FlxSprite(x, y);
+		healthBar = new TwoDSprite(x, y);
 		healthBar.makeGraphic(width, 1, FlxColor.BLACK);
-		healthBarFill = new FlxSprite(x, y);
+		healthBarFill = new TwoDSprite(x, y);
 		healthBarFill.makeGraphic(width, 1, FlxColor.RED);
 		animation.pause();
 	}
 	
-	public function setGraphics(s:FlxSprite)
+	public function setGraphics(s:TwoDSprite)
 	{
 		loadGraphicFromSprite(s);
 		setGraphicSize(overrideWidth, overrideHeight);

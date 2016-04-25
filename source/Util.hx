@@ -1,15 +1,33 @@
 package;
 import haxe.Constraints.Function;
+import flixel.FlxSprite;
+import flixel.system.FlxAssets.FlxGraphicAsset;
 /**
  * ...
  * @author John Doughty
  */
-interface TwoD 
+interface ITwoD 
 {
 	public var x(default, set):Float;
 	public var y(default, set):Float;
 	public var width(get, set):Float;
 	public var height(get, set):Float;
+
+}
+
+class TwoDSprite extends FlxSprite implements ITwoD
+{
+	public function new(?X:Float = 0, ?Y:Float = 0, ?SimpleGraphic:FlxGraphicAsset)
+	{
+		if (SimpleGraphic != null)
+		{
+			super(X, Y, SimpleGraphic);
+		}
+		else
+		{
+			super(X, Y);
+		}
+	}
 }
 
 typedef OverlappingObjects = {
@@ -25,7 +43,7 @@ class Util
 		
 	}
 	
-	public static function doesOverlap(object1:TwoD, object2:TwoD):Bool
+	public static function doesOverlap(object1:ITwoD, object2:ITwoD):Bool
 	{
 		var topLeftX1:Float = object1.x;
 		var topLeftY1:Float = object1.y;
@@ -46,7 +64,7 @@ class Util
 		return true;
 	}
 	
-	public static function groupOverlap(objects1:Array<TwoD>, objects2:Array<TwoD>):OverlappingObjects
+	public static function groupOverlap(objects1:Array<ITwoD>, objects2:Array<ITwoD>):OverlappingObjects
 	{
 		var result:OverlappingObjects = {group1:[], group2:[]};
 		var i:Int;
@@ -68,7 +86,7 @@ class Util
 		return result;
 	}
 	
-	public static function emulateFlxGOverlap(objects1:Array<TwoD>, objects2:Array<TwoD>, callback:Function):Bool
+	public static function emulateFlxGOverlap(objects1:Array<ITwoD>, objects2:Array<ITwoD>, callback:Function):Bool
 	{
 		var i:Int;
 		var result = false;

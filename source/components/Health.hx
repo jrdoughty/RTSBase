@@ -1,13 +1,13 @@
 package components;
 import events.EventObject;
 import events.UpdateEvent;
-import flixel.FlxSprite;
 import events.RevealEvent;
 import events.HideEvent;
 import events.KillEvent;
 import events.HurtEvent;
 import flixel.util.FlxColor;
 import flixel.FlxG;
+import Util;
 /**
  * ...
  * @author ...
@@ -24,12 +24,12 @@ class Health extends Component
 	/**
 	 * simple health bar sprite
 	 */
-	private var healthBar:FlxSprite;
+	private var healthBar:TwoDSprite;
 	
 	/**
 	 * simple health bar fill sprite
 	 */
-	private var healthBarFill:FlxSprite;
+	private var healthBarFill:TwoDSprite;
 	
 	private var health:Float = 1;
 	
@@ -50,10 +50,10 @@ class Health extends Component
 		{
 			entity.removeC(name);
 		}
-		healthBar = new FlxSprite(entity.x, entity.y - 1);
+		healthBar = new TwoDSprite(entity.x, entity.y - 1);
 		healthBar.makeGraphic(Std.int(Math.sqrt(entity.currentNodes.length) * 8), 1, FlxColor.BLACK);
 		FlxG.state.add(healthBar);
-		healthBarFill = new FlxSprite(entity.x, entity.y - 1);
+		healthBarFill = new TwoDSprite(entity.x, entity.y - 1);
 		healthBarFill.makeGraphic(Std.int(Math.sqrt(entity.currentNodes.length) * 8), 1, FlxColor.RED);
 		FlxG.state.add(healthBarFill);	
 		

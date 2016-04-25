@@ -1,6 +1,5 @@
 package world;
 
-import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import haxe.Json;
 import world.TiledTypes.Layer;
@@ -10,6 +9,7 @@ import flixel.FlxG;
 import openfl.geom.Rectangle;
 import openfl.geom.Point;
 import openfl.display.BitmapData;
+import Util;
 
 /**
  * ...
@@ -20,12 +20,12 @@ class SelfLoadingLevel extends FlxGroup
 	//public var nodes:Array<Node> = [];
 	public var width:Int;
 	public var height:Int;
-	public var highlight:FlxSprite;
+	public var highlight:TwoDSprite;
 	
 	public var tiledLevel(default,null):TiledLevel;
 	
-	private var background:FlxSprite;
-	private var fog:FlxSprite;
+	private var background:TwoDSprite;
+	private var fog:TwoDSprite;
 	private var selectedNode:Node;
 	
 	public function new(json:String) 
@@ -48,10 +48,10 @@ class SelfLoadingLevel extends FlxGroup
 		
 		width = tiledLevel.width;
 		height = tiledLevel.height;
-		background = new FlxSprite();
+		background = new TwoDSprite();
 		background.pixels = new BitmapData(Std.int(width * tiledLevel.tilewidth), height * tiledLevel.tileheight, true, 0xFFFFFF);
 		add(background);
-		fog = new FlxSprite();
+		fog = new TwoDSprite();
 		fog.pixels = new BitmapData(Std.int(width * tiledLevel.tilewidth), height * tiledLevel.tileheight, true, 0xFFFFFF);
 		add(fog);
 		for (i in 0...tiledLevel.layers.length)
@@ -99,7 +99,8 @@ class SelfLoadingLevel extends FlxGroup
 			{
 				if (tiledLevel.tilesets[i].name == "highlight")
 				{
-					highlight = new FlxSprite(0, 0).loadGraphic("assets/"+tiledLevel.tilesets[i].image.substring(3), true, tiledLevel.tilewidth, tiledLevel.tileheight);
+					highlight = new TwoDSprite(0, 0);
+					highlight.loadGraphic("assets/"+tiledLevel.tilesets[i].image.substring(3), true, tiledLevel.tilewidth, tiledLevel.tileheight);
 					highlight.animation.add("main", [0, 1, 2, 3, 4, 5, 6], 24);//has to be better way
 					highlight.animation.play("main");
 				}

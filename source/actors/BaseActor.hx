@@ -3,7 +3,6 @@ package actors;
 import events.HideEvent;
 import events.RevealEvent;
 import flixel.FlxObject;
-import flixel.FlxSprite;
 import flixel.FlxG;
 import haxe.Constraints.FlatEnum;
 import haxe.Timer;

@@ -5,7 +5,6 @@ import interfaces.IGameState;
 import dashboard.Control;
 import world.Node;
 import actors.BaseActor;
-import flixel.FlxSprite;
 import actors.DBActor;
 import flixel.FlxG;
 import components.View;

@@ -1,7 +1,7 @@
 package components;
 import events.GetSpriteEvent;
 import events.MoveToEvent;
-import flixel.FlxSprite;
+import Util;
 import events.AnimateAttackEvent;
 import events.MoveAnimEvent;
 import events.IdleAnimationEvent;
@@ -19,7 +19,7 @@ import flixel.tweens.FlxTween;
  */
 class SpriteC extends Component
 {
-	var sprite:FlxSprite;
+	var sprite:TwoDSprite;
 	var idleFrame:Int;
 	public function new(name:String) 
 	{
@@ -35,7 +35,7 @@ class SpriteC extends Component
 		if (Reflect.hasField(entity.eData, "spriteFile") && Reflect.hasField(entity.eData, "speed") && entity.currentNodes.length > 0)
 		{
 			assetPath = "assets" + entity.eData.spriteFile.substr(2);
-			sprite = new FlxSprite(entity.currentNodes[0].x, entity.currentNodes[0].y);
+			sprite = new TwoDSprite(entity.currentNodes[0].x, entity.currentNodes[0].y);
 			sprite.loadGraphic(assetPath, true, 8, 8);
 			sprite.animation.add("active", [0, 1], 5, true);
 			sprite.animation.add("attack", [0, 2], 5, true);
