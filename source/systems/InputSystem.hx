@@ -38,7 +38,7 @@ class InputSystem
 	private var inputState:InputState = InputState.SELECTING;
 	private var activeState:IGameState;
 	
-	private var selectedUnits:Array<BaseActor> = [];
+	private var selectedActors:Array<BaseActor> = [];
 	private var selectedBuildings:Array<Building> = [];
 	private var activeNodes:Array<ITwoD> = [];
 	private var nodes:Array<Node>;
@@ -243,55 +243,12 @@ class InputSystem
 	private function click():Void
 	{
 		
-		var overlaps:OverlappingObjects;
-		var i:Int;
 		newLeftClick = true;
 		if (Util.groupOverlap([selector], [activeState.dashboard.background]).group1.length == 0)
 		{
 			if (inputState == SELECTING)
 			{
-				clickSprites = [];
-				
-				for (i in 0...activeState.activeTeam.units.length )
-				{
-					activeState.activeTeam.units[i].dispatchEvent(GetSpriteEvent.GET, new GetSpriteEvent(addDBActorSprite));
-				}
-				
-				overlaps = Util.groupOverlap([selector], clickSprites);
-				
-				if (overlaps.group1.length == 0)
-				{
-					clickSprites = [];
-					
-					for (building in activeState.activeTeam.buildings )
-					{
-						building.dispatchEvent(GetSpriteEvent.GET, new GetSpriteEvent(addDBActorSprite));
-					}
-					
-					overlaps = Util.groupOverlap([selector], clickSprites);
-					
-					if (overlaps.group1.length == 0)
-					{
-						activeState.dashboard.clearDashBoard();//Select Enemies later
-					}
-					else
-					{
-						for (i in 0...overlaps.group1.length)
-						{
-							//selectOverlapBuildings(overlaps.group2[i]);
-						}
-					}
-				}
-				else
-				{
-					for (i in 0...overlaps.group1.length)
-					{
-						if (overlaps.group2[i].entity != null)
-						{
-							selectOverlapUnits(selector, overlaps.group2[i]);
-						}
-					}
-				}
+				findAndSelectOverlapingActors();
 			}
 			else if (inputState == MOVING)
 			{			
@@ -313,6 +270,44 @@ class InputSystem
 		activeState.remove(selector);
 		selector = null;
 		
+	}
+	
+	private function findAndSelectOverlapingActors()
+	{
+		var i:Int;
+		var overlaps:OverlappingObjects = null;
+		clickSprites = [];
+				
+		for (i in 0...activeState.activeTeam.units.length )
+		{
+			activeState.activeTeam.units[i].dispatchEvent(GetSpriteEvent.GET, new GetSpriteEvent(addDBActorSprite));
+		}
+		if (clickSprites.length > 0)
+		{
+			overlaps = Util.groupOverlap([selector], clickSprites);
+		}
+		if (overlaps.group1.length == 0 || overlaps == null)//If no units overlapped, we're going to check for buildings
+		{
+			clickSprites = [];
+			
+			for (building in activeState.activeTeam.buildings )
+			{
+				building.dispatchEvent(GetSpriteEvent.GET, new GetSpriteEvent(addDBActorSprite));
+			}
+			
+			overlaps = Util.groupOverlap([selector], clickSprites);
+		}
+		if (overlaps.group1.length == 0)
+			{
+				activeState.dashboard.clearDashBoard();//Select Enemies later
+			}
+			else
+			{
+				for (i in 0...overlaps.group1.length)
+				{
+					selectOverlapActors(selector, overlaps.group2[i]);
+				}
+			}
 	}
 	
 	private function rightClick()
@@ -338,9 +333,9 @@ class InputSystem
 	private function stop(sprite:TwoDSprite = null)
 	{
 		var i:Int;
-		for (i in 0...selectedUnits.length)
+		for (i in 0...selectedActors.length)
 		{
-			selectedUnits[i].dispatchEvent(StopEvent.STOP);
+			selectedActors[i].dispatchEvent(StopEvent.STOP);
 		}
 		resetInputState();
 	}
@@ -353,11 +348,11 @@ class InputSystem
 	private function moveToNode(selector:FlxObject,node:Node):Void
 	{
 		var i:Int;
-		if (selectedUnits.length > 0 && node.isPassible() && (node.occupant == null || activeState.activeTeam.isThreat(node.occupant.team.id)))
+		if (selectedActors.length > 0 && node.isPassible() && (node.occupant == null || activeState.activeTeam.isThreat(node.occupant.team.id)))
 		{
-			for (i in 0...selectedUnits.length)
+			for (i in 0...selectedActors.length)
 			{
-				selectedUnits[i].dispatchEvent(MoveEvent.MOVE, new MoveEvent(node));
+				selectedActors[i].dispatchEvent(MoveEvent.MOVE, new MoveEvent(node));
 			}
 		}
 	}
@@ -365,18 +360,18 @@ class InputSystem
 	private function attackClick(selector:FlxObject,node:Node):Void
 	{
 		var i:Int;
-		if (selectedUnits.length > 0 && node.isPassible() && node.occupant == null)
+		if (selectedActors.length > 0 && node.isPassible() && node.occupant == null)
 		{
-			for (i in 0...selectedUnits.length)
+			for (i in 0...selectedActors.length)
 			{
-				selectedUnits[i].dispatchEvent(MoveEvent.MOVE, new MoveEvent(node, true));
+				selectedActors[i].dispatchEvent(MoveEvent.MOVE, new MoveEvent(node, true));
 			}
 		}
 		else if (node.occupant != null && activeState.activeTeam.isThreat(node.occupant.team.id))
 		{
-			for (i in 0...selectedUnits.length)
+			for (i in 0...selectedActors.length)
 			{
-				selectedUnits[i].dispatchEvent(TargetEvent.ATTACK_ACTOR, new TargetEvent(node.occupant));
+				selectedActors[i].dispatchEvent(TargetEvent.ATTACK_ACTOR, new TargetEvent(node.occupant));
 			}
 		}
 	}
@@ -384,29 +379,25 @@ class InputSystem
 	private function attackOverlap(selector:FlxObject, unit:BaseActor):Void
 	{
 		var i:Int;
-		for (i in 0...selectedUnits.length)
+		for (i in 0...selectedActors.length)
 		{
-			selectedUnits[i].dispatchEvent(TargetEvent.ATTACK_ACTOR, new TargetEvent(unit));
+			selectedActors[i].dispatchEvent(TargetEvent.ATTACK_ACTOR, new TargetEvent(unit));
 		}
 	}
 	
 	private function clearSelected()
 	{
 		var i:Int;
-		for (i in 0...selectedUnits.length)
+		for (i in 0...selectedActors.length)
 		{
-			selectedUnits[i].resetSelect();
+			selectedActors[i].resetSelect();
 		}
-		for (i in 0...selectedBuildings.length)
-		{
-			//selectedBuildings[i].resetSelect();
-		}
-		selectedUnits = [];
+		selectedActors = [];
 		selectedBuildings = [];
 		activeState.dashboard.clearDashBoard();
 	}
 	
-	private function selectOverlapUnits(selector:ITwoD, unit:ITwoD):Void
+	private function selectOverlapActors(selector:ITwoD, unit:ITwoD):Void
 	{
 		if (newLeftClick)
 		{
@@ -414,21 +405,8 @@ class InputSystem
 			activeState.dashboard.setSelected(unit.entity);
 		}
 		activeState.dashboard.addSelectedActor(unit.entity);
-		selectedUnits.push(unit.entity);
+		selectedActors.push(unit.entity);
 		unit.entity.select();
-		newLeftClick = false;
-	}
-	
-	private function selectOverlapBuildings(selector:FlxObject, building:Building):Void
-	{
-		if (newLeftClick)
-		{
-			clearSelected();
-			activeState.dashboard.setSelected(building);
-		}
-		activeState.dashboard.addSelectedActor(building);
-		selectedBuildings.push(building);
-		building.select();
 		newLeftClick = false;
 	}
 	
