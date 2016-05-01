@@ -1,6 +1,5 @@
 package systems ;
 import world.Node;
-import flixel.util.FlxColor;
 import world.SelfLoadingLevel;
 
 /**

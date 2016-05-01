@@ -2,15 +2,12 @@ package actors;
 
 import events.HideEvent;
 import events.RevealEvent;
-import flixel.FlxObject;
-import flixel.FlxG;
 import haxe.Constraints.FlatEnum;
 import haxe.Timer;
 import interfaces.IEntity;
 import interfaces.IGameState;
 import systems.AStar;
 import world.Node;
-import flixel.util.FlxColor;
 import dashboard.Control;
 import systems.Team;
 import haxe.Constraints.Function;

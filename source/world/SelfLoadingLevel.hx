@@ -5,7 +5,6 @@ import haxe.Json;
 import world.TiledTypes.Layer;
 import world.TiledTypes.TiledLevel;
 import openfl.Assets;
-import flixel.FlxG;
 import openfl.geom.Rectangle;
 import openfl.geom.Point;
 import openfl.display.BitmapData;

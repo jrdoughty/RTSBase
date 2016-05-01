@@ -6,7 +6,6 @@ import dashboard.Control;
 import world.Node;
 import actors.BaseActor;
 import actors.DBActor;
-import flixel.FlxG;
 import components.View;
 import components.Health;
 import events.GetSpriteEvent;

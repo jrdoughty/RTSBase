@@ -4,7 +4,6 @@ import actors.BaseActor;
 import flixel.group.FlxGroup;
 import systems.InputSystem;
 import dashboard.Control;
-import flixel.FlxG;
 import events.GetSpriteEvent;
 import Util;
 
