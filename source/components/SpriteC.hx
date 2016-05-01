@@ -48,7 +48,7 @@ class SpriteC extends Component
 				entity.addEvent(MoveToEvent.MOVE, moveTo);
 				entity.addEvent(MoveAnimEvent.MOVE, activeAnim);
 			}
-			else if (Reflect.hasField(entity.eData, "units"))
+			else 
 			{
 				sprite = new TwoDSprite(entity.currentNodes[0].x, entity.currentNodes[0].y, assetPath, entity);
 			}
