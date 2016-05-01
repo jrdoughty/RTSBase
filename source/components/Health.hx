@@ -54,12 +54,6 @@ class Health extends Component
 		{
 			entity.removeC(name);
 		}
-		healthBar = new TwoDSprite(entity.x, entity.y - 1);
-		healthBar.makeGraphic(Std.int(Math.sqrt(entity.currentNodes.length) * 8), 1, FlxColor.BLACK);
-		FlxG.state.add(healthBar);
-		healthBarFill = new TwoDSprite(entity.x, entity.y - 1);
-		healthBarFill.makeGraphic(Std.int(Math.sqrt(entity.currentNodes.length) * 8), 1, FlxColor.RED);
-		FlxG.state.add(healthBarFill);	
 		entity.dispatchEvent(GetSpriteEvent.GET, new GetSpriteEvent(attachSprite));
 		if (actorSprite == null)
 		{
@@ -132,7 +126,13 @@ class Health extends Component
 	
 	public function attachSprite(s:TwoDSprite)
 	{
-		actorSprite = s;
+		actorSprite = s;			
+		healthBar = new TwoDSprite(actorSprite.x, actorSprite.y - 1);
+		healthBar.makeGraphic(Std.int(Math.sqrt(entity.currentNodes.length) * 8), 1, FlxColor.BLACK);
+		FlxG.state.add(healthBar);
+		healthBarFill = new TwoDSprite(actorSprite.x, actorSprite.y - 1);
+		healthBarFill.makeGraphic(Std.int(Math.sqrt(entity.currentNodes.length) * 8), 1, FlxColor.RED);
+		FlxG.state.add(healthBarFill);	
 	}
 	
 	public function kill(e:EventObject = null)

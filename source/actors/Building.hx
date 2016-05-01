@@ -9,6 +9,7 @@ import actors.DBActor;
 import flixel.FlxG;
 import components.View;
 import components.Health;
+import events.GetSpriteEvent;
 
 /**
  * ...
@@ -38,10 +39,12 @@ class Building extends BaseActor
 		eData = data.Buildings.get(uniqueID);//supposedly Buildings doesn't have get
 		
 		setupNodes(node);
-		
 		hw = Math.floor(Math.sqrt(currentNodes.length));
+		
 		addC("View");
 		addC("Health");
+		addC("SpriteC");
+		
 		for (i in 0...eData.units.length)
 		{
 			unitsToProduce.push(eData.units[i].unit);
@@ -81,9 +84,15 @@ class Building extends BaseActor
 				}
 			}
 		}
+	}	
+	
+	override function setupNodes(node:Node) 
+	{
+		currentNodes = node.getAllNodes(Std.int(16 / node.width) - 1, Std.int(16 / node.height) - 1);
+		
+		for (i in 0...currentNodes.length)
+		{
+			currentNodes[i].occupant = this;
+		}
 	}
-
-	
-	
-	
 }

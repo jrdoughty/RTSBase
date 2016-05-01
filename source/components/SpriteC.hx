@@ -33,21 +33,28 @@ class SpriteC extends Component
 		var assetPath:String;
 		
 		
-		if (Reflect.hasField(entity.eData, "spriteFile") && Reflect.hasField(entity.eData, "speed") && entity.currentNodes.length > 0)
+		if (Reflect.hasField(entity.eData, "spriteFile") && entity.currentNodes.length > 0)
 		{
 			assetPath = "assets" + entity.eData.spriteFile.substr(2);
-			sprite = new TwoDSprite(entity.currentNodes[0].x, entity.currentNodes[0].y,null, entity);
-			sprite.loadGraphic(assetPath, true, 8, 8);
-			sprite.animation.add("active", [0, 1], 5, true);
-			sprite.animation.add("attack", [0, 2], 5, true);
-			sprite.animation.add("idle", [0], 5, true);
+			if (Reflect.hasField(entity.eData, "speed"))
+			{
+				sprite = new TwoDSprite(entity.currentNodes[0].x, entity.currentNodes[0].y, null, entity);
+				sprite.loadGraphic(assetPath, true, 8, 8);
+				sprite.animation.add("active", [0, 1], 5, true);
+				sprite.animation.add("attack", [0, 2], 5, true);
+				sprite.animation.add("idle", [0], 5, true);
+				entity.addEvent(IdleAnimationEvent.IDLE, idleAnim);
+				entity.addEvent(AnimateAttackEvent.ATTACK, attackAnim);
+				entity.addEvent(MoveToEvent.MOVE, moveTo);
+				entity.addEvent(MoveAnimEvent.MOVE, activeAnim);
+			}
+			else if (Reflect.hasField(entity.eData, "units"))
+			{
+				sprite = new TwoDSprite(entity.currentNodes[0].x, entity.currentNodes[0].y, assetPath, entity);
+			}
 			entity.addEvent(RevealEvent.REVEAL, makeVisible);
 			entity.addEvent(HideEvent.HIDE, killVisibility);
 			entity.addEvent(KillEvent.KILL, kill);
-			entity.addEvent(IdleAnimationEvent.IDLE, idleAnim);
-			entity.addEvent(AnimateAttackEvent.ATTACK, attackAnim);
-			entity.addEvent(MoveAnimEvent.MOVE, activeAnim);
-			entity.addEvent(MoveToEvent.MOVE, moveTo);
 			entity.addEvent(GetSpriteEvent.GET, getSprite);
 			
 			entity.dispatchEvent(AddedSpriteEvent.ADDED, new AddedSpriteEvent());
