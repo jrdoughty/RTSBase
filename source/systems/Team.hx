@@ -114,4 +114,19 @@ class Team
 			return true;
 		}
 	}
+	
+	public function update()
+	{
+		for (unit in units)
+		{
+			if (unit.alive)
+			{
+				unit.update();
+				if (unit.alive == false)
+				{
+					units.splice(units.indexOf(unit), 1);
+				}
+			}
+		}
+	}
 }

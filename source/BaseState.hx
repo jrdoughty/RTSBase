@@ -141,6 +141,10 @@ class BaseState extends FlxState implements IGameState
 			}
 			getLevel().rebuildFog();
 		}
+		for (team in Teams)
+		{
+			team.update();
+		}
 		positions = newPositions;
 		frame++;
 	}

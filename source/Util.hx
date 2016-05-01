@@ -1,4 +1,5 @@
 package;
+import actors.BaseActor;
 import haxe.Constraints.Function;
 import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
@@ -10,6 +11,7 @@ interface ITwoD
 {
 	public var x(default, set):Float;
 	public var y(default, set):Float;
+	public var entity:BaseActor;
 	public var width(get, set):Float;
 	public var height(get, set):Float;
 
@@ -17,8 +19,14 @@ interface ITwoD
 
 class TwoDSprite extends FlxSprite implements ITwoD
 {
-	public function new(?X:Float = 0, ?Y:Float = 0, ?SimpleGraphic:FlxGraphicAsset)
+	public var entity:BaseActor = null;
+	
+	public function new(?X:Float = 0, ?Y:Float = 0, ?SimpleGraphic:FlxGraphicAsset,?entity:BaseActor)
 	{
+		if (entity != null)
+		{
+			this.entity = entity;
+		}
 		if (SimpleGraphic != null)
 		{
 			super(X, Y, SimpleGraphic);

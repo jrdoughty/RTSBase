@@ -30,10 +30,10 @@ class DemoState extends BaseState
 		Teams.push(new Team());
 		Teams[0].addAlly(Teams[2]);
 		Teams[0].addUnit(new DBActor("SoldierSword",Node.getNodeByGridXY(0,0)));
-		//Teams[0].addUnit(new DBActor("SoldierSpear",Node.getNodeByGridXY(1,0)));
-		//Teams[0].addUnit(new DBActor("OrcAxe",Node.getNodeByGridXY(1,1)));		
+		Teams[0].addUnit(new DBActor("SoldierSpear",Node.getNodeByGridXY(1,0)));
+		Teams[0].addUnit(new DBActor("OrcAxe",Node.getNodeByGridXY(1,1)));		
 		Teams[2].addUnit(new DBActor("Wizard",Node.getNodeByGridXY(2,5)));	
-		//Teams[0].addUnit(new DBActor("OrcClub",Node.getNodeByGridXY(0,1)));
+		Teams[0].addUnit(new DBActor("OrcClub",Node.getNodeByGridXY(0,1)));
 		Teams[1].addUnit(new DBActor("DevilSpear",Node.activeNodes[616]));
 		Teams[1].addUnit(new DBActor("DevilWhip",Node.activeNodes[499]));	
 		Teams[1].addUnit(new DBActor("LizardClaw",Node.getNodeByGridXY(23,13)));	

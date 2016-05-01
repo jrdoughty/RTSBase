@@ -67,7 +67,7 @@ class BaseActor  implements IEntity
 	 */
 	public var eData:Dynamic = {};
 	
-	public var alive:Bool;
+	public var alive:Bool = true;
 	
 	/**
 	 * components coupled to this

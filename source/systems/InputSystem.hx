@@ -38,7 +38,7 @@ class InputSystem
 	private var inputState:InputState = InputState.SELECTING;
 	private var activeState:IGameState;
 	
-	private var selectedUnits:Array<DBActor> = [];
+	private var selectedUnits:Array<BaseActor> = [];
 	private var selectedBuildings:Array<Building> = [];
 	private var activeNodes:Array<ITwoD> = [];
 	private var nodes:Array<Node>;
@@ -242,8 +242,9 @@ class InputSystem
 	
 	private function click():Void
 	{
-		var overlaps:OverlappingObjects;
 		
+		var overlaps:OverlappingObjects;
+		var i:Int;
 		newLeftClick = true;
 		if (Util.groupOverlap([selector], [activeState.dashboard.background]).group1.length == 0)
 		{
@@ -251,14 +252,14 @@ class InputSystem
 			{
 				clickSprites = [];
 				
-				for (unit in activeState.activeTeam.units )
+				for (i in 0...activeState.activeTeam.units.length )
 				{
-					unit.dispatchEvent(GetSpriteEvent.GET, new GetSpriteEvent(addDBActorSprite));
+					activeState.activeTeam.units[i].dispatchEvent(GetSpriteEvent.GET, new GetSpriteEvent(addDBActorSprite));
 				}
-				overlaps = null;
-				//overlaps = Util.groupOverlap([selector], clickSprites, selectOverlapUnits);
 				
-				if (overlaps != null && overlaps.group1.length == 0)
+				overlaps = Util.groupOverlap([selector], clickSprites);
+				
+				if (overlaps.group1.length == 0)
 				{
 					clickSprites = [];
 					
@@ -285,7 +286,10 @@ class InputSystem
 				{
 					for (i in 0...overlaps.group1.length)
 					{
-						selectOverlapUnits(overlaps.group2[i]);
+						if (overlaps.group2[i].entity != null)
+						{
+							selectOverlapUnits(selector, overlaps.group2[i]);
+						}
 					}
 				}
 			}
@@ -308,6 +312,7 @@ class InputSystem
 		}
 		activeState.remove(selector);
 		selector = null;
+		
 	}
 	
 	private function rightClick()
@@ -401,16 +406,16 @@ class InputSystem
 		activeState.dashboard.clearDashBoard();
 	}
 	
-	private function selectOverlapUnits(unit:DBActor):Void
+	private function selectOverlapUnits(selector:ITwoD, unit:ITwoD):Void
 	{
 		if (newLeftClick)
 		{
 			clearSelected();
-			activeState.dashboard.setSelected(unit);
+			activeState.dashboard.setSelected(unit.entity);
 		}
-		activeState.dashboard.addSelectedActor(unit);
-		selectedUnits.push(unit);
-		unit.select();
+		activeState.dashboard.addSelectedActor(unit.entity);
+		selectedUnits.push(unit.entity);
+		unit.entity.select();
 		newLeftClick = false;
 	}
 	

@@ -75,6 +75,7 @@ class Dashboard extends FlxGroup
 	
 	public function clearDashBoard():Void
 	{
+
 		var i:Int;
 		
 		remove(selected);
@@ -126,7 +127,7 @@ class Dashboard extends FlxGroup
 		
 		while(i < representatives.length)//because the length gets stored ahead in haxe for loops, the changing length breaks this loop
 		{
-			if (!representatives[i].alive)
+			if (!representatives[i].baseActor.alive)
 			{
 				activeUnits.splice(activeUnits.indexOf(representatives[i].baseActor), 1);
 				remove(representatives[i]);

@@ -1,10 +1,12 @@
 package components;
+import events.AddedSpriteEvent;
 import events.EventObject;
 import events.UpdateEvent;
 import events.RevealEvent;
 import events.HideEvent;
 import events.KillEvent;
 import events.HurtEvent;
+import events.GetSpriteEvent;
 import flixel.util.FlxColor;
 import flixel.FlxG;
 import Util;
@@ -33,6 +35,8 @@ class Health extends Component
 	
 	private var health:Float = 1;
 	
+	private var actorSprite:TwoDSprite;
+	
 	public function new(name:String) 
 	{
 		super(name);
@@ -56,8 +60,11 @@ class Health extends Component
 		healthBarFill = new TwoDSprite(entity.x, entity.y - 1);
 		healthBarFill.makeGraphic(Std.int(Math.sqrt(entity.currentNodes.length) * 8), 1, FlxColor.RED);
 		FlxG.state.add(healthBarFill);	
-		
-		
+		entity.dispatchEvent(GetSpriteEvent.GET, new GetSpriteEvent(attachSprite));
+		if (actorSprite == null)
+		{
+			entity.addEvent(AddedSpriteEvent.ADDED, function(e:AddedSpriteEvent){entity.dispatchEvent(GetSpriteEvent.GET, new GetSpriteEvent(attachSprite));});
+		}
 		entity.addEvent(RevealEvent.REVEAL, makeVisible);
 		entity.addEvent(HideEvent.HIDE, killVisibility);
 		entity.addEvent(HurtEvent.HURT, hurt);
@@ -93,24 +100,29 @@ class Health extends Component
 	 */
 	public function update(e:UpdateEvent = null)
 	{
-		if (healthBarFill != null)
+		
+		if (actorSprite != null)
 		{
-			if (health > 0)
+			if (healthBarFill != null)
 			{
-				healthBarFill.scale.set(health, 1);
+				if (health > 0)
+				{
+					healthBarFill.scale.set(health, 1);
+				}
+				else
+				{
+					healthBarFill.scale.set(0, 1);
+				}
+				healthBarFill.updateHitbox();
+				healthBarFill.x = actorSprite.x;
+				healthBarFill.y = actorSprite.y - 1;
+				
 			}
-			else
+			if (healthBar != null)
 			{
-				healthBarFill.scale.set(0, 1);
+				healthBar.x = actorSprite.x;
+				healthBar.y = actorSprite.y - 1;
 			}
-			healthBarFill.updateHitbox();
-			healthBarFill.x = entity.x;
-			healthBarFill.y = entity.y - 1;
-		}
-		if (healthBar != null)
-		{
-			healthBar.x = entity.x;
-			healthBar.y = entity.y - 1;
 		}
 		if (health <= 0)
 		{
@@ -118,6 +130,10 @@ class Health extends Component
 		}
 	}
 	
+	public function attachSprite(s:TwoDSprite)
+	{
+		actorSprite = s;
+	}
 	
 	public function kill(e:EventObject = null)
 	{
