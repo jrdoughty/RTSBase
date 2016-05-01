@@ -8,7 +8,6 @@ import events.MoveEvent;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.group.FlxGroup;
-import flixel.FlxObject;
 import flixel.input.mouse.FlxMouseEventManager;
 import flixel.util.FlxColor;
 import interfaces.IGameState;
@@ -345,7 +344,7 @@ class InputSystem
 		inputState = SELECTING;
 	}
 	
-	private function moveToNode(selector:FlxObject,node:Node):Void
+	private function moveToNode(selector:ITwoD,node:Node):Void
 	{
 		var i:Int;
 		if (selectedActors.length > 0 && node.isPassible() && (node.occupant == null || activeState.activeTeam.isThreat(node.occupant.team.id)))
@@ -357,7 +356,7 @@ class InputSystem
 		}
 	}
 	
-	private function attackClick(selector:FlxObject,node:Node):Void
+	private function attackClick(selector:ITwoD,node:Node):Void
 	{
 		var i:Int;
 		if (selectedActors.length > 0 && node.isPassible() && node.occupant == null)
@@ -376,7 +375,7 @@ class InputSystem
 		}
 	}
 	
-	private function attackOverlap(selector:FlxObject, unit:BaseActor):Void
+	private function attackOverlap(selector:ITwoD, unit:BaseActor):Void
 	{
 		var i:Int;
 		for (i in 0...selectedActors.length)
