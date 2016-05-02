@@ -17,6 +17,8 @@ import world.Node;
 import components.AI;
 import events.StopEvent;
 import events.GetSpriteEvent;
+import adapters.TwoDSprite;
+import adapters.TwoDRect;
 import Util;
 
 /**
@@ -146,9 +148,7 @@ class InputSystem
 		}
 		else if (FlxG.mouse.pressed && wasLeftMouseDown == false)
 		{
-			selector = new TwoDSprite(-1,-1);
-			selector.makeGraphic(1, 1, FlxColor.WHITE);
-			activeState.add(selector);
+			selector = new TwoDRect();
 			if (inputState == SELECTING)
 			{
 				selector.alpha = .5;

@@ -4,7 +4,7 @@ import actors.BaseActor;
 import events.EventObject;
 import flixel.util.FlxColor;
 import events.GetSpriteEvent;
-import Util;
+import adapters.TwoDSprite;
 /**
  * ...
  * @author ...

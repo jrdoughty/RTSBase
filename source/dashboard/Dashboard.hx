@@ -5,7 +5,7 @@ import flixel.group.FlxGroup;
 import systems.InputSystem;
 import dashboard.Control;
 import events.GetSpriteEvent;
-import Util;
+import adapters.TwoDSprite;
 
 /**
  * ...
@@ -28,12 +28,10 @@ class Dashboard extends FlxGroup
 		super();
 		
 		inputHandler = inputH;
-		background = new TwoDSprite();
-		background.loadGraphic("assets/images/dashBG.png");
+		background = new TwoDSprite(0,0, "assets/images/dashBG.png");
 		background.x = 0;
 		background.y = 184;
-		controls = new TwoDSprite(background.x, background.y);
-		controls.loadGraphic("assets/images/controlsBG.png");
+		controls = new TwoDSprite(background.x, background.y, "assets/images/controlsBG.png");
 		
 		selected = new TwoDSprite();
 		selected.x = background.x + controls.width + 4;

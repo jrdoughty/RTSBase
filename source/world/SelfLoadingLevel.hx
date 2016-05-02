@@ -8,7 +8,7 @@ import openfl.Assets;
 import openfl.geom.Rectangle;
 import openfl.geom.Point;
 import openfl.display.BitmapData;
-import Util;
+import adapters.TwoDSprite;
 
 /**
  * ...
@@ -98,8 +98,7 @@ class SelfLoadingLevel extends FlxGroup
 			{
 				if (tiledLevel.tilesets[i].name == "highlight")
 				{
-					highlight = new TwoDSprite(0, 0);
-					highlight.loadGraphic("assets/"+tiledLevel.tilesets[i].image.substring(3), true, tiledLevel.tilewidth, tiledLevel.tileheight);
+					highlight = new TwoDSprite(0, 0"assets/"+tiledLevel.tilesets[i].image.substring(3), tiledLevel.tilewidth, tiledLevel.tileheight);
 					highlight.animation.add("main", [0, 1, 2, 3, 4, 5, 6], 24);//has to be better way
 					highlight.animation.play("main");
 				}

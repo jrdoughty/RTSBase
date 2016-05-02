@@ -1,42 +1,12 @@
 package;
 import actors.BaseActor;
 import haxe.Constraints.Function;
-import flixel.FlxSprite;
-import flixel.system.FlxAssets.FlxGraphicAsset;
+import adapters.TwoDSprite;
 /**
  * ...
  * @author John Doughty
  */
-interface ITwoD 
-{
-	public var x(default, set):Float;
-	public var y(default, set):Float;
-	public var entity:BaseActor;
-	public var width(get, set):Float;
-	public var height(get, set):Float;
 
-}
-
-class TwoDSprite extends FlxSprite implements ITwoD
-{
-	public var entity:BaseActor = null;
-	
-	public function new(?X:Float = 0, ?Y:Float = 0, ?SimpleGraphic:FlxGraphicAsset,?entity:BaseActor)
-	{
-		if (entity != null)
-		{
-			this.entity = entity;
-		}
-		if (SimpleGraphic != null)
-		{
-			super(X, Y, SimpleGraphic);
-		}
-		else
-		{
-			super(X, Y);
-		}
-	}
-}
 
 typedef OverlappingObjects = {
 	group1:Array<Dynamic>,
@@ -44,13 +14,7 @@ typedef OverlappingObjects = {
 }
 
 class Util
-{
-
-	public function new() 
-	{
-		
-	}
-	
+{	
 	public static function doesOverlap(object1:ITwoD, object2:ITwoD):Bool
 	{
 		var topLeftX1:Float = object1.x;
@@ -63,12 +27,10 @@ class Util
 		var bottomRightX2:Float = object2.x + object2.width;
 		var bottomRightY2:Float = object2.y + object2.height;
 		
-		if (topLeftX1 > bottomRightX2 || topLeftX2 > bottomRightX1)
-				return false;
-		 
-		if (topLeftY1 > bottomRightY2 || topLeftY2 > bottomRightY1)
+		if (topLeftX1 > bottomRightX2 || topLeftX2 > bottomRightX1 || topLeftY1 > bottomRightY2 || topLeftY2 > bottomRightY1)
+		{
 			return false;
-		
+		}
 		return true;
 	}
 	

@@ -2,7 +2,7 @@ package dashboard;
 
 import actors.BaseActor.ActorControlTypes;
 import openfl.display.Sprite;
-import Util;
+import adapters.TwoDSprite;
 
 /**
  * ...
@@ -15,9 +15,8 @@ class Control extends TwoDSprite
 	
 	public function new(frame:Int=7, type:ActorControlTypes, callback:Dynamic, spriteString:String) 
 	{
-		super(0, 0);
+		super(0, 0, spriteString, 8, 8);
 		this.type = type;
-		loadGraphic(spriteString, true, 8, 8);
 		
 		if (callback != null)
 		{

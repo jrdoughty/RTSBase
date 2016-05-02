@@ -9,7 +9,7 @@ import events.HurtEvent;
 import events.GetSpriteEvent;
 import flixel.util.FlxColor;
 import flixel.FlxG;
-import Util;
+import adapters.TwoDSprite;
 /**
  * ...
  * @author ...

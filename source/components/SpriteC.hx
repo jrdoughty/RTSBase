@@ -1,7 +1,6 @@
 package components;
 import events.GetSpriteEvent;
 import events.MoveToEvent;
-import Util;
 import events.AnimateAttackEvent;
 import events.MoveAnimEvent;
 import events.IdleAnimationEvent;
@@ -11,6 +10,7 @@ import events.HideEvent;
 import events.HurtEvent;
 import events.RevealEvent;
 import events.AddedSpriteEvent;
+import adapters.TwoDSprite;
 import flixel.FlxG;
 import flixel.tweens.FlxTween;
 
@@ -38,8 +38,7 @@ class SpriteC extends Component
 			assetPath = "assets" + entity.eData.spriteFile.substr(2);
 			if (Reflect.hasField(entity.eData, "speed"))
 			{
-				sprite = new TwoDSprite(entity.currentNodes[0].x, entity.currentNodes[0].y, null, entity);
-				sprite.loadGraphic(assetPath, true, 8, 8);
+				sprite = new TwoDSprite(entity.currentNodes[0].x, entity.currentNodes[0].y, assetPath, 8, 8 entity);
 				sprite.animation.add("active", [0, 1], 5, true);
 				sprite.animation.add("attack", [0, 2], 5, true);
 				sprite.animation.add("idle", [0], 5, true);

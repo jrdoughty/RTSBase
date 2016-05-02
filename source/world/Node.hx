@@ -2,7 +2,7 @@ package world;
 import actors.BaseActor;
 import events.RevealEvent;
 import events.HideEvent;
-import Util;
+import adapters.TwoDSprite;
 
 /**
  * ...
@@ -36,12 +36,10 @@ class Node extends TwoDSprite
 	
 	public function new(asset:String, frame:Int, width:Int, height, X:Int = 0, Y:Int = 0, pass:Bool = true ) 
 	{
-		super(X * width, Y * height);
-		overlay = new TwoDSprite(X * width, Y * height);
+		super(X * width, Y * height, asset, width, height);
+		overlay = new TwoDSprite(X * width, Y * height, asset, width, height);
 		nodeX = X;
 		nodeY = Y;
-		loadGraphic(asset, true, width, height);
-		overlay.loadGraphic(asset, true, width, height);
 		overlay.animation.frameIndex = 6;
 		overlay.alpha = .5;
 		if (frame == 7)
