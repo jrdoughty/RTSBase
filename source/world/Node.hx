@@ -40,16 +40,16 @@ class Node extends TwoDSprite
 		overlay = new TwoDSprite(X * width, Y * height, asset, width, height);
 		nodeX = X;
 		nodeY = Y;
-		overlay.animation.frameIndex = 6;
-		overlay.alpha = .5;
+		overlay.setCurrentFrame(6);
+		overlay.setAlpha(.5);
 		if (frame == 7)
 		{
 			true;
 		}
-		animation.add("main",[frame,frame],0,false);
-		animation.add("clicked",[9,9],0,false);
-		animation.play("main", true);
-		animation.frameIndex = frame;
+		addAnimation("main",[frame],0,false);
+		addAnimation("clicked",[9],0,false);
+		playAnimation("main", true);
+		setCurrentFrame(frame);
 		passable = pass;
 	}
 	
@@ -60,7 +60,7 @@ class Node extends TwoDSprite
 	
 	public function resetState():Void
 	{
-		animation.play("main");
+		playAnimation("main");
 	}
 	
 	public function getFinal():Int
@@ -87,7 +87,7 @@ class Node extends TwoDSprite
 	
 	public function removeOverlay()
 	{
-		overlay.alpha = 0;
+		overlay.setAlpha(0);
 		if (occupant != null)
 		{
 			occupant.dispatchEvent(RevealEvent.REVEAL, new RevealEvent());
@@ -96,7 +96,7 @@ class Node extends TwoDSprite
 	
 	public function addOverlay()
 	{
-		overlay.alpha = .5;
+		overlay.setAlpha(.5);
 		if (occupant != null)
 		{
 			occupant.dispatchEvent(HideEvent.HIDE, new HideEvent());

@@ -66,8 +66,8 @@ class Dashboard extends FlxGroup
 		selected.loadGraphicFromSprite(s);
 		selected.setGraphicSize(48, 48);
 		selected.updateHitbox();
-		selected.animation.frameIndex = s.animation.frameIndex;
-		selected.animation.pause();
+		selected.setCurrentFrame(s.getCurrentFrame());
+		selected.pauseAnimation();
 	}
 	
 	public function clearDashBoard():Void

@@ -31,7 +31,8 @@ class ActorRepresentative extends TwoDSprite
 		healthBar.makeGraphic(width, 1, FlxColor.BLACK);
 		healthBarFill = new TwoDSprite(x, y);
 		healthBarFill.makeGraphic(width, 1, FlxColor.RED);
-		animation.pause();
+		
+		pauseAnimation();
 	}
 	
 	public function setGraphics(s:TwoDSprite)

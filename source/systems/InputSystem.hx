@@ -41,7 +41,7 @@ class InputSystem
 	
 	private var selectedActors:Array<BaseActor> = [];
 	private var selectedBuildings:Array<Building> = [];
-	private var activeNodes:Array<ITwoD> = [];
+	private var activeNodes:Array<TwoDSprite> = [];
 	private var nodes:Array<Node>;
 	private var selector:TwoDSprite;
 	
@@ -52,7 +52,7 @@ class InputSystem
 	private var wasRightMouseDown:Bool = false;
 	private var wasLeftMouseDown:Bool = false;
 	
-	private var clickSprites: Array<ITwoD> = [];
+	private var clickSprites: Array<TwoDSprite> = [];
 	
 	
 	public function new(state:IGameState) 
@@ -151,11 +151,11 @@ class InputSystem
 			selector = new TwoDRect();
 			if (inputState == SELECTING)
 			{
-				selector.alpha = .5;
+				selector.setAlpha(.5);
 			}
 			else
 			{
-				selector.alpha = 0;
+				selector.setAlpha(0);
 			}
 			selectorStartX = FlxG.mouse.x;
 			selectorStartY = FlxG.mouse.y;
@@ -223,7 +223,7 @@ class InputSystem
 		}
 		else 
 		{
-			selector.alpha = 0;
+				selector.setAlpha(.5);
 			width = 1;
 			height = 1;
 			selector.x = FlxG.mouse.x;
@@ -233,7 +233,7 @@ class InputSystem
 		selector.updateHitbox();
 	}
 	
-	private function addDBActorSprite(s:ITwoD)
+	private function addDBActorSprite(s:TwoDSprite)
 	{
 		clickSprites.push(s);
 	}
@@ -317,7 +317,7 @@ class InputSystem
 			selector.makeGraphic(1, 1, FlxColor.WHITE);
 			activeState.add(selector);
 		}
-		selector.alpha = 0;
+		selector.setAlpha(.5);
 		if (Util.groupOverlap([selector], [activeState.dashboard.background]).group1.length == 0)
 		{
 			if (selector.width < activeState.getLevel().tiledLevel.tilewidth && selector.height < activeState.getLevel().tiledLevel.tileheight)
@@ -344,7 +344,7 @@ class InputSystem
 		inputState = SELECTING;
 	}
 	
-	private function moveToNode(selector:ITwoD,node:Node):Void
+	private function moveToNode(selector:TwoDSprite,node:Node):Void
 	{
 		var i:Int;
 		if (selectedActors.length > 0 && node.isPassible() && (node.occupant == null || activeState.activeTeam.isThreat(node.occupant.team.id)))
@@ -356,7 +356,7 @@ class InputSystem
 		}
 	}
 	
-	private function attackClick(selector:ITwoD,node:Node):Void
+	private function attackClick(selector:TwoDSprite,node:Node):Void
 	{
 		var i:Int;
 		if (selectedActors.length > 0 && node.isPassible() && node.occupant == null)
@@ -375,7 +375,7 @@ class InputSystem
 		}
 	}
 	
-	private function attackOverlap(selector:ITwoD, unit:BaseActor):Void
+	private function attackOverlap(selector:TwoDSprite, unit:BaseActor):Void
 	{
 		var i:Int;
 		for (i in 0...selectedActors.length)
@@ -396,7 +396,7 @@ class InputSystem
 		activeState.dashboard.clearDashBoard();
 	}
 	
-	private function selectOverlapActors(selector:ITwoD, unit:ITwoD):Void
+	private function selectOverlapActors(selector:TwoDSprite, unit:TwoDSprite):Void
 	{
 		if (newLeftClick)
 		{

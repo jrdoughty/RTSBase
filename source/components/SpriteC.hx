@@ -38,10 +38,10 @@ class SpriteC extends Component
 			assetPath = "assets" + entity.eData.spriteFile.substr(2);
 			if (Reflect.hasField(entity.eData, "speed"))
 			{
-				sprite = new TwoDSprite(entity.currentNodes[0].x, entity.currentNodes[0].y, assetPath, 8, 8 entity);
-				sprite.animation.add("active", [0, 1], 5, true);
-				sprite.animation.add("attack", [0, 2], 5, true);
-				sprite.animation.add("idle", [0], 5, true);
+				sprite = new TwoDSprite(entity.currentNodes[0].x, entity.currentNodes[0].y, assetPath, 8, 8, entity);
+				sprite.addAnimation("active", [0, 1], 5, true);
+				sprite.addAnimation("attack", [0, 2], 5, true);
+				sprite.addAnimation("idle", [0], 5, true);
 				entity.addEvent(IdleAnimationEvent.IDLE, idleAnim);
 				entity.addEvent(AnimateAttackEvent.ATTACK, attackAnim);
 				entity.addEvent(MoveToEvent.MOVE, moveTo);
@@ -89,17 +89,17 @@ class SpriteC extends Component
 	
 	public function attackAnim(e:AnimateAttackEvent)
 	{
-		sprite.animation.play("attack");
+		sprite.playAnimation("attack");
 	}
 	
 	public function activeAnim(e:MoveAnimEvent)
 	{
-		sprite.animation.play("active");
+		sprite.playAnimation("active");
 	}
 	
 	public function idleAnim(e:IdleAnimationEvent)
 	{
-		sprite.animation.play("idle");
+		sprite.playAnimation("idle");
 	}
 	
 	public function moveTo(e:MoveToEvent)

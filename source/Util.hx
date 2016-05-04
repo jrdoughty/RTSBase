@@ -15,7 +15,7 @@ typedef OverlappingObjects = {
 
 class Util
 {	
-	public static function doesOverlap(object1:ITwoD, object2:ITwoD):Bool
+	public static function doesOverlap(object1:TwoDSprite, object2:TwoDSprite):Bool
 	{
 		var topLeftX1:Float = object1.x;
 		var topLeftY1:Float = object1.y;
@@ -34,7 +34,7 @@ class Util
 		return true;
 	}
 	
-	public static function groupOverlap(objects1:Array<ITwoD>, objects2:Array<ITwoD>):OverlappingObjects
+	public static function groupOverlap(objects1:Array<TwoDSprite>, objects2:Array<TwoDSprite>):OverlappingObjects
 	{
 		var result:OverlappingObjects = {group1:[], group2:[]};
 		var i:Int;
@@ -56,7 +56,7 @@ class Util
 		return result;
 	}
 	
-	public static function emulateFlxGOverlap(objects1:Array<ITwoD>, objects2:Array<ITwoD>, callback:Function):Bool
+	public static function emulateFlxGOverlap(objects1:Array<TwoDSprite>, objects2:Array<TwoDSprite>, callback:Function):Bool
 	{
 		var i:Int;
 		var result = false;

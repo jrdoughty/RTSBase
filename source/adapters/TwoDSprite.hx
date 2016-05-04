@@ -7,17 +7,9 @@ import actors.BaseActor;
  * ...
  * @author John Doughty
  */
-interface ITwoD 
-{
-	public var x(default, set):Float;
-	public var y(default, set):Float;
-	public var entity:BaseActor;
-	public var width(get, set):Float;
-	public var height(get, set):Float;
 
-}
 
-class TwoDSprite extends FlxSprite implements ITwoD
+class TwoDSprite extends FlxSprite 
 {
 	public var entity:BaseActor = null;
 	
@@ -38,4 +30,36 @@ class TwoDSprite extends FlxSprite implements ITwoD
 			loadGraphic(filePath, true, width, height);
 		}
 	}
+	
+	@:extern public inline function pauseAnimation()
+	{
+		animation.pause();
+	}
+	
+	@:extern public inline function setCurrentFrame(frame:Int)
+	{
+		animation.frameIndex = frame;
+	}
+	@:extern public inline function addAnimation(name:String, frames:Array<Int>, frameRate:Int = 30,
+	looped:Bool = true, flipX:Bool = false, flipY:Bool = false)
+	{
+		animation.add(name, frames, frameRate, looped, flipX, flipY);
+	}
+	
+	@:extern public inline function playAnimation(animationName:String)
+	{
+		animation.play(animationName);
+	}
+	
+	@:extern public inline function getCurrentFrame():Int
+	{
+		return animation.frameIndex;
+	}
+	
+	@:extern public inline function setAlpha(decimal:Float)
+	{
+		alpha = decimal;
+	}
+	
+	
 }

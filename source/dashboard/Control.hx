@@ -22,7 +22,7 @@ class Control extends TwoDSprite
 		{
 			callbackFunction = callback;
 		}
-		animation.frameIndex = frame;
+		setCurrentFrame(frame);
 		scale.set(2, 2);
 		updateHitbox();
 	}
