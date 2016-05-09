@@ -19,7 +19,6 @@ class TwoDSprite extends FlxSprite
 		{
 			this.entity = entity;
 		}
-		
 		if (width == 0 && height == 0)
 		{
 			super(X, Y, filePath);
@@ -29,6 +28,39 @@ class TwoDSprite extends FlxSprite
 			super(X, Y);
 			loadGraphic(filePath, true, width, height);
 		}
+		
+	}
+	
+	@:extern public inline function loadSpriteFromSprite(s:TwoDSprite)
+	{
+		this.loadGraphicFromSprite(s);
+	}
+	
+	@:extern public inline function darkenColor()
+	{
+		color = 0xBBBBBB;
+	}
+	
+	@:extern public inline function normalizeColor()
+	{
+		color = 0xFFFFFF;
+	}
+	
+	@:extern public inline function setScale(x:Float, y:Float)
+	{
+		scale.set(x, y);
+		updateHitbox();
+	}
+	
+	@:extern public inline function setImageSize(w:Int, h:Int)
+	{
+		setGraphicSize(w, h);
+		updateHitbox();
+	}
+	
+	@:extern public inline function setVisibility(visible:Bool)
+	{
+		this.visible = visible;
 	}
 	
 	@:extern public inline function pauseAnimation()

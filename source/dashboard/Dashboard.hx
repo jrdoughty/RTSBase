@@ -1,17 +1,17 @@
 package dashboard;
 
 import actors.BaseActor;
-import flixel.group.FlxGroup;
 import systems.InputSystem;
 import dashboard.Control;
 import events.GetSpriteEvent;
 import adapters.TwoDSprite;
+import flixel.FlxG;
 
 /**
  * ...
  * @author ...
  */
-class Dashboard extends FlxGroup
+class Dashboard
 {
 	public var background:TwoDSprite;
 	public var activeControls:Array<Control> = [];
@@ -24,9 +24,7 @@ class Dashboard extends FlxGroup
 	private var baseX:Float;
 	
 	public function new(inputH:InputSystem):Void
-	{
-		super();
-		
+	{		
 		inputHandler = inputH;
 		background = new TwoDSprite(0,0, "assets/images/dashBG.png");
 		background.x = 0;
@@ -37,8 +35,8 @@ class Dashboard extends FlxGroup
 		selected.x = background.x + controls.width + 4;
 		selected.y = 4 + background.y;
 		
-		add(background);
-		add(controls);
+		FlxG.state.add(background);
+		FlxG.state.add(controls);
 		//add(selected);
 	}
 	
@@ -48,13 +46,13 @@ class Dashboard extends FlxGroup
 		
 		baseA.dispatchEvent(GetSpriteEvent.GET, new GetSpriteEvent(setGraphics));
 		
-		add(selected);
+		FlxG.state.add(selected);
 		activeControls = baseA.controls;
 		
 		for (i in 0...activeControls.length)
 		{
 			trace("Controls: "+i);
-			add(activeControls[i]);
+			FlxG.state.add(activeControls[i]);
 			activeControls[i].x = 2 + (i % 3) * 18;
 			activeControls[i].y = Math.floor(i / 3) * 18 + 2 + background.y;
 		}
@@ -63,9 +61,8 @@ class Dashboard extends FlxGroup
 	
 	public function setGraphics(s:TwoDSprite)
 	{
-		selected.loadGraphicFromSprite(s);
-		selected.setGraphicSize(48, 48);
-		selected.updateHitbox();
+		selected.loadSpriteFromSprite(s);
+		selected.setImageSize(48, 48);
 		selected.setCurrentFrame(s.getCurrentFrame());
 		selected.pauseAnimation();
 	}
@@ -75,18 +72,18 @@ class Dashboard extends FlxGroup
 
 		var i:Int;
 		
-		remove(selected);
+		FlxG.state.remove(selected);
 		
 		for (i in 0...activeControls.length)
 		{
-			remove(activeControls[i]);			
+			FlxG.state.remove(activeControls[i]);			
 		}
 		
 		for (i in 0...representatives.length)
 		{
-			remove(representatives[i]);
-			remove(representatives[i].healthBarFill);
-			remove(representatives[i].healthBar);
+			FlxG.state.remove(representatives[i]);
+			FlxG.state.remove(representatives[i].healthBarFill);
+			FlxG.state.remove(representatives[i].healthBar);
 		}
 		activeUnits = [];
 		representatives = [];
@@ -99,9 +96,9 @@ class Dashboard extends FlxGroup
 			activeUnits.push(baseA);
 			var sprite:ActorRepresentative = new ActorRepresentative(baseA);
 			representatives.push(sprite);
-			add(sprite);
-			add(sprite.healthBar);
-			add(sprite.healthBarFill);
+			FlxG.state.add(sprite);
+			FlxG.state.add(sprite.healthBar);
+			FlxG.state.add(sprite.healthBarFill);
 			sprite.setDashPos(Std.int(background.x) + 112 + Math.floor((representatives.length - 1) % ((background.width -112) / 16)) * 16,
 			16 * Math.floor((representatives.length - 1) * 16 / (background.width - 112))+Std.int(background.y));
 		}
@@ -116,20 +113,17 @@ class Dashboard extends FlxGroup
 		}
 	}
 	
-	override public function update(elapsed:Float):Void
+	public function update():Void
 	{
 		var i:Int = 0;
-				
-		super.update(elapsed);
-		
 		while(i < representatives.length)//because the length gets stored ahead in haxe for loops, the changing length breaks this loop
 		{
 			if (!representatives[i].baseActor.alive)
 			{
 				activeUnits.splice(activeUnits.indexOf(representatives[i].baseActor), 1);
-				remove(representatives[i]);
-				remove(representatives[i].healthBarFill);
-				remove(representatives[i].healthBar);
+				FlxG.state.remove(representatives[i]);
+				FlxG.state.remove(representatives[i].healthBarFill);
+				FlxG.state.remove(representatives[i].healthBar);
 				representatives.splice(i, 1);
 				if (representatives.length == 0)
 				{

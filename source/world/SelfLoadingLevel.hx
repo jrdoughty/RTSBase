@@ -1,9 +1,9 @@
 package world;
 
-import flixel.group.FlxGroup;
 import haxe.Json;
 import world.TiledTypes.Layer;
 import world.TiledTypes.TiledLevel;
+import flixel.FlxG;
 import openfl.Assets;
 import openfl.geom.Rectangle;
 import openfl.geom.Point;
@@ -14,7 +14,7 @@ import adapters.TwoDSprite;
  * ...
  * @author John Doughty
  */
-class SelfLoadingLevel extends FlxGroup
+class SelfLoadingLevel 
 {
 	//public var nodes:Array<Node> = [];
 	public var width:Int;
@@ -29,7 +29,6 @@ class SelfLoadingLevel extends FlxGroup
 	
 	public function new(json:String) 
 	{
-		super();
 		var i:Int = 0;
 		var j:Int = 0;
 		var tileSetId:Int = 0;
@@ -49,10 +48,10 @@ class SelfLoadingLevel extends FlxGroup
 		height = tiledLevel.height;
 		background = new TwoDSprite();
 		background.pixels = new BitmapData(Std.int(width * tiledLevel.tilewidth), height * tiledLevel.tileheight, true, 0xFFFFFF);
-		add(background);
+		FlxG.state.add(background);
 		fog = new TwoDSprite();
 		fog.pixels = new BitmapData(Std.int(width * tiledLevel.tilewidth), height * tiledLevel.tileheight, true, 0xFFFFFF);
-		add(fog);
+		FlxG.state.add(fog);
 		for (i in 0...tiledLevel.layers.length)
 		{
 			if (tiledLevel.layers[i].name == "graphic")

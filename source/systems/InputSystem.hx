@@ -6,8 +6,6 @@ import events.TargetEvent;
 import events.EventObject;
 import events.MoveEvent;
 import flixel.FlxG;
-import flixel.FlxState;
-import flixel.group.FlxGroup;
 import flixel.input.mouse.FlxMouseEventManager;
 import flixel.util.FlxColor;
 import interfaces.IGameState;
@@ -71,18 +69,18 @@ class InputSystem
 		{
 			if (activeState.getLevel().highlight != null && sprite.occupant != null)
 			{
-				activeState.getLevel().highlight.visible = true;
+				activeState.getLevel().highlight.setVisibility(true);
 				activeState.getLevel().highlight.x = sprite.x;
 				activeState.getLevel().highlight.y = sprite.y;
 			}
 			else
 			{
-				activeState.getLevel().highlight.visible = false;
+				activeState.getLevel().highlight.setVisibility(false);
 			}
 		}
 		else if (inputState == MOVING || inputState == ATTACKING)
 		{
-			activeState.getLevel().highlight.visible = true;
+			activeState.getLevel().highlight.setVisibility(true);
 			activeState.getLevel().highlight.x = sprite.x;
 			activeState.getLevel().highlight.y = sprite.y;
 		}
@@ -161,8 +159,7 @@ class InputSystem
 			selectorStartY = FlxG.mouse.y;
 			selector.x = selectorStartX;
 			selector.y = selectorStartY;
-			selector.setGraphicSize(1, 1);
-			selector.updateHitbox();
+			selector.setImageSize(1, 1);
 			wasLeftMouseDown = true;
 		} 
 		else if (wasLeftMouseDown && FlxG.mouse.pressed == false)
@@ -229,8 +226,7 @@ class InputSystem
 			selector.x = FlxG.mouse.x;
 			selector.y = FlxG.mouse.y;
 		}
-		selector.setGraphicSize(width, height);
-		selector.updateHitbox();
+		selector.setImageSize(width, height);
 	}
 	
 	private function addDBActorSprite(s:TwoDSprite)
@@ -266,7 +262,7 @@ class InputSystem
 			resetInputState();
 			
 		}
-		activeState.remove(selector);
+		FlxG.state.remove(selector);
 		selector = null;
 		
 	}
@@ -313,9 +309,8 @@ class InputSystem
 	{
 		if (selector == null)
 		{
-			selector = new TwoDSprite(FlxG.mouse.x, FlxG.mouse.y);
-			selector.makeGraphic(1, 1, FlxColor.WHITE);
-			activeState.add(selector);
+			selector = new TwoDRect(FlxG.mouse.x, FlxG.mouse.y);
+			FlxG.state.add(selector);
 		}
 		selector.setAlpha(.5);
 		if (Util.groupOverlap([selector], [activeState.dashboard.background]).group1.length == 0)
@@ -325,7 +320,7 @@ class InputSystem
 				Util.emulateFlxGOverlap([selector], activeNodes, attackClick);
 			}
 		}
-		activeState.remove(selector);
+		FlxG.state.remove(selector);
 		selector = null;
 	}
 	

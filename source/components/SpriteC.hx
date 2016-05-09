@@ -70,7 +70,7 @@ class SpriteC extends Component
 	 */
 	public function killVisibility(e:HideEvent)
 	{
-		sprite.visible = false;
+		sprite.setVisibility(false);
 	}
 
 	
@@ -79,7 +79,7 @@ class SpriteC extends Component
 	 */
 	public function makeVisible(e:RevealEvent)
 	{
-		sprite.visible = true;
+		sprite.setVisibility(true);
 	}
 	
 	public function kill(e:KillEvent)

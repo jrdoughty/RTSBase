@@ -1,6 +1,7 @@
 package dashboard;
 
 import actors.BaseActor;
+import adapters.TwoDRect;
 import events.EventObject;
 import flixel.util.FlxColor;
 import events.GetSpriteEvent;
@@ -27,19 +28,16 @@ class ActorRepresentative extends TwoDSprite
 		overrideWidth = width;
 		overrideHeight = height;
 		baseActor.dispatchEvent(GetSpriteEvent.GET, new GetSpriteEvent(setGraphics));
-		healthBar = new TwoDSprite(x, y);
-		healthBar.makeGraphic(width, 1, FlxColor.BLACK);
-		healthBarFill = new TwoDSprite(x, y);
-		healthBarFill.makeGraphic(width, 1, FlxColor.RED);
+		healthBar = new TwoDRect(x, y,"BLACK", width, 1);
+		healthBarFill = new TwoDRect(x, y, "RED", width, 1);
 		
 		pauseAnimation();
 	}
 	
 	public function setGraphics(s:TwoDSprite)
 	{
-		loadGraphicFromSprite(s);
-		setGraphicSize(overrideWidth, overrideHeight);
-		updateHitbox();
+		loadSpriteFromSprite(s);
+		setImageSize(overrideWidth, overrideHeight);
 	}
 	
 	public function setDashPos(x:Int, y:Int):Void
@@ -50,13 +48,5 @@ class ActorRepresentative extends TwoDSprite
 		this.y = y;
 		healthBar.y = y;
 		healthBarFill.y = y;
-	}
-	
-	override public function update(elapsed:Float):Void
-	{
-		super.update(elapsed);
-		alive = baseActor.alive;
-		//healthBarFill.scale.set(baseActor.health, 1);
-		healthBarFill.updateHitbox();
 	}
 }

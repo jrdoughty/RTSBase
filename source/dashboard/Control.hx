@@ -23,8 +23,7 @@ class Control extends TwoDSprite
 			callbackFunction = callback;
 		}
 		setCurrentFrame(frame);
-		scale.set(2, 2);
-		updateHitbox();
+		setScale(x, y);
 	}
 	
 	public function useCallback(sprite:Control)
@@ -34,12 +33,12 @@ class Control extends TwoDSprite
 	
 	public function hover(sprite:Control)
 	{
-		color = 0xBBBBBB;
+		darkenColor();
 	}
 	
 	public function out(sprite:Control)
 	{
-		color = 0xFFFFFF;
+		normalizeColor();
 	}
 	
 }

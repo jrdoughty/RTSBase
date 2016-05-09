@@ -4,7 +4,6 @@ import actors.BaseActor;
 import dashboard.Dashboard;
 import flixel.FlxCamera;
 import flixel.FlxG;
-import flixel.group.FlxGroup;
 import flixel.util.FlxColor;
 import flixel.FlxState;
 import interfaces.IGameState;
@@ -23,8 +22,6 @@ import events.ClearFogEvent;
 /**
  * A FlxState which can be used for the actual gameplay.
  */
-
-
  
 class BaseState extends FlxState implements IGameState
 {
@@ -46,7 +43,7 @@ class BaseState extends FlxState implements IGameState
 	override public function create():Void
 	{
 		super.create();
-		add(getLevel());
+		getLevel();
 		add(activeLevel.highlight);
 		createTeams();
 		inputHandler = new InputSystem(this);
@@ -71,7 +68,6 @@ class BaseState extends FlxState implements IGameState
 	private function setupDashboard()
 	{
 		dashboard = new Dashboard( inputHandler);
-		add(dashboard);
 	}
 	
 	private function createTeams():Void
@@ -140,6 +136,7 @@ class BaseState extends FlxState implements IGameState
 		{
 			team.update();
 		}
+		dashboard.update();
 		positions = newPositions;
 		frame++;
 	}

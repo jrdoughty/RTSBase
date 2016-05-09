@@ -7,9 +7,9 @@ import events.HideEvent;
 import events.KillEvent;
 import events.HurtEvent;
 import events.GetSpriteEvent;
-import flixel.util.FlxColor;
 import flixel.FlxG;
 import adapters.TwoDSprite;
+import adapters.TwoDRect;
 /**
  * ...
  * @author ...
@@ -75,8 +75,8 @@ class Health extends Component
 	 */
 	public function killVisibility(e:HideEvent = null)
 	{
-		healthBar.visible = false;
-		healthBarFill.visible = false;
+		healthBar.setVisibility(false);
+		healthBarFill.setVisibility(false);
 	}
 
 	
@@ -85,8 +85,8 @@ class Health extends Component
 	 */
 	public function makeVisible(e:RevealEvent = null)
 	{
-		healthBar.visible = true;
-		healthBarFill.visible = true;
+		healthBar.setVisibility(true);
+		healthBarFill.setVisibility(true);
 	}
 	
 	/**
@@ -101,13 +101,12 @@ class Health extends Component
 			{
 				if (health > 0)
 				{
-					healthBarFill.scale.set(health, 1);
+					healthBarFill.setScale(health, 1);
 				}
 				else
 				{
-					healthBarFill.scale.set(0, 1);
+					healthBarFill.setScale(0, 1);
 				}
-				healthBarFill.updateHitbox();
 				healthBarFill.x = actorSprite.x;
 				healthBarFill.y = actorSprite.y - 1;
 				
@@ -127,11 +126,9 @@ class Health extends Component
 	public function attachSprite(s:TwoDSprite)
 	{
 		actorSprite = s;			
-		healthBar = new TwoDSprite(actorSprite.x, actorSprite.y - 1);
-		healthBar.makeGraphic(Std.int(Math.sqrt(entity.currentNodes.length) * 8), 1, FlxColor.BLACK);
+		healthBar = new TwoDRect(actorSprite.x, actorSprite.y - 1,"BLACK",Std.int(Math.sqrt(entity.currentNodes.length) * 8), 1);
 		FlxG.state.add(healthBar);
-		healthBarFill = new TwoDSprite(actorSprite.x, actorSprite.y - 1);
-		healthBarFill.makeGraphic(Std.int(Math.sqrt(entity.currentNodes.length) * 8), 1, FlxColor.RED);
+		healthBarFill = new TwoDRect(actorSprite.x, actorSprite.y - 1, "RED", Std.int(Math.sqrt(entity.currentNodes.length) * 8), 1);
 		FlxG.state.add(healthBarFill);	
 	}
 	

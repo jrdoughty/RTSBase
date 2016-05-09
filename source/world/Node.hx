@@ -48,7 +48,7 @@ class Node extends TwoDSprite
 		}
 		addAnimation("main",[frame],0,false);
 		addAnimation("clicked",[9],0,false);
-		playAnimation("main", true);
+		playAnimation("main");
 		setCurrentFrame(frame);
 		passable = pass;
 	}

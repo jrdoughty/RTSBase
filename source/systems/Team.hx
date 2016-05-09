@@ -2,7 +2,6 @@ package systems;
 
 import actors.BaseActor;
 import actors.DBActor;
-import flixel.group.FlxGroup;
 
 /**
  * ...
