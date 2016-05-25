@@ -9,6 +9,7 @@ import flixel.FlxGame;
 import flixel.FlxState;
 import systems.Data;
 import openfl.Assets;
+import debugger.HaxeRemote;
 
 class Main extends Sprite 
 {
@@ -24,6 +25,9 @@ class Main extends Sprite
 	
 	public static function main():Void
 	{	
+		#if debug
+    	new debugger.HaxeRemote(true, "localhost");
+		#end
 		Lib.current.addChild(new Main());
 	}
 	

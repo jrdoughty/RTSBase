@@ -1,0 +1,18 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Windows Debug",
+			"type": "hxcpp",
+			"request": "launch",
+			"stopOnEntry": true,
+            "args":[
+                "compilePath=${workspaceRoot}",
+                "compileCommand=haxelib run openfl build Project.xml windows -64 -lib -hxcpp-debugger -debug -cpp -DHXCPP_DEBUGGER -Dfdb -Dtelemetry",
+                "runPath=${workspaceRoot}/export/windows/cpp/bin/",
+                "runCommand=RTS.exe",
+                "runInTerminal=false"
+            ]
+		}
+	]
+}

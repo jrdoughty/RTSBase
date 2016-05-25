@@ -1,0 +1,34 @@
+#automatically generated do not edit
+#@date Tue May 24 2016 21:39:59 GMT-0500 (Central Daylight Time)
+-main ApplicationMain
+-cp c:\haxetoolkit\haxe\lib\flixel\4,0,1\
+-D flixel=4.0.1
+-cp c:\haxetoolkit\haxe\lib\openfl\3,6,1\
+-D openfl=3.6.1
+-cp c:\haxetoolkit\haxe\lib\lime\2,9,1\
+-D lime=2.9.1
+-cp c:\haxetoolkit\haxe\lib\hscript\2,0,5\
+-D hscript=2.0.5
+-cp c:\haxetoolkit\haxe\lib\castle\1,5,0\
+-D castle=1.5.0
+-cp c:\haxetoolkit\haxe\lib\mphx\git\
+-D mphx=0.0.0
+-cp c:\users\fire dragon\documents\projects\rtsbase\source\
+-cp c:\haxetoolkit\haxe\lib\openfl\3,6,1\extern\
+-D openfl-next
+-D tools=2.9.1
+-D FLX_NO_DEBUG
+-D no-compilation
+-D NAPE_RELEASE_BUILD
+-D native
+-D lime-native
+-D openfl-native
+-D windows
+-D desktop
+--remap flash:openfl
+--macro flixel.system.macros.FlxDefines.run()
+-cp c:\users\fire dragon\documents\projects\rtsbase\export\windows\cpp\haxe\
+-cpp export/windows/cpp/obj
+--macro keep("Main")
+-D display
+-cp c:\users\firedr~1\appdata\local\temp\bc1109780b26859e4b439100c7c6d6fa489c5668
