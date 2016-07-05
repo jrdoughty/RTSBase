@@ -1,5 +1,6 @@
 package world;
 
+import flixel.FlxSprite;
 import haxe.Json;
 import world.TiledTypes.Layer;
 import world.TiledTypes.TiledLevel;
@@ -9,6 +10,9 @@ import openfl.geom.Rectangle;
 import openfl.geom.Point;
 import openfl.display.BitmapData;
 import adapters.TwoDSprite;
+import flixel.util.FlxSpriteUtil;
+import flash.geom.ColorTransform;
+import flash.display.BitmapDataChannel;
 
 /**
  * ...
@@ -52,6 +56,7 @@ class SelfLoadingLevel
 		fog = new TwoDSprite();
 		fog.pixels = new BitmapData(Std.int(width * tiledLevel.tilewidth), height * tiledLevel.tileheight, true, 0xFFFFFF);
 		FlxG.state.add(fog);
+		fog.setAlpha(.5);
 		for (i in 0...tiledLevel.layers.length)
 		{
 			if (tiledLevel.layers[i].name == "graphic")
@@ -104,18 +109,51 @@ class SelfLoadingLevel
 			}
 		}
 	}
-	
+	var mainMask = new FlxSprite();
 	public function rebuildFog()
 	{
+		var i;
+		var mask:FlxSprite = new FlxSprite();
+		//mask.loadGraphic("assets/images/textures.png", true, 8, 8);
+		//mask.animation.frameIndex = 4;
+		//FlxG.state.add(mask);
+		//mask.addAnimation("main", [4], 24);//has to be better way
+		//mask.playAnimation("main");
+		
+		fog.pixels = new BitmapData(Std.int(width * tiledLevel.tilewidth), height * tiledLevel.tileheight, false, 0x000000);
 		
 		for (i in 0...Node.activeNodes.length)
 		{
-			var sourceRect:Rectangle = new Rectangle(0, 0, Node.activeNodes[i].width, Node.activeNodes[i].height);
-			var destPoint:Point = new Point(Std.int(Node.activeNodes[i].x), Node.activeNodes[i].y);
-			var btmpdta:BitmapData = Node.activeNodes[i].overlay.updateFramePixels();
-			fog.pixels.copyPixels(btmpdta, sourceRect, destPoint, btmpdta, new Point(0,0), false);
+			if (Node.activeNodes[i].occupant != null)
+			{
+				mask.loadGraphicFromSprite(mainMask);
+				FlxSpriteUtil.drawCircle(mask, Node.activeNodes[i].getMidpoint().x, Node.activeNodes[i].getMidpoint().y, 8, 0xFFFFFF);
+				invertedAlphaMaskFlxSprite(fog, mask, mainMask);
+			}
 		}
 		fog.dirty = true;
 		
+	}
+	
+	function invertedAlphaMaskFlxSprite(sprite:FlxSprite, mask:FlxSprite, output:FlxSprite):FlxSprite
+	{
+		// Solution based on the discussion here:
+		// https://groups.google.com/forum/#!topic/haxeflixel/fq7_Y6X2ngY
+ 
+		// NOTE: The code below is the same as FlxSpriteUtil.alphaMaskFlxSprite(),
+		// except it has an EXTRA section below.
+ 
+		sprite.drawFrame();
+		var data:BitmapData = sprite.pixels.clone();
+		data.copyChannel(mask.pixels, new Rectangle(0, 0, sprite.width, sprite.height), new Point(), BitmapDataChannel.ALPHA, BitmapDataChannel.ALPHA);
+ 
+		// EXTRA:
+		// this code applies a -1 multiplier to the alpha channel,
+		// turning the opaque circle into a transparent circle.
+		data.colorTransform(new Rectangle(0, 0, sprite.width, sprite.height), new ColorTransform(0,0,0,-1,0,0,0,255));
+		// end EXTRA
+ 
+		output.pixels = data;
+		return output;
 	}
 }

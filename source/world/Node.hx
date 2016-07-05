@@ -10,7 +10,7 @@ import adapters.TwoDSprite;
  */
 class Node extends TwoDSprite
 {
-	public static var activeNodes = [];
+	public static var activeNodes:Array<Node> = [];
 	private static var levelWidth;
 	private static var levelHeight;
 	private static inline var diagonal:Bool = false;
