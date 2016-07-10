@@ -57,6 +57,7 @@ class InputSystem
 	public function new(state:IGameState) 
 	{
 		activeState = state;
+		activeNodes = cast Node.activeNodes;
 		FlxMouseEventManager.add(state.getLevel().background, null, null, onOver);
 		
 	}
