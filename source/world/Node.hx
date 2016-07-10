@@ -1,14 +1,15 @@
 package world;
 import actors.BaseActor;
+import adapters.ITwoD;
+import adapters.TwoD;
 import events.RevealEvent;
 import events.HideEvent;
 import adapters.TwoDSprite;
-
 /**
  * ...
  * @author John Doughty
  */
-class Node extends TwoDSprite
+class Node extends TwoD implements ITwoD
 {
 	public static var activeNodes = [];
 	private static var levelWidth;
@@ -30,26 +31,22 @@ class Node extends TwoDSprite
 	public var heiristic:Int = -1;
 	public var nodeX:Int;
 	public var nodeY:Int;
-	public var overlay:TwoDSprite;
+	//public var overlay:TwoDSprite;
 	
 	private var passable:Bool = true;
 	
-	public function new(asset:String, frame:Int, width:Int, height, X:Int = 0, Y:Int = 0, pass:Bool = true ) 
+	public function new(width:Int, height, x:Int = 0, y:Int = 0, pass:Bool = true ) 
 	{
-		super(X * width, Y * height, asset, width, height);
-		overlay = new TwoDSprite(X * width, Y * height, asset, width, height);
-		nodeX = X;
-		nodeY = Y;
-		overlay.setCurrentFrame(6);
-		overlay.setAlpha(.5);
-		if (frame == 7)
-		{
-			true;
-		}
-		addAnimation("main",[frame],0,false);
-		addAnimation("clicked",[9],0,false);
-		playAnimation("main");
-		setCurrentFrame(frame);
+		super();
+		this.x = x * width;
+		this.y = y * height;
+		this.width = width;
+		this.height = height;
+		//overlay = new TwoDSprite(x * width, y * height, asset, width, height);
+		nodeX = x;
+		nodeY = y;
+		//overlay.setCurrentFrame(6);
+		//overlay.setAlpha(.5);
 		passable = pass;
 	}
 	
@@ -58,10 +55,6 @@ class Node extends TwoDSprite
 		return (passable);
 	}
 	
-	public function resetState():Void
-	{
-		playAnimation("main");
-	}
 	
 	public function getFinal():Int
 	{
@@ -87,7 +80,7 @@ class Node extends TwoDSprite
 	
 	public function removeOverlay()
 	{
-		overlay.setAlpha(0);
+		//overlay.setAlpha(0);
 		if (occupant != null)
 		{
 			occupant.dispatchEvent(RevealEvent.REVEAL, new RevealEvent());
@@ -96,7 +89,7 @@ class Node extends TwoDSprite
 	
 	public function addOverlay()
 	{
-		overlay.setAlpha(.5);
+		//overlay.setAlpha(.5);
 		if (occupant != null)
 		{
 			occupant.dispatchEvent(HideEvent.HIDE, new HideEvent());
@@ -184,4 +177,5 @@ class Node extends TwoDSprite
             }
         }
 	}
+	
 }

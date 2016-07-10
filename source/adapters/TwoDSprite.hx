@@ -9,7 +9,7 @@ import actors.BaseActor;
  */
 
 
-class TwoDSprite extends FlxSprite 
+class TwoDSprite extends FlxSprite implements ITwoD
 {
 	public var entity:BaseActor = null;
 	

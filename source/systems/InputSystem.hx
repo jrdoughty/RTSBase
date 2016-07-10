@@ -6,6 +6,7 @@ import events.TargetEvent;
 import events.EventObject;
 import events.MoveEvent;
 import flixel.FlxG;
+import flixel.FlxSprite;
 import flixel.input.mouse.FlxMouseEventManager;
 import flixel.util.FlxColor;
 import interfaces.IGameState;
@@ -17,6 +18,7 @@ import events.StopEvent;
 import events.GetSpriteEvent;
 import adapters.TwoDSprite;
 import adapters.TwoDRect;
+import adapters.ITwoD;
 import Util;
 
 /**
@@ -39,8 +41,7 @@ class InputSystem
 	
 	private var selectedActors:Array<BaseActor> = [];
 	private var selectedBuildings:Array<Building> = [];
-	private var activeNodes:Array<TwoDSprite> = [];
-	private var nodes:Array<Node>;
+	private var activeNodes:Array<ITwoD> = [];
 	private var selector:TwoDSprite;
 	
 	private var selectorStartX:Float;
@@ -50,21 +51,20 @@ class InputSystem
 	private var wasRightMouseDown:Bool = false;
 	private var wasLeftMouseDown:Bool = false;
 	
-	private var clickSprites: Array<TwoDSprite> = [];
+	private var clickSprites: Array<ITwoD> = [];
 	
 	
 	public function new(state:IGameState) 
 	{
 		activeState = state;
-		for (i in 0...Node.activeNodes.length)
-		{
-			activeNodes.push(Node.activeNodes[i]);
-			FlxMouseEventManager.add(Node.activeNodes[i], null, null, onOver);
-		}
+		FlxMouseEventManager.add(state.getLevel().background, null, null, onOver);
+		
 	}
 	
-	private function onOver(sprite:Node):Void
+	private function onOver(levelBG:FlxSprite):Void
 	{
+		var index:Int = Std.int(FlxG.mouse.x / activeState.getLevel().tiledLevel.tilewidth) + Std.int(FlxG.mouse.y / activeState.getLevel().tiledLevel.tileheight) * activeState.getLevel().width;
+		var sprite = Node.activeNodes[index];
 		if (inputState == SELECTING)
 		{
 			if (activeState.getLevel().highlight != null && sprite.occupant != null)
@@ -293,16 +293,16 @@ class InputSystem
 			overlaps = Util.groupOverlap([selector], clickSprites);
 		}
 		if (overlaps.group1.length == 0)
+		{
+			activeState.dashboard.clearDashBoard();//Select Enemies later
+		}
+		else
+		{
+			for (i in 0...overlaps.group1.length)
 			{
-				activeState.dashboard.clearDashBoard();//Select Enemies later
+				selectOverlapActors(selector, overlaps.group2[i]);
 			}
-			else
-			{
-				for (i in 0...overlaps.group1.length)
-				{
-					selectOverlapActors(selector, overlaps.group2[i]);
-				}
-			}
+		}
 	}
 	
 	private function rightClick()
@@ -315,7 +315,8 @@ class InputSystem
 		selector.setAlpha(.5);
 		if (Util.groupOverlap([selector], [activeState.dashboard.background]).group1.length == 0)
 		{
-			if (selector.width < activeState.getLevel().tiledLevel.tilewidth && selector.height < activeState.getLevel().tiledLevel.tileheight)
+			if (selector.width < activeState.getLevel().tiledLevel.tilewidth && 
+			selector.height < activeState.getLevel().tiledLevel.tileheight)
 			{
 				Util.emulateFlxGOverlap([selector], activeNodes, attackClick);
 			}

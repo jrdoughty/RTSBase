@@ -78,7 +78,7 @@ class AStar
 		var i:Int;
 		for (i in 0...Node.activeNodes.length)
 		{
-			Node.activeNodes[i].animation.play("main");
+			//Node.activeNodes[i].animation.play("main");
 			Node.activeNodes[i].g = -1;
 			Node.activeNodes[i].heiristic = -1;
 		}

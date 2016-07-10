@@ -1,5 +1,6 @@
 package world;
 
+import flixel.FlxSprite;
 import haxe.Json;
 import world.TiledTypes.Layer;
 import world.TiledTypes.TiledLevel;
@@ -22,8 +23,8 @@ class SelfLoadingLevel
 	public var highlight:TwoDSprite;
 	
 	public var tiledLevel(default,null):TiledLevel;
+	public var background:TwoDSprite;
 	
-	private var background:TwoDSprite;
 	private var fog:TwoDSprite;
 	private var selectedNode:Node;
 	
@@ -41,8 +42,14 @@ class SelfLoadingLevel
 		
 		var graphicLayer:Layer = null;
 		var collisionLayer:Layer = null;
+		var sprites:Array<FlxSprite>;
+		var sourceRect:Rectangle = new Rectangle(0, 0, 0, 0);
+		var destPoint:Point = new Point(0, 0);
 		
 		tiledLevel = Json.parse(json);
+		sprites = [new FlxSprite().loadGraphic("assets/" + tiledLevel.tilesets[tileSetId].image.substring(3), true, tiledLevel.tilewidth, tiledLevel.tileheight)];
+		var sourceRect:Rectangle = new Rectangle(0, 0, tiledLevel.tilewidth, tiledLevel.tileheight);
+		var destPoint:Point = new Point(0, 0);
 		
 		width = tiledLevel.width;
 		height = tiledLevel.height;
@@ -72,6 +79,11 @@ class SelfLoadingLevel
 						if (graphicLayer.data[i] > tiledLevel.tilesets[j + 1].firstgid)
 						{
 							tileSetId += 1;
+							if (tileSetId == sprites.length)
+							{
+								sprites.push(new FlxSprite());
+								sprites[tileSetId].loadGraphic("assets/" + tiledLevel.tilesets[tileSetId].image.substring(3), true, tiledLevel.tilewidth, tiledLevel.tileheight);
+							}
 						}
 					}
 					asset = "assets/" + tiledLevel.tilesets[tileSetId].image.substring(3);
@@ -79,15 +91,13 @@ class SelfLoadingLevel
 					x = i % width;
 					y = Math.floor(i / width);
 					pass = collisionLayer.data[i] == 0;
-					Node.activeNodes.push(new Node(asset, frame,tiledLevel.tilewidth,tiledLevel.tileheight, x, y, pass));
+					Node.activeNodes.push(new Node(tiledLevel.tilewidth,tiledLevel.tileheight, x, y, pass));
 					
-					var sourceRect:Rectangle = new Rectangle(0, 0, Node.activeNodes[i].width, Node.activeNodes[i].height);
-					var destPoint:Point = new Point(Std.int(Node.activeNodes[i].x), Node.activeNodes[i].y);
-					if (frame == 7)
-					{
-						true;
-					}
-					background.pixels.copyPixels(Node.activeNodes[i].updateFramePixels(), sourceRect, destPoint, null, null, true);
+					destPoint.x = Node.activeNodes[i].x;
+					destPoint.y = Node.activeNodes[i].y;
+					
+					sprites[tileSetId].animation.frameIndex = frame;
+					background.pixels.copyPixels(sprites[tileSetId].updateFramePixels(), sourceRect, destPoint, null, null, true);
 					background.dirty = true;
 				}
 				Node.createNeighbors(width, height);
@@ -107,7 +117,7 @@ class SelfLoadingLevel
 	
 	public function rebuildFog()
 	{
-		
+		/*
 		for (i in 0...Node.activeNodes.length)
 		{
 			var sourceRect:Rectangle = new Rectangle(0, 0, Node.activeNodes[i].width, Node.activeNodes[i].height);
@@ -116,6 +126,6 @@ class SelfLoadingLevel
 			fog.pixels.copyPixels(btmpdta, sourceRect, destPoint, btmpdta, new Point(0,0), false);
 		}
 		fog.dirty = true;
-		
+		*/
 	}
 }
