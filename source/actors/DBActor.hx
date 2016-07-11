@@ -53,7 +53,7 @@ class DBActor extends BaseActor
 		
 		for (i in 0...3)
 		{
-			controls.push(new Control(i, unitControlTypes[i],null,"assets/images/controls.png"));
+			controls.push(new Control(i, unitControlTypes[i],null,AssetPaths.controls__png));
 		}
 
 		for (i in 0...eData.components.length)

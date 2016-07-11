@@ -11,7 +11,7 @@ import adapters.TwoDSprite;
  */
 class Node extends TwoD implements ITwoD
 {
-	public static var activeNodes = [];
+	public static var activeNodes:Array<Node> = [];
 	private static var levelWidth;
 	private static var levelHeight;
 	private static inline var diagonal:Bool = false;
@@ -31,6 +31,7 @@ class Node extends TwoD implements ITwoD
 	public var heiristic:Int = -1;
 	public var nodeX:Int;
 	public var nodeY:Int;
+	public var overlayShadowOn:Bool = true;
 	//public var overlay:TwoDSprite;
 	
 	private var passable:Bool = true;
@@ -81,6 +82,7 @@ class Node extends TwoD implements ITwoD
 	public function removeOverlay()
 	{
 		//overlay.setAlpha(0);
+		overlayShadowOn = false;
 		if (occupant != null)
 		{
 			occupant.dispatchEvent(RevealEvent.REVEAL, new RevealEvent());
@@ -90,6 +92,7 @@ class Node extends TwoD implements ITwoD
 	public function addOverlay()
 	{
 		//overlay.setAlpha(.5);
+		overlayShadowOn = true;
 		if (occupant != null)
 		{
 			occupant.dispatchEvent(HideEvent.HIDE, new HideEvent());

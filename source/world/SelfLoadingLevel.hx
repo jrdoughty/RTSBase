@@ -1,5 +1,6 @@
 package world;
 
+import flash.geom.ColorTransform;
 import flixel.FlxSprite;
 import haxe.Json;
 import world.TiledTypes.Layer;
@@ -10,6 +11,7 @@ import openfl.geom.Rectangle;
 import openfl.geom.Point;
 import openfl.display.BitmapData;
 import adapters.TwoDSprite;
+import flixel.graphics.frames.FlxTileFrames;
 
 /**
  * ...
@@ -24,7 +26,7 @@ class SelfLoadingLevel
 	
 	public var tiledLevel(default,null):TiledLevel;
 	public var background:TwoDSprite;
-	
+	private var darkenedbackground:TwoDSprite;
 	private var fog:TwoDSprite;
 	private var selectedNode:Node;
 	
@@ -54,10 +56,11 @@ class SelfLoadingLevel
 		width = tiledLevel.width;
 		height = tiledLevel.height;
 		background = new TwoDSprite();
-		background.pixels = new BitmapData(Std.int(width * tiledLevel.tilewidth), height * tiledLevel.tileheight, true, 0xFFFFFF);
+		background.pixels = new BitmapData(Std.int(width * tiledLevel.tilewidth), height * tiledLevel.tileheight, true, 0xFFFFFFFF);
 		FlxG.state.add(background);
 		fog = new TwoDSprite();
-		fog.pixels = new BitmapData(Std.int(width * tiledLevel.tilewidth), height * tiledLevel.tileheight, true, 0xFFFFFF);
+		darkenedbackground = new TwoDSprite();
+		fog.pixels = new BitmapData(Std.int(width * tiledLevel.tilewidth), height * tiledLevel.tileheight, true, 0xFFFFFFFF);
 		FlxG.state.add(fog);
 		for (i in 0...tiledLevel.layers.length)
 		{
@@ -113,19 +116,27 @@ class SelfLoadingLevel
 				}
 			}
 		}
+		//darkenedbackground.loadGraphicFromSprite(background);
+		//darkenedbackground.pixels.colorTransform(new Rectangle(0,0,darkenedbackground.width, darkenedbackground.height), new ColorTransform(.3,.3,.3,1));
+		
+		//FlxG.state.add(darkenedbackground);
 	}
 	
 	public function rebuildFog()
 	{
-		/*
+		
+		fog.pixels.dispose();
+		fog.pixels = new BitmapData(Std.int(width * tiledLevel.tilewidth), height * tiledLevel.tileheight, true, 0x66000000);
 		for (i in 0...Node.activeNodes.length)
 		{
-			var sourceRect:Rectangle = new Rectangle(0, 0, Node.activeNodes[i].width, Node.activeNodes[i].height);
-			var destPoint:Point = new Point(Std.int(Node.activeNodes[i].x), Node.activeNodes[i].y);
-			var btmpdta:BitmapData = Node.activeNodes[i].overlay.updateFramePixels();
-			fog.pixels.copyPixels(btmpdta, sourceRect, destPoint, btmpdta, new Point(0,0), false);
+			if (!Node.activeNodes[i].overlayShadowOn)
+			{
+				var sourceRect:Rectangle = new Rectangle(Node.activeNodes[i].x, Node.activeNodes[i].y, Node.activeNodes[i].width, Node.activeNodes[i].height);
+				var destPoint:Point = new Point(Std.int(Node.activeNodes[i].x), Node.activeNodes[i].y);
+				fog.pixels.copyPixels(background.pixels, sourceRect, destPoint, background.pixels, new Point(0,0), false);
+			}
 		}
 		fog.dirty = true;
-		*/
+		
 	}
 }

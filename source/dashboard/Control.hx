@@ -23,7 +23,7 @@ class Control extends TwoDSprite
 			callbackFunction = callback;
 		}
 		setCurrentFrame(frame);
-		setScale(x, y);
+		setScale(2, 2);
 	}
 	
 	public function useCallback(sprite:Control)

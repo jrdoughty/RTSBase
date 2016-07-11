@@ -9,10 +9,8 @@ class TwoD implements ITwoD
 
 	public var x(default, set):Float;
 	public var y(default, set):Float;
-	@:isVar
-	public var width(get, set):Float;
-	@:isVar
-	public var height(get, set):Float;
+	@:isVar	public var width(get, set):Float;
+	@:isVar	public var height(get, set):Float;
 	
 	public function new() 
 	{
