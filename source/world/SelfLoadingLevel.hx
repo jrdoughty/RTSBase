@@ -26,7 +26,6 @@ class SelfLoadingLevel
 	
 	public var tiledLevel(default,null):TiledLevel;
 	public var background:TwoDSprite;
-	private var darkenedbackground:TwoDSprite;
 	private var fog:TwoDSprite;
 	private var selectedNode:Node;
 	
@@ -59,7 +58,6 @@ class SelfLoadingLevel
 		background.pixels = new BitmapData(Std.int(width * tiledLevel.tilewidth), height * tiledLevel.tileheight, true, 0xFFFFFFFF);
 		FlxG.state.add(background);
 		fog = new TwoDSprite();
-		darkenedbackground = new TwoDSprite();
 		fog.pixels = new BitmapData(Std.int(width * tiledLevel.tilewidth), height * tiledLevel.tileheight, true, 0xFFFFFFFF);
 		FlxG.state.add(fog);
 		for (i in 0...tiledLevel.layers.length)
@@ -111,15 +109,11 @@ class SelfLoadingLevel
 				if (tiledLevel.tilesets[i].name == "highlight")
 				{
 					highlight = new TwoDSprite(0, 0, "assets/"+tiledLevel.tilesets[i].image.substring(3), tiledLevel.tilewidth, tiledLevel.tileheight);
-					highlight.addAnimation("main", [0, 1, 2, 3, 4, 5, 6], 24);//has to be better way
+					highlight.addAnimation("main", [0, 1, 2, 3, 4, 5, 6], 18);//has to be better way
 					highlight.playAnimation("main");
 				}
 			}
 		}
-		//darkenedbackground.loadGraphicFromSprite(background);
-		//darkenedbackground.pixels.colorTransform(new Rectangle(0,0,darkenedbackground.width, darkenedbackground.height), new ColorTransform(.3,.3,.3,1));
-		
-		//FlxG.state.add(darkenedbackground);
 	}
 	
 	public function rebuildFog()

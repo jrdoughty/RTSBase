@@ -58,35 +58,10 @@ class InputSystem
 	{
 		activeState = state;
 		activeNodes = cast Node.activeNodes;
-		FlxMouseEventManager.add(state.getLevel().background, null, null, onOver);
 		
 	}
 	
-	private function onOver(levelBG:FlxSprite):Void
-	{
-		var index:Int = Std.int(FlxG.mouse.x / activeState.getLevel().tiledLevel.tilewidth) + Std.int(FlxG.mouse.y / activeState.getLevel().tiledLevel.tileheight) * activeState.getLevel().width;
-		var sprite = Node.activeNodes[index];
-		if (inputState == SELECTING)
-		{
-			if (activeState.getLevel().highlight != null && sprite.occupant != null)
-			{
-				activeState.getLevel().highlight.setVisibility(true);
-				activeState.getLevel().highlight.x = sprite.x;
-				activeState.getLevel().highlight.y = sprite.y;
-			}
-			else
-			{
-				activeState.getLevel().highlight.setVisibility(false);
-			}
-		}
-		else if (inputState == MOVING || inputState == ATTACKING)
-		{
-			activeState.getLevel().highlight.setVisibility(true);
-			activeState.getLevel().highlight.x = sprite.x;
-			activeState.getLevel().highlight.y = sprite.y;
-		}
-	}
-	
+
 	
 	public function setupClickControls(controls:Array<Control>)
 	{
@@ -126,7 +101,9 @@ class InputSystem
 	
 	public function update()
 	{
-		//cameraUpdate();
+		var index:Int = Std.int(FlxG.mouse.x / activeState.getLevel().tiledLevel.tilewidth) + Std.int(FlxG.mouse.y / activeState.getLevel().tiledLevel.tileheight) * activeState.getLevel().width;
+		var sprite = Node.activeNodes[index];
+		
 		if (FlxG.keys.pressed.M)
 		{
 			move();
@@ -172,6 +149,26 @@ class InputSystem
 		if (FlxG.mouse.justPressedRight)
 		{
 			rightClick();
+		}		
+		
+		if (inputState == SELECTING)
+		{
+			if (activeState.getLevel().highlight != null && sprite.occupant != null && sprite.occupant.team == activeState.activeTeam)
+			{
+				activeState.getLevel().highlight.setVisibility(true);
+				activeState.getLevel().highlight.x = sprite.x;
+				activeState.getLevel().highlight.y = sprite.y;
+			}
+			else
+			{
+				activeState.getLevel().highlight.setVisibility(false);
+			}
+		}
+		else if (inputState == MOVING || inputState == ATTACKING)
+		{
+			activeState.getLevel().highlight.setVisibility(true);
+			activeState.getLevel().highlight.x = sprite.x;
+			activeState.getLevel().highlight.y = sprite.y;
 		}
 	}
 	
