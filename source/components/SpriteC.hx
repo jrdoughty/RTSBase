@@ -18,6 +18,8 @@ import flixel.tweens.FlxTween;
  * ...
  * @author John Doughty
  */
+typedef FrameObject = {	var frame:Int;}
+ 
 class SpriteC extends Component
 {
 	var sprite:TwoDSprite;
@@ -26,22 +28,35 @@ class SpriteC extends Component
 	{
 		super(name);
 	}
-	
+	private inline function extractFrames(frameObjects:Array<FrameObject>):Array<Int>
+	{
+		var result:Array<Int> = [];
+		for (i in frameObjects)
+		{
+			result.push(i.frame);
+		}
+		return result;
+	}
 	override public function init() 
 	{
 		super.init();
 		var assetPath:String;
-		
+		var idleFrames:Array<Int>;
+		var attackFrames:Array<Int>;
+		var activeFrames:Array<Int>;
 		
 		if (Reflect.hasField(entity.eData, "spriteFile") && entity.currentNodes.length > 0)
 		{
 			assetPath = "assets" + entity.eData.spriteFile.substr(2);
 			if (Reflect.hasField(entity.eData, "speed"))
 			{
-				sprite = new TwoDSprite(entity.currentNodes[0].x, entity.currentNodes[0].y, assetPath, 8, 8, entity);
-				sprite.addAnimation("active", [0, 1], 5, true);
-				sprite.addAnimation("attack", [0, 2], 5, true);
-				sprite.addAnimation("idle", [0], 5, true);
+				idleFrames = extractFrames(entity.eData.idle);
+				attackFrames = extractFrames(entity.eData.attack);
+				activeFrames = extractFrames(entity.eData.active);
+				sprite = new TwoDSprite(entity.currentNodes[0].x, entity.currentNodes[0].y, assetPath, entity.eData.width, entity.eData.height, entity);
+				sprite.addAnimation("active", activeFrames, 5, true);
+				sprite.addAnimation("attack", attackFrames, 5, true);
+				sprite.addAnimation("idle", idleFrames, 5, true);
 				entity.addEvent(IdleAnimationEvent.IDLE, idleAnim);
 				entity.addEvent(AnimateAttackEvent.ATTACK, attackAnim);
 				entity.addEvent(MoveToEvent.MOVE, moveTo);

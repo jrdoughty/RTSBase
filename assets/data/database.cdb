@@ -18,6 +18,27 @@
 					"opt": true
 				},
 				{
+					"typeStr": "4",
+					"name": "width"
+				},
+				{
+					"typeStr": "4",
+					"name": "height"
+				},
+				{
+					"typeStr": "8",
+					"name": "idle",
+					"display": null
+				},
+				{
+					"typeStr": "8",
+					"name": "attack"
+				},
+				{
+					"typeStr": "8",
+					"name": "active"
+				},
+				{
 					"typeStr": "3",
 					"name": "speed",
 					"display": null
@@ -72,7 +93,30 @@
 							"name": "SpriteC"
 						}
 					],
-					"threatRange": 2
+					"threatRange": 2,
+					"width": 8,
+					"height": 8,
+					"idle": [
+						{
+							"frame": 0
+						}
+					],
+					"active": [
+						{
+							"frame": 0
+						},
+						{
+							"frame": 1
+						}
+					],
+					"attack": [
+						{
+							"frame": 0
+						},
+						{
+							"frame": 2
+						}
+					]
 				},
 				{
 					"id": "SoldierSpear",
@@ -97,7 +141,30 @@
 							"name": "SpriteC"
 						}
 					],
-					"threatRange": 3
+					"threatRange": 3,
+					"width": 8,
+					"height": 8,
+					"idle": [
+						{
+							"frame": 0
+						}
+					],
+					"active": [
+						{
+							"frame": 0
+						},
+						{
+							"frame": 1
+						}
+					],
+					"attack": [
+						{
+							"frame": 0
+						},
+						{
+							"frame": 2
+						}
+					]
 				},
 				{
 					"id": "DevilWhip",
@@ -122,7 +189,30 @@
 							"name": "SpriteC"
 						}
 					],
-					"threatRange": 2
+					"threatRange": 2,
+					"width": 8,
+					"height": 8,
+					"idle": [
+						{
+							"frame": 0
+						}
+					],
+					"active": [
+						{
+							"frame": 0
+						},
+						{
+							"frame": 1
+						}
+					],
+					"attack": [
+						{
+							"frame": 0
+						},
+						{
+							"frame": 2
+						}
+					]
 				},
 				{
 					"id": "DevilSpear",
@@ -147,7 +237,30 @@
 							"name": "SpriteC"
 						}
 					],
-					"threatRange": 3
+					"threatRange": 3,
+					"width": 8,
+					"height": 8,
+					"idle": [
+						{
+							"frame": 0
+						}
+					],
+					"active": [
+						{
+							"frame": 0
+						},
+						{
+							"frame": 1
+						}
+					],
+					"attack": [
+						{
+							"frame": 0
+						},
+						{
+							"frame": 2
+						}
+					]
 				},
 				{
 					"id": "LizardClaw",
@@ -172,7 +285,30 @@
 							"name": "SpriteC"
 						}
 					],
-					"threatRange": 1
+					"threatRange": 1,
+					"width": 8,
+					"height": 8,
+					"idle": [
+						{
+							"frame": 0
+						}
+					],
+					"active": [
+						{
+							"frame": 0
+						},
+						{
+							"frame": 1
+						}
+					],
+					"attack": [
+						{
+							"frame": 0
+						},
+						{
+							"frame": 2
+						}
+					]
 				},
 				{
 					"id": "LizardSpear",
@@ -197,7 +333,30 @@
 							"name": "SpriteC"
 						}
 					],
-					"threatRange": 3
+					"threatRange": 3,
+					"width": 8,
+					"height": 8,
+					"idle": [
+						{
+							"frame": 0
+						}
+					],
+					"active": [
+						{
+							"frame": 0
+						},
+						{
+							"frame": 1
+						}
+					],
+					"attack": [
+						{
+							"frame": 0
+						},
+						{
+							"frame": 2
+						}
+					]
 				},
 				{
 					"id": "OrcClub",
@@ -222,7 +381,30 @@
 							"name": "SpriteC"
 						}
 					],
-					"threatRange": 2
+					"threatRange": 2,
+					"width": 8,
+					"height": 8,
+					"idle": [
+						{
+							"frame": 0
+						}
+					],
+					"active": [
+						{
+							"frame": 0
+						},
+						{
+							"frame": 1
+						}
+					],
+					"attack": [
+						{
+							"frame": 0
+						},
+						{
+							"frame": 2
+						}
+					]
 				},
 				{
 					"id": "OrcAxe",
@@ -247,7 +429,30 @@
 							"name": "SpriteC"
 						}
 					],
-					"threatRange": 2
+					"threatRange": 2,
+					"width": 8,
+					"height": 8,
+					"idle": [
+						{
+							"frame": 0
+						}
+					],
+					"active": [
+						{
+							"frame": 0
+						},
+						{
+							"frame": 1
+						}
+					],
+					"attack": [
+						{
+							"frame": 0
+						},
+						{
+							"frame": 2
+						}
+					]
 				},
 				{
 					"id": "Wizard",
@@ -272,7 +477,30 @@
 							"name": "SpriteC"
 						}
 					],
-					"threatRange": 1
+					"threatRange": 1,
+					"width": 8,
+					"height": 8,
+					"idle": [
+						{
+							"frame": 0
+						}
+					],
+					"active": [
+						{
+							"frame": 0
+						},
+						{
+							"frame": 1
+						}
+					],
+					"attack": [
+						{
+							"frame": 0
+						},
+						{
+							"frame": 2
+						}
+					]
 				}
 			],
 			"separators": [],
@@ -383,6 +611,48 @@
 				{
 					"typeStr": "1",
 					"name": "name"
+				}
+			]
+		},
+		{
+			"name": "Actors@idle",
+			"props": {
+				"hide": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": [
+				{
+					"typeStr": "3",
+					"name": "frame"
+				}
+			]
+		},
+		{
+			"name": "Actors@attack",
+			"props": {
+				"hide": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": [
+				{
+					"typeStr": "3",
+					"name": "frame"
+				}
+			]
+		},
+		{
+			"name": "Actors@active",
+			"props": {
+				"hide": true
+			},
+			"separators": [],
+			"lines": [],
+			"columns": [
+				{
+					"typeStr": "3",
+					"name": "frame"
 				}
 			]
 		}
