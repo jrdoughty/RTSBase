@@ -29,16 +29,16 @@ class View extends Component
 	{
 		super.init();
 		
-		if (Reflect.hasField(entity.eData, "viewRange"))
+		if (entity.eData.exists("viewRange"))
 		{
-			this.viewRange = entity.eData.viewRange;
+			this.viewRange = entity.eData["viewRange"];
+			entity.addEvent(ClearFogEvent.CLEAR, clearNodes);
 		}
 		else
 		{
 			entity.removeC(name);
 		}
 		
-		entity.addEvent(ClearFogEvent.CLEAR, clearNodes);
 	}
 	
 	public function clearNodes(e:ClearFogEvent = null)

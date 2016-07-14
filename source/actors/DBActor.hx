@@ -45,20 +45,24 @@ class DBActor extends BaseActor
 	public function new(unitID:String, node:Node) 
 	{
 		var i:Int;
+		var compnts:Array<Dynamic>;
 		super(node);
 		
 		data = systems.Data;//hack
-		eData = data.Actors.get(unitID);//supposedly Actors doesn't have get
+		for (n in Reflect.fields(data.Actors.get(unitID)))
+		{
+			eData.set(n, Reflect.field(data.Actors.get(unitID), n));
+		}
 		setupNodes(node);
 		
 		for (i in 0...3)
 		{
 			controls.push(new Control(i, unitControlTypes[i],null,AssetPaths.controls__png));
 		}
-
-		for (i in 0...eData.components.length)
+		compnts = eData["components"];
+		for (j in compnts)
 		{
-			addC(eData.components[i].name);			
+			addC(j.name);			
 		}
 	}
 	

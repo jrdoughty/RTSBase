@@ -30,24 +30,29 @@ class Building extends BaseActor
 	public function new(uniqueID:String, node:Node) 
 	{
 		var i:Int;
+		var units:Array<Dynamic>;
 		var spriteFile:String;
+		var iteratorNum = 0;
 
 		super(node);
 		
 		data = systems.Data;//hack
-		eData = data.Buildings.get(uniqueID);//supposedly Buildings doesn't have get
-		
+		for (n in Reflect.fields(data.Buildings.get(uniqueID)))
+		{
+			eData.set(n, Reflect.field(data.Buildings.get(uniqueID), n));
+		}
 		setupNodes(node);
 		hw = Math.floor(Math.sqrt(currentNodes.length));
 		
 		addC("View");
 		addC("Health");
 		addC("SpriteC");
-		
-		for (i in 0...eData.units.length)
+		units = eData["units"];
+		for (i in units)
 		{
-			unitsToProduce.push(eData.units[i].unit);
-			controls.push(new UnitControl(0, ActorControlTypes.PRODUCE, function() { createUnit(i); }, "assets" + data.Actors.get(unitsToProduce[i]).spriteFile.substr(2), data.Actors.get(unitsToProduce[i]).id));
+			unitsToProduce.push(i.unit);
+			controls.push(new UnitControl(0, ActorControlTypes.PRODUCE, function() { createUnit(iteratorNum); }, "assets" + data.Actors.get(unitsToProduce[iteratorNum]).spriteFile.substr(2), data.Actors.get(unitsToProduce[iteratorNum]).id));
+			iteratorNum++;
 		}
 	}
 	

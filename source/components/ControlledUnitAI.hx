@@ -79,11 +79,11 @@ class ControlledUnitAI extends AI
 	override public function init() 
 	{
 		super.init();
-		if (Reflect.hasField(entity.eData, "speed") && Reflect.hasField(entity.eData, "threatRange") && Reflect.hasField(entity.eData, "damage"))
+		if (entity.eData.exists("speed") && entity.eData.exists("threatRange") && entity.eData.exists("damage"))
 		{
-			this.speed = entity.eData.speed;
-			this.damage = entity.eData.damage;
-			this.threatRange = entity.eData.threatRange;
+			this.speed = entity.eData["speed"];
+			this.damage = entity.eData["damage"];
+			this.threatRange = entity.eData["threatRange"];
 
 			entity.addEvent(MoveEvent.MOVE, MoveToNode);
 			entity.addEvent(TargetEvent.ATTACK_ACTOR, TargetActor);

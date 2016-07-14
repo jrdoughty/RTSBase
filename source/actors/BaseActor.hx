@@ -4,6 +4,7 @@ import events.HideEvent;
 import events.RevealEvent;
 import haxe.Constraints.FlatEnum;
 import haxe.Timer;
+import haxe.ds.StringMap;
 import interfaces.IEntity;
 import interfaces.IGameState;
 import systems.AStar;
@@ -62,7 +63,7 @@ class BaseActor  implements IEntity
 	/**
 	 * DataHolder for Entity
 	 */
-	public var eData:Dynamic = {};
+	public var eData:Map<String, Dynamic> = new Map();
 	
 	public var alive:Bool = true;
 	

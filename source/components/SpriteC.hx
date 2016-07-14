@@ -45,15 +45,15 @@ class SpriteC extends Component
 		var attackFrames:Array<Int>;
 		var activeFrames:Array<Int>;
 		
-		if (Reflect.hasField(entity.eData, "spriteFile") && entity.currentNodes.length > 0)
+		if (entity.eData.exists("spriteFile") && entity.currentNodes.length > 0)
 		{
-			assetPath = "assets" + entity.eData.spriteFile.substr(2);
-			if (Reflect.hasField(entity.eData, "speed"))
+			assetPath = "assets" + entity.eData["spriteFile"].substr(2);
+			if (entity.eData.exists("speed") && entity.eData.exists("active") && entity.eData.exists("attack") && entity.eData.exists("idle") && entity.eData.exists("width") && entity.eData.exists("height"))
 			{
-				idleFrames = extractFrames(entity.eData.idle);
-				attackFrames = extractFrames(entity.eData.attack);
-				activeFrames = extractFrames(entity.eData.active);
-				sprite = new TwoDSprite(entity.currentNodes[0].x, entity.currentNodes[0].y, assetPath, entity.eData.width, entity.eData.height, entity);
+				idleFrames = extractFrames(entity.eData["idle"]);
+				attackFrames = extractFrames(entity.eData["attack"]);
+				activeFrames = extractFrames(entity.eData["active"]);
+				sprite = new TwoDSprite(entity.currentNodes[0].x, entity.currentNodes[0].y, assetPath, entity.eData["width"], entity.eData["height"], entity);
 				sprite.addAnimation("active", activeFrames, 5, true);
 				sprite.addAnimation("attack", attackFrames, 5, true);
 				sprite.addAnimation("idle", idleFrames, 5, true);
@@ -119,8 +119,8 @@ class SpriteC extends Component
 	
 	public function moveTo(e:MoveToEvent)
 	{
-		FlxTween.tween(sprite, { x:e.x, y:e.y }, entity.eData.speed / 1000);
-		FlxTween.tween(entity, { x:e.x, y:e.y }, entity.eData.speed / 1000);
+		FlxTween.tween(sprite, { x:e.x, y:e.y }, entity.eData["speed"] / 1000);
+		FlxTween.tween(entity, { x:e.x, y:e.y }, entity.eData["speed"] / 1000);
 	}
 	
 	public function getSprite(e:GetSpriteEvent)

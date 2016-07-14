@@ -46,23 +46,23 @@ class Health extends Component
 	{
 		super.init();
 		
-		if (Reflect.hasField(entity.eData, "health"))
+		if (entity.eData.exists("health"))
 		{
-			this.healthMax = entity.eData.health;
+			this.healthMax = entity.eData["health"];
+			entity.addEvent(RevealEvent.REVEAL, makeVisible);
+			entity.addEvent(HideEvent.HIDE, killVisibility);
+			entity.addEvent(HurtEvent.HURT, hurt);
+			entity.addEvent(UpdateEvent.UPDATE, update);
+			entity.dispatchEvent(GetSpriteEvent.GET, new GetSpriteEvent(attachSprite));
+			if (actorSprite == null)
+			{
+				entity.addEvent(AddedSpriteEvent.ADDED, function(e:AddedSpriteEvent){entity.dispatchEvent(GetSpriteEvent.GET, new GetSpriteEvent(attachSprite));});
+			}
 		}
 		else
 		{
 			entity.removeC(name);
 		}
-		entity.dispatchEvent(GetSpriteEvent.GET, new GetSpriteEvent(attachSprite));
-		if (actorSprite == null)
-		{
-			entity.addEvent(AddedSpriteEvent.ADDED, function(e:AddedSpriteEvent){entity.dispatchEvent(GetSpriteEvent.GET, new GetSpriteEvent(attachSprite));});
-		}
-		entity.addEvent(RevealEvent.REVEAL, makeVisible);
-		entity.addEvent(HideEvent.HIDE, killVisibility);
-		entity.addEvent(HurtEvent.HURT, hurt);
-		entity.addEvent(UpdateEvent.UPDATE, update);
 	}
 	
 	public function hurt(e:HurtEvent)
