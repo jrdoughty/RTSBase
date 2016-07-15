@@ -15,6 +15,7 @@ import openfl.Assets;
 import events.MoveEvent;
 import events.UpdateEvent;
 import components.ComponentSystem;
+import systems.DataCache;
 /**
  * ...
  * @author ...
@@ -49,10 +50,7 @@ class DBActor extends BaseActor
 		super(node);
 		
 		data = systems.Data;//hack
-		for (n in Reflect.fields(data.Actors.get(unitID)))
-		{
-			eData.set(n, Reflect.field(data.Actors.get(unitID), n));
-		}
+		eData = DataCache.getInstance().getData(data.Actors, unitID);
 		setupNodes(node);
 		
 		for (i in 0...3)
