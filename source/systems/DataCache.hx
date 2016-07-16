@@ -10,8 +10,8 @@ class DataCache
 
 	static var instance:DataCache;
 	
-	private var data:ObjectMap<Map> = new ObjectMap();
-	
+	private var data:Map<Int, Map<String, Map<String, Dynamic>>> = new Map();
+	private var dataObjects:Array<Dynamic> = [];
 	private function new() 
 	{
 		
@@ -29,12 +29,19 @@ class DataCache
 	public function getData(dObject:Dynamic, name:String)
 	{
 		var result:Map<String, Dynamic> = new Map();
-		var map:Map<String, Map<String, Dynamic>> = new Map();
-		if (!data.exists(dObject))
+		var index:Int = dataObjects.indexOf(dObject);
+		if(index == -1)
 		{
-			data.set(dObject, map);
+			dataObjects.push(dObject);
+			index = dataObjects.indexOf(dObject);
+			
+			for (n in Reflect.fields(dObject.get(name)))
+			{
+				result.set(n, Reflect.field(dObject.get(name), n));
+			}
+			data.set(index, [name => result]);
 		}
-		if (data[dObject].exists(name))
+		else if (data[index].exists(name))
 		{
 			result = data[dObject][name];
 		}
@@ -44,10 +51,8 @@ class DataCache
 			{
 				result.set(n, Reflect.field(dObject.get(name), n));
 			}
-			map.set(name, result);
+			data[index].set(name, result);
 		}
 		return result;
 	}
-	
-	
 }

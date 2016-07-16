@@ -50,8 +50,9 @@ class Building extends BaseActor
 		units = eData["units"];
 		for (i in units)
 		{
+			var index = iteratorNum;
 			unitsToProduce.push(i.unit);
-			controls.push(new UnitControl(0, ActorControlTypes.PRODUCE, function() { createUnit(iteratorNum); }, "assets" + data.Actors.get(unitsToProduce[iteratorNum]).spriteFile.substr(2), data.Actors.get(unitsToProduce[iteratorNum]).id));
+			controls.push(new UnitControl(0, ActorControlTypes.PRODUCE, function() { createUnit(index); }, "assets" + data.Actors.get(unitsToProduce[iteratorNum]).spriteFile.substr(2), data.Actors.get(unitsToProduce[iteratorNum]).id));
 			iteratorNum++;
 		}
 	}
