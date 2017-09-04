@@ -7,6 +7,7 @@ import systems.Data;
 import actors.DBActor;
 import actors.Building;
 import flixel.text.FlxText;
+import flixel.FlxG;
 
 
 /**
@@ -42,8 +43,9 @@ class DemoState extends BaseState
 		Teams[0].addBuilding(new Building("Barracks", Node.getNodeByGridXY(0, 14)));
 		
 		//Teams[0].addUnit(new Unit("SoldierSword",Node.getNodeByGridXY(0,0)));
-		resourceDisplay = new FlxText(0, 0, 30, "");
+		resourceDisplay = new FlxText(315, 0, 30, "");
 		add(resourceDisplay);
+		FlxG.sound.playMusic(AssetPaths.Battle_Theme_II_v1__2__mp3);
 	}
 	
 	override public function update(elapsed:Float):Void 

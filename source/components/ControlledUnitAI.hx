@@ -16,6 +16,8 @@ import events.AnimateAttackEvent;
 import events.MoveAnimEvent;
 import events.IdleAnimationEvent;
 import events.MoveToEvent;
+import flixel.FlxG;
+
 /**
  * ...
  * @author John Doughty
@@ -261,6 +263,13 @@ class ControlledUnitAI extends AI
 			if (isEnemyInRange())
 			{
 				hit();
+				var weight = Math.random();
+				if (weight > .7)
+					FlxG.sound.play(AssetPaths.hit1__wav, .5);
+				else if (weight > .3)
+					FlxG.sound.play(AssetPaths.hit2__wav, .5);
+				else
+					FlxG.sound.play(AssetPaths.hit3__wav, .5);
 			}
 			else
 			{
